@@ -15,7 +15,5 @@ note_colors = Array[Color]([Color(1, 1, 0.09803922, 1), Color(0.26666668, 1, 0, 
 
 [node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=642329262]
 
-[node name="MidiPlayer2" type="MidiPlayer" parent="." unique_id=1089852040]
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=234670667]
 stream = ExtResource("3_1j6l3")
