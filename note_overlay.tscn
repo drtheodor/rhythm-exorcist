@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjo3dqxnfmib7" path="res://note_overlay.gd" id="1_gxip2"]
 [ext_resource type="AudioStream" uid="uid://dv4sgm03p7cxp" path="res://thick_of_it.ogg" id="3_1j6l3"]
+[ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="3_h8uoj"]
 
 [node name="NoteOverlay" type="Control" unique_id=1613212265]
 layout_mode = 3
@@ -17,3 +18,10 @@ note_colors = Array[Color]([Color(1, 1, 0.09803922, 1), Color(0.26666668, 1, 0, 
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=234670667]
 stream = ExtResource("3_1j6l3")
+
+[node name="Label" type="Label" parent="." unique_id=1358094071]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("3_h8uoj")
+text = "TESTFONT"
