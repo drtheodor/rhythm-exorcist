@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cy1uhd4mp27tb"]
+
+[ext_resource type="Script" uid="uid://cjo3dqxnfmib7" path="res://note_overlay.gd" id="1_gxip2"]
+[ext_resource type="AudioStream" uid="uid://dv4sgm03p7cxp" path="res://thick_of_it.ogg" id="3_1j6l3"]
+
+[node name="NoteOverlay" type="Control" unique_id=1613212265]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gxip2")
+note_colors = Array[Color]([Color(1, 1, 0.09803922, 1), Color(0.26666668, 1, 0, 1), Color(0.11372549, 0, 1, 1), Color(0.94509804, 0, 0, 1)])
+
+[node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=642329262]
+
+[node name="MidiPlayer2" type="MidiPlayer" parent="." unique_id=1089852040]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=234670667]
+stream = ExtResource("3_1j6l3")

@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Rhythm Exorcist"
 config/version="0.0.0"
+run/main_scene="uid://cy1uhd4mp27tb"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
