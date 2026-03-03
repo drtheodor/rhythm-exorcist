@@ -4,3 +4,4 @@
 
 # Direnv
 .direnv
+addons/godot_midi/bin/windows/*

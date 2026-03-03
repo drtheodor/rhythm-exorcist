@@ -1,0 +1,11 @@
+{
+	"test": {
+		"color": "red",
+		"alignment": "center",
+		"font_size": 16,
+		"text": [
+			"This is a Test.",
+			"And So is This."
+		],
+	}
+}
