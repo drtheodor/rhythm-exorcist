@@ -108,6 +108,9 @@ func process_text_data(data:Dictionary) -> Array:
 	
 	if data.has("next"):
 		next = data["next"]
+	
+	if data.has("speed"):
+		typing_speed = data["speed"]
 
 	var texts = data["text"].duplicate()
 	
