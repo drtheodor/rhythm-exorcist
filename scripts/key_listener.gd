@@ -30,14 +30,15 @@ func _process(_delta: float) -> void:
 			key_running_queue.pop_front()
 			current_key.queue_free()
 
-func CreateKeyRunning():
+func create_running_key():
 	var kr_inst = key_running.instantiate()
 	get_tree().get_root().call_deferred("add_child", kr_inst)
-	kr_inst.Setup(position.y, frame + 4)
+	kr_inst.setup(position.y, frame + 4)
 	
 	key_running_queue.push_back(kr_inst)
 
 func _on_random_spawn_timer_timeout() -> void:
-	CreateKeyRunning()
+	self.create_running_key()
+	
 	$RandomSpawnTimer.wait_time = randf_range(0.4, 3)
 	$RandomSpawnTimer.start()
