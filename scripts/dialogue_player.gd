@@ -1,6 +1,9 @@
 class_name DialoguePlayer
 extends Node
 
+signal StartDialogue()
+signal DialogueTyping()
+
 @export_file("*.json") var scene_text_file
 
 var scene_text = {}
@@ -38,6 +41,7 @@ func type_text() -> void:
 	var count = text_label.get_total_character_count()
 	if text_label.visible_characters < count + end_padding:
 		text_label.visible_characters += 1
+		DialogueTyping.emit()
 	else:
 		is_typing = false
 		next_line()
@@ -75,10 +79,11 @@ func finish() -> void:
 	background.visible = false
 
 func on_display_dialog(text_key):
-	if in_progress and not is_typing:
+	if in_progress:
 		next_line()
 	elif not is_typing:
 		#get_tree().paused = true
+		StartDialogue.emit()
 		current = text_key
 		background.visible = true
 		in_progress = true
@@ -131,5 +136,4 @@ func process_text_data(data:Dictionary) -> Array:
 func _on_background_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			pass
 			on_display_dialog(starting_key)
