@@ -27,8 +27,8 @@ func _process(_delta: float) -> void:
 		if distance <= hit_threshold:
 			if distance <= perfect_threshold:
 				Signals.IncrementFear.emit(-1)
-			
 			key_running_queue.pop_front()
+			$AnimationPlayer.play("hand_hitting")
 			current_key.queue_free()
 
 func create_running_key():
