@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cq8m57372ivc4"]
 
-[ext_resource type="Script" uid="uid://ch7cfslijqydo" path="res://scenes/game_ui.gd" id="1_rns2u"]
+[ext_resource type="Script" uid="uid://ch7cfslijqydo" path="res://scripts/game_ui.gd" id="1_rns2u"]
 [ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="1_yubou"]
 [ext_resource type="Texture2D" uid="uid://c3ob4m4x2t8eh" path="res://assets/textures/progressbar_under.png" id="3_u2dgd"]
 [ext_resource type="Texture2D" uid="uid://812jjo4h8o35" path="res://assets/textures/progressbar_red.png" id="4_bt76a"]

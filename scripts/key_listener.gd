@@ -1,6 +1,6 @@
 extends Sprite2D
 
-@onready var key_running = preload("res://scenes/key_running.tscn")
+@onready var key_running = preload("res://scenes/objects/key_running.tscn")
 @export var key_name: String = ""
 
 var key_running_queue = []
