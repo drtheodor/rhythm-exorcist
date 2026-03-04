@@ -1,6 +1,6 @@
 extends Sprite2D
 
-@onready var key_running = preload("res://scenes/key_running.tscn")
+@onready var key_running = preload("res://scenes/objects/key_running.tscn")
 @export var key_name: String = ""
 
 var key_running_queue = []
@@ -22,22 +22,24 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed(key_name):
 		var distance = abs(current_key.pass_threshold - current_key.position.x)
+		$AnimationPlayer.play("hand_shaking")
 		
 		if distance <= hit_threshold:
 			if distance <= perfect_threshold:
 				Signals.IncrementFear.emit(-1)
-			
 			key_running_queue.pop_front()
+			$AnimationPlayer.play("hand_hitting")
 			current_key.queue_free()
 
-func CreateKeyRunning():
+func create_running_key():
 	var kr_inst = key_running.instantiate()
 	get_tree().get_root().call_deferred("add_child", kr_inst)
-	kr_inst.Setup(position.y, frame + 4)
+	kr_inst.setup(position.y, frame + 4)
 	
 	key_running_queue.push_back(kr_inst)
 
 func _on_random_spawn_timer_timeout() -> void:
-	CreateKeyRunning()
+	self.create_running_key()
+	
 	$RandomSpawnTimer.wait_time = randf_range(0.4, 3)
 	$RandomSpawnTimer.start()
