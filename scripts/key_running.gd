@@ -13,14 +13,14 @@ func _init() -> void:
 func _process(delta: float) -> void:
 	position += Vector2(-fall_speed, 0)
 	
+	# FIXME: does this even need a Timer?
 	if position.x < pass_threshold and not $Timer.is_stopped():
 		# print($Timer.wait_time - $Timer.time_left)
 		$Timer.stop()
 		has_passed = true
 
-func setup(target_y: float, target_frame: int):
+func setup(target_y: float):
 	position = Vector2(init_x_pos, target_y)
-	frame = target_frame
 	
 	set_process(true)
 
