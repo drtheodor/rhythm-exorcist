@@ -24,12 +24,10 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed(key_name):
 		var distance = abs(current_key.pass_threshold - current_key.position.x)
-		# TODO: maybe, this could be done with tweens?
-		# Can't, it messes with the position of running keys
-		$AnimationPlayer.play("hand_shaking")
-		# var tween = create_tween()
-		# tween.tween_property(self, "position:y", -3, 0.1).as_relative().set_trans(Tween.TRANS_SINE)
-		# tween.tween_property(self, "position:y", 3, 0.1).as_relative().set_trans(Tween.TRANS_SINE)
+		# $AnimationPlayer.play("hand_shaking")
+		var tween = create_tween()
+		tween.tween_property(self, "offset:y", -3, 0.1).as_relative().set_trans(Tween.TRANS_SINE)
+		tween.tween_property(self, "offset:y", 3, 0.1).as_relative().set_trans(Tween.TRANS_SINE)
 		
 		if distance <= hit_threshold:
 			if distance <= perfect_threshold:
