@@ -72,6 +72,7 @@ func _ready():
 		box.position.y = self.size.y - (note - note_offset) * (height + distance)
 		notes.append(box)
 	
+	midi_player.note.connect(note_callback)
 	midi_player.play()
 
 func _process(delta):
@@ -81,3 +82,14 @@ func _process(delta):
 		if note.position.x > self.size.x:
 			notes.remove_at(notes.find(note))
 			note.queue_free()
+
+func note_callback(event, track):
+	if (event['subtype'] == MIDI_MESSAGE_NOTE_ON): # note on
+		pass
+		# do something on note on
+	elif (event['subtype'] == MIDI_MESSAGE_NOTE_OFF): # note off
+		pass
+		# do something on note off
+		
+	
+	print("[Track: " + str(track) + "] Note played: " + str(event['note']))
