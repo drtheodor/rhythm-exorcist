@@ -14,6 +14,8 @@ func _process(_delta: float) -> void:
 
 	var current_key = key_running_queue.front()
 
+	# For some reason, sometimes, current_key may already be freed but is still in the queue.
+	#  This is why we check if its even real. TODO: find out whether this could cause additional issues.
 	if not current_key or current_key.has_passed:
 		key_running_queue.pop_front()
 		Signals.IncrementFear.emit(5)
