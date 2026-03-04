@@ -24,6 +24,7 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed(key_name):
 		var distance = abs(current_key.pass_threshold - current_key.position.x)
+		# TODO: maybe, this could be done with tweens?
 		$AnimationPlayer.play("hand_shaking")
 		
 		if distance <= hit_threshold:

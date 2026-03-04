@@ -13,6 +13,7 @@ func _init() -> void:
 func _process(delta: float) -> void:
 	position += Vector2(-fall_speed, 0)
 	
+	# FIXME: does this even need a Timer?
 	if position.x < pass_threshold and not $Timer.is_stopped():
 		# print($Timer.wait_time - $Timer.time_left)
 		$Timer.stop()
