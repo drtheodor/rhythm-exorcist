@@ -14,7 +14,7 @@ func _process(_delta: float) -> void:
 
 	var current_key = key_running_queue.front()
 
-	if current_key.has_passed:
+	if not current_key or current_key.has_passed:
 		key_running_queue.pop_front()
 		Signals.IncrementFear.emit(5)
 		current_key.queue_free()
@@ -34,7 +34,7 @@ func _process(_delta: float) -> void:
 func create_running_key():
 	var kr_inst = key_running.instantiate()
 	get_tree().get_root().call_deferred("add_child", kr_inst)
-	kr_inst.setup(position.y, frame + 4)
+	kr_inst.setup(position.y)
 	
 	key_running_queue.push_back(kr_inst)
 
