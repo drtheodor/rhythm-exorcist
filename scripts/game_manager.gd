@@ -1,0 +1,24 @@
+extends Node
+
+
+const MIN_SFX_DB : float = -5.0
+const MAX_SFX_DB : float = 5.0
+const MIN_MUSIC_DB : float = -5.0
+const MAX_MUSIC_DB : float = 5.0
+
+static var sfx_volume : float = 0.0
+static var music_volume : float = 0.0
+
+static func set_sfx_volume(val: float)->void:
+	sfx_volume = remap(val, 0, 100, MIN_SFX_DB, MAX_SFX_DB)
+	
+	var sfx_index= AudioServer.get_bus_index("SFX")
+	AudioServer.set_bus_volume_db(sfx_index, sfx_volume)
+
+static func set_music_volume(val: float)->void:
+	music_volume = remap(val, 0, 100, MIN_MUSIC_DB, MAX_MUSIC_DB)
+	
+	var sfx_index= AudioServer.get_bus_index("Music")
+	AudioServer.set_bus_volume_db(sfx_index, sfx_volume)
+
+const TITLESCREEN = preload("uid://d2h0hblq55p8p")
