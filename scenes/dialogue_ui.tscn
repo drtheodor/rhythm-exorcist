@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://cn64kaic6agov"]
+
+[ext_resource type="Script" uid="uid://b8454s4oi2l5y" path="res://scripts/dialogue_player.gd" id="1_jx1sv"]
+[ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="2_e6usr"]
+[ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_imsod"]
+[ext_resource type="Texture2D" uid="uid://igcp7m3onpx0" path="res://assets/textures/character_portraits.png" id="4_e6usr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_imsod"]
+texture = ExtResource("4_e6usr")
+texture_region_size = Vector2i(48, 48)
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_wlc0t"]
+sources/0 = SubResource("TileSetAtlasSource_imsod")
+
+[node name="DialogueUi" type="Control" unique_id=1477838171]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jx1sv")
+scene_text_file = "res://dialogue.json"
+starting_key = "test1"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1870564904]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 25
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=741444607]
+z_index = 1
+texture_filter = 2
+texture_repeat = 1
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_e6usr")
+theme_override_fonts/bold_font = ExtResource("3_imsod")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+bbcode_enabled = true
+text = "Hello World"
+scroll_active = false
+scroll_following = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackgroundTexture" type="TextureRect" parent="." unique_id=442470775]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=196464201]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 224.0
+color = Color(0, 0, 0, 1)
+
+[node name="Speaker1" type="TileMapLayer" parent="." unique_id=1019392813]
+tile_map_data = PackedByteArray(0, 0, 2, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_wlc0t")
+
+[node name="Speaker2" type="TileMapLayer" parent="." unique_id=1846907738]
+visible = false
+tile_map_data = PackedByteArray(0, 0, 13, 0, 9, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_wlc0t")
+
+[connection signal="gui_input" from="BackgroundColor" to="." method="_on_background_gui_input"]

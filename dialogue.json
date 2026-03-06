@@ -1,12 +1,28 @@
 {
-	"test": {
-		"color": "red",
-		"alignment": "center",
+	"test1": {
+		"color": "blue",
+		"alignment": "left",
 		"font_size": 16,
 		"speed": 0.25,
 		"text": [
 			"This is a Test.",
 			"And So is This."
 		],
+		"speaker": "speaker1",
+		"background": "background1",
+		"next": [
+			"test2"
+		]
+	},
+	"test2": {
+		"color": "orange",
+		"alignment": "right",
+		"font_size": 16,
+		"speed": 0.25,
+		"text": [
+			"Test of Speaker 2",
+		],
+		"speaker": "speaker2",
+		"background": "background2"
 	}
 }
