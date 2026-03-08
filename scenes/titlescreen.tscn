@@ -1,11 +1,9 @@
 [gd_scene format=4 uid="uid://d2h0hblq55p8p"]
 
-[ext_resource type="Shader" uid="uid://eppmrgrlcb0f" path="res://assets/shaders/darkening.gdshader" id="1_vhbaf"]
 [ext_resource type="Texture2D" uid="uid://b4wefa8jgpoyg" path="res://assets/textures/title.png" id="2_3jj3l"]
 [ext_resource type="Texture2D" uid="uid://btl24fwergpt0" path="res://assets/textures/background.png" id="2_vhbaf"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_tt55a"]
 [ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="4_t7v6v"]
-[ext_resource type="PackedScene" uid="uid://bvns00cb52gtc" path="res://scenes/effects/dark_effect.tscn" id="5_vhbaf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
 texture = ExtResource("2_vhbaf")
@@ -39,11 +37,6 @@ tile_size = Vector2i(8, 8)
 sources/0 = SubResource("TileSetAtlasSource_d3qq5")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t7v6v"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v6ms7"]
-resource_local_to_scene = true
-shader = ExtResource("1_vhbaf")
-shader_parameter/fade_stage = 0
 
 [node name="GameTest" type="Node2D" unique_id=1813943640]
 
@@ -105,13 +98,3 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
 text = "CREDITS"
 flat = true
 script = ExtResource("4_t7v6v")
-
-[node name="DarkEffect" parent="." unique_id=428971437 instance=ExtResource("5_vhbaf")]
-visible = false
-
-[node name="DarkenRect" parent="DarkEffect" index="0" unique_id=1738142026]
-material = SubResource("ShaderMaterial_v6ms7")
-grow_horizontal = 2
-grow_vertical = 2
-
-[editable path="DarkEffect"]

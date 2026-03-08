@@ -1,15 +1,13 @@
-[gd_scene format=3 uid="uid://bqvm8efh18yhn"]
+[gd_scene format=3 uid="uid://byh13u10kmmo1"]
 
-[ext_resource type="Shader" uid="uid://cvq6nt58xttsj" path="res://assets/shaders/brightening.gdshader" id="1_rat8x"]
+[ext_resource type="Shader" uid="uid://cvq6nt58xttsj" path="res://assets/shaders/brightening.gdshader" id="1_u20tg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhbaf"]
 resource_local_to_scene = true
-shader = ExtResource("1_rat8x")
+shader = ExtResource("1_u20tg")
 shader_parameter/bright_amount = 0.0
 
-[node name="BrightEffect" type="CanvasLayer" unique_id=428971437]
-
-[node name="BrightenRect" type="ColorRect" parent="." unique_id=1738142026]
+[node name="BrightenRect" type="ColorRect" unique_id=376229784]
 z_index = 1
 material = SubResource("ShaderMaterial_vhbaf")
 anchors_preset = 15

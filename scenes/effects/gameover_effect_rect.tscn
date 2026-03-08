@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cvgpur1616u3u"]
+
+[ext_resource type="Shader" uid="uid://bxu18vgujl0cx" path="res://assets/shaders/gameover.gdshader" id="1_8dakm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ka3d8"]
+shader = ExtResource("1_8dakm")
+shader_parameter/dark_amount = 0.0
+shader_parameter/white_threshold = 1.0
+shader_parameter/flash_speed = 10.0
+
+[node name="GameoverEffectRect" type="ColorRect" unique_id=846579070]
+z_index = 1
+material = SubResource("ShaderMaterial_ka3d8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true

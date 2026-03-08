@@ -1,15 +1,13 @@
-[gd_scene format=3 uid="uid://bvns00cb52gtc"]
+[gd_scene format=3 uid="uid://bfss432gh6571"]
 
-[ext_resource type="Shader" uid="uid://eppmrgrlcb0f" path="res://assets/shaders/darkening.gdshader" id="1_oclhy"]
+[ext_resource type="Shader" uid="uid://eppmrgrlcb0f" path="res://assets/shaders/darkening.gdshader" id="1_bky16"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhbaf"]
 resource_local_to_scene = true
-shader = ExtResource("1_oclhy")
+shader = ExtResource("1_bky16")
 shader_parameter/fade_stage = 0
 
-[node name="DarkEffect" type="CanvasLayer" unique_id=428971437]
-
-[node name="DarkenRect" type="ColorRect" parent="." unique_id=1738142026]
+[node name="DarkenRect" type="ColorRect" unique_id=512003992]
 z_index = 1
 material = SubResource("ShaderMaterial_vhbaf")
 anchors_preset = 15
