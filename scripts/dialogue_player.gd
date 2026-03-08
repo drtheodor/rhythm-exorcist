@@ -132,7 +132,7 @@ func process_text_data(data:Dictionary) -> Array:
 		set_speaker(data["speaker"])
 	
 	if data.has("background"):
-		background_texture.texture = backgrounds[data["backgroud"]]
+		background_texture.texture = backgrounds.get(data["background"])
 
 	var texts = data["text"].duplicate()
 	

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c3ob4m4x2t8eh" path="res://assets/textures/progressbar_under.png" id="3_u2dgd"]
 [ext_resource type="Texture2D" uid="uid://812jjo4h8o35" path="res://assets/textures/progressbar_red.png" id="4_bt76a"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="5_bt76a"]
-[ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/DialogueUI.tscn" id="6_djwj0"]
+[ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="6_djwj0"]
 
 [node name="GameUI" type="Control" unique_id=1827341359]
 layout_mode = 3
@@ -48,6 +48,7 @@ A
 R"
 
 [node name="DialogueUi" parent="CanvasLayer" unique_id=22267864 instance=ExtResource("6_djwj0")]
+visible = false
 offset_left = 27.0
 offset_top = 51.0
 offset_right = -27.0

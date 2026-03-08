@@ -8,15 +8,3 @@ texture = ExtResource("1_qpk06")
 region_enabled = true
 region_rect = Rect2(32, 0, 16, 16)
 script = ExtResource("2_5rofs")
-
-[node name="Timer" type="Timer" parent="." unique_id=1734296475]
-wait_time = 5.0
-one_shot = true
-autostart = true
-
-[node name="DestroyTimer" type="Timer" parent="." unique_id=1659786875]
-wait_time = 2.0
-one_shot = true
-autostart = true
-
-[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]
