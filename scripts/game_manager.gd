@@ -15,6 +15,7 @@ var fear: int:
 		on_fear.emit(diff)
 
 signal on_fear(incr: int)
+signal game_over_triggered
 
 func _init() -> void:
 	self.on_fear.connect(self._on_fear)
@@ -24,6 +25,9 @@ func _on_fear(_incr: int) -> void:
 		self.game_over()
 
 func game_over() -> void:
+	game_over_triggered.emit()
+	
+func game_restart() -> void:
 	self.fear = 0
 	get_tree().reload_current_scene()
 

@@ -6,6 +6,224 @@
 [ext_resource type="Texture2D" uid="uid://812jjo4h8o35" path="res://assets/textures/progressbar_red.png" id="4_bt76a"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="5_bt76a"]
 [ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="6_djwj0"]
+[ext_resource type="FontFile" uid="uid://b754fovu6ug0w" path="res://assets/Fami-Sans-Condensed-Bold.otf" id="6_o3bws"]
+[ext_resource type="PackedScene" uid="uid://cvgpur1616u3u" path="res://scenes/effects/gameover_effect_rect.tscn" id="7_e0pfi"]
+[ext_resource type="Shader" uid="uid://bxu18vgujl0cx" path="res://assets/shaders/gameover.gdshader" id="8_sjwyb"]
+[ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="9_3huio"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5kh4o"]
+shader = ExtResource("8_sjwyb")
+shader_parameter/dark_amount = 0.0
+shader_parameter/white_threshold = 0.7690000365275
+shader_parameter/flash_speed = 5.0000002375
+shader_parameter/flash_opacity = 0.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sjwyb"]
+
+[sub_resource type="Animation" id="Animation_sjwyb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameOverText:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RetryButton:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GameOverText:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RetryButton:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RetryButton:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GameoverEffectRect:material:shader_parameter/dark_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GameoverEffectRect:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GameoverEffectRect:material:shader_parameter/flash_opacity")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3huio"]
+resource_name = "game_over"
+length = 15.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameOverText:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(6.033334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RetryButton:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(6.033334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GameOverText:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(6.033334, 7.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RetryButton:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(6.033334, 7.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RetryButton:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(6.033334, 8.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GameoverEffectRect:material:shader_parameter/dark_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 5.433334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.6770000321575]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GameoverEffectRect:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GameoverEffectRect:material:shader_parameter/flash_opacity")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 5.9000006),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sjwyb"]
+_data = {
+&"RESET": SubResource("Animation_sjwyb"),
+&"game_over": SubResource("Animation_3huio")
+}
 
 [node name="GameUI" type="Control" unique_id=1827341359]
 layout_mode = 3
@@ -35,7 +253,7 @@ fill_mode = 3
 texture_under = ExtResource("3_u2dgd")
 texture_progress = ExtResource("4_bt76a")
 
-[node name="Label" type="Label" parent="CanvasLayer" unique_id=1333292986]
+[node name="FearText" type="Label" parent="CanvasLayer" unique_id=1333292986]
 offset_top = 136.0
 offset_right = 40.0
 offset_bottom = 177.0
@@ -53,3 +271,44 @@ offset_left = 27.0
 offset_top = 51.0
 offset_right = -27.0
 offset_bottom = -122.0
+
+[node name="GameoverEffectRect" parent="CanvasLayer" unique_id=846579070 instance=ExtResource("7_e0pfi")]
+visible = false
+material = SubResource("ShaderMaterial_5kh4o")
+offset_bottom = -1.5258789e-05
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverText" type="Label" parent="CanvasLayer" unique_id=240270189]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 2
+offset_left = 91.0
+offset_top = 96.0
+offset_right = 163.0
+offset_bottom = 112.0
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("6_o3bws")
+theme_override_font_sizes/font_size = 16
+text = "GAME OVER"
+
+[node name="RetryButton" type="Button" parent="CanvasLayer" unique_id=821789607]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 2
+offset_left = 96.0
+offset_top = 116.0
+offset_right = 160.0
+offset_bottom = 132.0
+theme_override_fonts/font = ExtResource("5_bt76a")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sjwyb")
+text = "RETRY"
+flat = true
+script = ExtResource("9_3huio")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=903899591]
+root_node = NodePath("../CanvasLayer")
+libraries/ = SubResource("AnimationLibrary_sjwyb")
+
+[connection signal="pressed" from="CanvasLayer/RetryButton" to="." method="_on_retry_button_pressed"]

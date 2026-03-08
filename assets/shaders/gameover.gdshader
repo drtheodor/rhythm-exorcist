@@ -3,6 +3,7 @@ shader_type canvas_item;
 uniform float dark_amount : hint_range(0.0, 1.0) = 0.0;
 uniform float white_threshold : hint_range(0.0, 1.0) = 0.95;
 uniform float flash_speed : hint_range(0.0, 30.0) = 10.0;
+uniform float flash_opacity : hint_range(0.0, 1.0) = 1.0;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 
 void fragment() {
@@ -22,7 +23,10 @@ void fragment() {
             screen_color.b > white_threshold) {
             
             float flash = step(0.5, sin(TIME * flash_speed));
-            processed_color = mix(screen_color.rgb, vec3(1.0, 0.0, 0.0), flash);
+            vec3 red_color = vec3(1.0, 0.0, 0.0);
+            
+            // Mix original color with red based on flash state AND opacity slider
+            processed_color = mix(screen_color.rgb, red_color, flash * flash_opacity);
         }
 
         float snapped_darkness = floor(dark_amount * 10.0) / 10.0;
