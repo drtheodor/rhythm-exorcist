@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cq8m57372ivc4"]
 
 [ext_resource type="Script" uid="uid://ch7cfslijqydo" path="res://scripts/game_ui.gd" id="1_rns2u"]
-[ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="1_yubou"]
 [ext_resource type="Texture2D" uid="uid://c3ob4m4x2t8eh" path="res://assets/textures/progressbar_under.png" id="3_u2dgd"]
 [ext_resource type="Texture2D" uid="uid://812jjo4h8o35" path="res://assets/textures/progressbar_red.png" id="4_bt76a"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="5_bt76a"]
+[ext_resource type="Texture2D" uid="uid://bo2shapatehs7" path="res://assets/textures/progressbar_white.png" id="5_g2v8e"]
 [ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="6_djwj0"]
 [ext_resource type="FontFile" uid="uid://b754fovu6ug0w" path="res://assets/Fami-Sans-Condensed-Bold.otf" id="6_o3bws"]
 [ext_resource type="PackedScene" uid="uid://cvgpur1616u3u" path="res://scenes/effects/gameover_effect_rect.tscn" id="7_e0pfi"]
@@ -387,24 +387,35 @@ script = ExtResource("1_rns2u")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=430000400]
 
-[node name="FearLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=415758055]
-visible = false
-offset_right = 160.0
-offset_bottom = 40.0
-theme_override_fonts/normal_font = ExtResource("1_yubou")
-theme_override_font_sizes/normal_font_size = 8
-text = "0 FEAR"
-
 [node name="FearBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1344384834]
-offset_left = 8.0
+offset_left = 40.0
 offset_top = 136.0
-offset_right = 16.0
+offset_right = 48.0
+offset_bottom = 216.0
+fill_mode = 3
+texture_under = ExtResource("3_u2dgd")
+texture_progress = ExtResource("4_bt76a")
+
+[node name="FaithBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1779859320]
+offset_left = 16.0
+offset_top = 136.0
+offset_right = 24.0
+offset_bottom = 216.0
+fill_mode = 3
+texture_under = ExtResource("3_u2dgd")
+texture_progress = ExtResource("5_g2v8e")
+
+[node name="PossBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=768998454]
+offset_left = 232.0
+offset_top = 136.0
+offset_right = 240.0
 offset_bottom = 216.0
 fill_mode = 3
 texture_under = ExtResource("3_u2dgd")
 texture_progress = ExtResource("4_bt76a")
 
 [node name="FearText" type="Label" parent="CanvasLayer" unique_id=1333292986]
+offset_left = 32.0
 offset_top = 136.0
 offset_right = 40.0
 offset_bottom = 177.0
@@ -415,6 +426,39 @@ text = "F
 E
 A
 R"
+
+[node name="FaithText" type="Label" parent="CanvasLayer" unique_id=236290537]
+offset_left = 8.0
+offset_top = 136.0
+offset_right = 16.0
+offset_bottom = 177.0
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("5_bt76a")
+theme_override_font_sizes/font_size = 8
+text = "F
+A
+I
+T
+H"
+
+[node name="PossText" type="Label" parent="CanvasLayer" unique_id=507773183]
+offset_left = 224.0
+offset_top = 136.0
+offset_right = 232.0
+offset_bottom = 177.0
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("5_bt76a")
+theme_override_font_sizes/font_size = 8
+text = "P
+O
+S
+S
+E
+S
+S
+I
+O
+N"
 
 [node name="DialogueUi" parent="CanvasLayer" unique_id=22267864 instance=ExtResource("6_djwj0")]
 visible = false

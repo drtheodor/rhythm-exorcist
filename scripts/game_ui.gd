@@ -9,7 +9,6 @@ func _ready() -> void:
 
 # TODO: use snake case
 func _on_fear(incr: int):
-	fear_label.text = "FEAR: " + str(GameManager.fear) + "%"
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
 
 func _on_game_over_notified() -> void:
