@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://cvgpur1616u3u" path="res://scenes/effects/gameover_effect_rect.tscn" id="7_e0pfi"]
 [ext_resource type="Shader" uid="uid://bxu18vgujl0cx" path="res://assets/shaders/gameover.gdshader" id="8_sjwyb"]
 [ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="9_3huio"]
+[ext_resource type="Texture2D" uid="uid://bl86bccnf63x6" path="res://assets/textures/eyesdark.png" id="11_5kh4o"]
+[ext_resource type="AudioStream" uid="uid://4pxuyi7ce37w" path="res://assets/audio/imwatchingyou.wav" id="12_s2npe"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5kh4o"]
 shader = ExtResource("8_sjwyb")
@@ -118,6 +120,30 @@ tracks/7/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Eyesdark:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("../Imwatchingyou:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_3huio"]
 resource_name = "game_over"
@@ -219,10 +245,135 @@ tracks/7/keys = {
 "values": [0.0, 1.0]
 }
 
+[sub_resource type="Animation" id="Animation_g2v8e"]
+resource_name = "game_over_jump1"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameOverText:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(6.033334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RetryButton:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(6.033334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GameOverText:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(6.033334, 7.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RetryButton:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(6.033334, 7.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RetryButton:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(6.033334, 8.533334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GameoverEffectRect:material:shader_parameter/dark_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 5.433334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.6770000321575]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GameoverEffectRect:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GameoverEffectRect:material:shader_parameter/flash_opacity")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 5.9000006),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Eyesdark:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 3.3, 4.7489333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("../Imwatchingyou:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 3.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sjwyb"]
 _data = {
 &"RESET": SubResource("Animation_sjwyb"),
-&"game_over": SubResource("Animation_3huio")
+&"game_over": SubResource("Animation_3huio"),
+&"game_over_jump1": SubResource("Animation_g2v8e")
 }
 
 [node name="GameUI" type="Control" unique_id=1827341359]
@@ -307,8 +458,18 @@ text = "RETRY"
 flat = true
 script = ExtResource("9_3huio")
 
+[node name="Eyesdark" type="Sprite2D" parent="CanvasLayer" unique_id=1279429172]
+visible = false
+z_index = 3
+position = Vector2(128, 128)
+texture = ExtResource("11_5kh4o")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=903899591]
 root_node = NodePath("../CanvasLayer")
 libraries/ = SubResource("AnimationLibrary_sjwyb")
+
+[node name="Imwatchingyou" type="AudioStreamPlayer" parent="." unique_id=648773016]
+stream = ExtResource("12_s2npe")
+volume_db = 7.241
 
 [connection signal="pressed" from="CanvasLayer/RetryButton" to="." method="_on_retry_button_pressed"]

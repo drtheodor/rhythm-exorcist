@@ -14,6 +14,6 @@ func _on_fear(incr: int):
 
 func _on_game_over_notified() -> void:
 	$AnimationPlayer.play("game_over")
-	
+
 func _on_retry_button_pressed() -> void:
 	GameManager.game_restart()

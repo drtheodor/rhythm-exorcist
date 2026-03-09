@@ -8,6 +8,8 @@ const MAX_MUSIC_DB : float = 5.0
 var sfx_volume : float = 0.0
 var music_volume : float = 0.0
 
+var is_game_over: bool = false
+
 var fear: int:
 	set(val):
 		var diff = val - fear
@@ -21,7 +23,8 @@ func _init() -> void:
 	self.on_fear.connect(self._on_fear)
 
 func _on_fear(_incr: int) -> void:
-	if fear >= 100:
+	if fear >= 100 and not is_game_over:
+		is_game_over = true 
 		self.game_over()
 
 func game_over() -> void:
@@ -29,6 +32,7 @@ func game_over() -> void:
 	
 func game_restart() -> void:
 	self.fear = 0
+	is_game_over = false 
 	get_tree().reload_current_scene()
 
 func set_sfx_volume(val: float) -> void:
