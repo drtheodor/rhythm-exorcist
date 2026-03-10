@@ -1,6 +1,6 @@
 extends Control
 
-@onready var fear_label = $CanvasLayer/FearLabel
+@onready var fear_label = $CanvasLayer/FearText
 @onready var fear_bar = $CanvasLayer/FearBar
 
 func _ready() -> void:
