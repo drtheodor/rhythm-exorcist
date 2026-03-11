@@ -115,12 +115,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 script = ExtResource("2_64e6d")
 
-[node name="RandomSpawnTimer" type="Timer" parent="." unique_id=478044783]
-autostart = true
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1749258777]
 root_motion_local = true
 libraries/ = SubResource("AnimationLibrary_bbep3")
 speed_scale = 1.5
-
-[connection signal="timeout" from="RandomSpawnTimer" to="." method="_on_random_spawn_timer_timeout"]

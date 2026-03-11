@@ -1,0 +1,14 @@
+[remap]
+
+importer="com.nlaha.godotmidi"
+type="MidiResource"
+uid="uid://co1l3tkcbic3i"
+path="res://.godot/imported/thick_of_it.mid-b5d80708a981bdeb2bc34aa932dd0738.res"
+
+[deps]
+
+source_file="res://thick_of_it.mid"
+dest_files=["res://.godot/imported/thick_of_it.mid-b5d80708a981bdeb2bc34aa932dd0738.res"]
+
+[params]
+

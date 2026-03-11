@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://dvbjs5edfe16c"]
 
 [ext_resource type="Texture2D" uid="uid://b114dkrbtbr8x" path="res://assets/textures/objects.png" id="1_qpk06"]
-[ext_resource type="Script" uid="uid://dsux10p8j2e3n" path="res://scripts/key_running.gd" id="2_5rofs"]
 
 [node name="KeyRunning" type="Sprite2D" unique_id=508515822]
 texture = ExtResource("1_qpk06")
 region_enabled = true
 region_rect = Rect2(32, 0, 16, 16)
-script = ExtResource("2_5rofs")

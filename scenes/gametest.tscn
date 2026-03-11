@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://6f74tevkju0r" path="res://scenes/objects/key_listener.tscn" id="3_34im5"]
 [ext_resource type="PackedScene" uid="uid://cq8m57372ivc4" path="res://scenes/game_ui.tscn" id="4_6ycye"]
 [ext_resource type="PackedScene" uid="uid://bhes1rw6g6xlk" path="res://scenes/objects/clara.tscn" id="5_1dvly"]
+[ext_resource type="MidiResource" uid="uid://ben25xbc4akfs" path="res://test_low_tempo2.mid" id="5_82nuq"]
+[ext_resource type="Script" uid="uid://bitpgscy8bwyx" path="res://scripts/midi_manager.gd" id="6_t82je"]
+[ext_resource type="AudioStream" uid="uid://c2hprt6p8adds" path="res://test_low_tempo2.wav" id="7_82nuq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
 texture = ExtResource("1_p5vg0")
@@ -76,15 +79,6 @@ tile_set = SubResource("TileSet_f6jnj")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1019960626]
 position = Vector2(128, 112)
 
-[node name="UpKey" parent="." unique_id=2070705062 instance=ExtResource("3_34im5")]
-position = Vector2(64, 144)
-key_name = "up"
-
-[node name="DownKey" parent="." unique_id=843859615 instance=ExtResource("3_34im5")]
-position = Vector2(64, 160)
-region_rect = Rect2(16, 0, 16, 16)
-key_name = "down"
-
 [node name="Cross" type="Sprite2D" parent="." unique_id=160852253]
 position = Vector2(72, 176)
 texture = ExtResource("2_708r6")
@@ -119,3 +113,39 @@ position = Vector2(128, 64)
 [node name="ClaraAnimations" type="AnimationPlayer" parent="." unique_id=304925286]
 libraries/ = SubResource("AnimationLibrary_t82je")
 autoplay = &"idle"
+
+[node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188]
+midi = ExtResource("5_82nuq")
+process_mode = 3
+script = ExtResource("6_t82je")
+audio = ExtResource("7_82nuq")
+note_width = 0
+play_line_x = 60.0
+debug = true
+
+[node name="Running" type="Node" parent="MidiPlayer" unique_id=489803820]
+
+[node name="NoteHider2" type="ColorRect" parent="MidiPlayer" unique_id=1048274858]
+offset_left = 201.0
+offset_top = 137.0
+offset_right = 256.0
+offset_bottom = 167.0
+color = Color(0, 0, 0, 1)
+
+[node name="NoteHider" type="ColorRect" parent="MidiPlayer" unique_id=1062773405]
+offset_left = 55.0
+offset_top = 137.0
+offset_right = 71.0
+offset_bottom = 167.0
+color = Color(0, 0, 0, 1)
+
+[node name="UpKey" parent="MidiPlayer" unique_id=2070705062 instance=ExtResource("3_34im5")]
+position = Vector2(64, 144)
+key_name = "up"
+
+[node name="DownKey" parent="MidiPlayer" unique_id=843859615 instance=ExtResource("3_34im5")]
+position = Vector2(64, 160)
+region_rect = Rect2(16, 0, 16, 16)
+key_name = "down"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MidiPlayer" unique_id=821598419]
