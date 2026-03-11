@@ -11,18 +11,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
 func _on_play_button_pressed() -> void:
-	pass # Replace with function body.
-
+	get_tree().change_scene_to_packed(GAMESCENE)
 
 func _on_stage_button_pressed() -> void:
 	pass # Replace with function body.
 
-
 func _on_options_button_pressed() -> void:
-	pass # Replace with function body.
-
+	GameManager.options_visible()
 
 func _on_credits_button_pressed() -> void:
 	pass # Replace with function body.
