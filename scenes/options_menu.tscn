@@ -40,6 +40,7 @@ sources/0 = SubResource("TileSetAtlasSource_d3qq5")
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t7v6v"]
 
 [node name="OptionsMenu" type="Node2D" unique_id=1813943640]
+process_mode = 3
 visible = false
 script = ExtResource("1_3xsyx")
 

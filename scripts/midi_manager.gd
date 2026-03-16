@@ -28,7 +28,7 @@ const KEY = preload("res://scenes/objects/key_running.tscn")
 
 var notes: Array = []
 
-func _ready() -> void:
+func start() -> void:
 	var asp = $AudioStreamPlayer
 	asp.stream = self.audio
 	
@@ -59,7 +59,7 @@ func _ready() -> void:
 					
 					temp_notes.append(last_note)
 				
-				if event.subtype == MIDI_MESSAGE_NOTE_OFF:
+				if event.subtype == MIDI_MESSAGE_NOTE_OFF and last_note != null:
 					last_note.duration = time - last_note.time
 					last_note = null
 	
