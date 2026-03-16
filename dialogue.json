@@ -20,9 +20,310 @@
 		"font_size": 16,
 		"speed": 0.25,
 		"text": [
-			"Test of Speaker 2",
+			"Test of Speaker 2"
 		],
 		"speaker": "speaker2",
 		"background": "background2"
+	},
+	"intro_start": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"speed": 0.05,
+		"scene": "",
+		"text": ["Father Aldric had a way of delivering terrible news"],
+		"next": ["intro_1"]
+	},
+	"intro_1": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I remember the afternoon he called me into his study."],
+		"next": ["intro_2"]
+	},
+	"intro_2": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "scene1",
+		"text": ["He was already seated when I entered, hands folded atop his worn bible."],
+		"next": ["intro_3"]
+	},
+	"intro_3": {
+		"speaker": "aldric",
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"Her name is Clara Vos. Fifteen years old. Family lives out past Brennan Road.\""],
+		"next": ["intro_4"]
+	},
+	"intro_4": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"Three days ago, she went down into their cellar and found something,\""],
+		"next": ["intro_5"]
+	},
+	"intro_5": {
+		"color": "lightgray",
+		"alignment": "right",
+		"scene": "scene4",
+		"text": ["\"a box, old, no markings the father could describe clearly.\""],
+		"next": ["intro_6"]
+	},
+	"intro_6": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"She opened it. She hasn't been herself since.\""],
+		"next": ["intro_7"]
+	},
+	"intro_7": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"scene": "scene1",
+		"text": ["\"What do you mean, hasn't been herself?\""],
+		"next": ["intro_8"]
+	},
+	"intro_8": {
+		"speaker": "aldric",
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"Not sleeping. Not eating. Speaking in a voice that isn't hers.\""],
+		"next": ["intro_9"]
+	},
+	"intro_9": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"Her mother says she woke in the night to find the girl standing in the hallway,\""],
+		"next": ["intro_10"]
+	},
+	"intro_10": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"perfectly still, reciting something in a language nobody in that house knows.\""],
+		"next": ["intro_11"]
+	},
+	"intro_11": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"text": ["He slid a manilla folder across the desk. I opened it."],
+		"next": ["intro_12"]
+	},
+	"intro_12": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["There were notes, a few photographs of the cellar, a short written account from the father."],
+		"next": ["intro_13"]
+	},
+	"intro_13": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I didn't read past the first paragraph."],
+		"next": ["intro_14"]
+	},
+	"intro_14": {
+		"speaker": "aldric",
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"I would go myself, but this calls for someone who can move quickly if it comes to that.\""],
+		"next": ["intro_15"]
+	},
+	"intro_15": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"And someone the girl might not frighten so easily.\""],
+		"next": ["intro_16"]
+	},
+	"intro_16": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"...\""],
+		"next": ["intro_17"]
+	},
+	"intro_17": {
+		"color": "lightgray",
+		"alignment": "right",
+		"text": ["\"I am not certain she would not frighten me.\""],
+		"next": ["intro_18"]
+	},
+	"intro_18": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"scene": "",
+		"text": ["It was the closest I had ever heard him come to admitting something like that."],
+		"next": ["intro_19"]
+	},
+	"intro_19": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I closed the folder and told him I understood."],
+		"next": ["intro_20"]
+	},
+	"intro_20": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I would be lying if I said I wasn't afraid. But I went anyway."],
+		"next": ["intro_21"]
+	},
+	"intro_21": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "scene2",
+		"text": ["The next morning I was at the Voss house by nine."],
+		"next": ["intro_22"]
+	},
+	"intro_22": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I knocked twice. After a while the door opened to reveal a young woman."],
+		"next": ["intro_23"]
+	},
+	"intro_23": {
+		"speaker": "speaker2",
+		"color": "orange",
+		"text": ["\"You're from the church.\""],
+		"next": ["intro_24"]
+	},
+	"intro_24": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": ["\"Oh... yes, I am. Father Aldric sent me.\""],
+		"next": ["intro_25"]
+	},
+	"intro_25": {
+		"speaker": "speaker2",
+		"color": "orange",
+		"text": ["\"...\""],
+		"next": ["intro_26"]
+	},
+	"intro_26": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": ["\"I assume you're Clara's sister? Are your parents here?\""],
+		"next": ["intro_27"]
+	},
+	"intro_27": {
+		"speaker": "speaker2",
+		"color": "orange",
+		"text": ["\"My parents are at the church. I was told to call them when you arrived.\""],
+		"next": ["intro_28"]
+	},
+	"intro_28": {
+		"color": "orange",
+		"text": ["\"I haven't yet.\""],
+		"next": ["intro_29"]
+	},
+	"intro_29": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"text": ["She stepped back and let me in without another word."],
+		"next": ["intro_30"]
+	},
+	"intro_30": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "scene3b",
+		"text": ["She led me down a narrow hallway and stopped midway."],
+		"next": ["intro_31"]
+	},
+	"intro_31": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["She pointed to a wooden door down the hallway."],
+		"next": ["intro_32"]
+	},
+	"intro_32": {
+		"speaker": "speaker2",
+		"color": "orange",
+		"text": ["\"She's through there. In the back room. She hasn't come out since yesterday morning.\""],
+		"next": ["intro_33"]
+	},
+	"intro_33": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I was wise enough not to ask her why."],
+		"next": ["intro_34"]
+	},
+	"intro_34": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": ["\"I'll go in alone.\""],
+		"next": ["intro_35"]
+	},
+	"intro_35": {
+		"speaker": "speaker2",
+		"color": "orange",
+		"text": ["\"...\""],
+		"next": ["intro_36"]
+	},
+	"intro_36": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"text": ["She looked at me for a moment as if deciding whether to say something else."],
+		"next": ["intro_37"]
+	},
+	"intro_37": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "scene3a",
+		"text": ["Then she nodded and turned to go into another room."],
+		"next": ["intro_38"]
+	},
+	"intro_38": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["There was a mirror on the wall beside me. I hadn't paid it any attention on the way in."],
+		"next": ["intro_39"]
+	},
+	"intro_39": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["But standing there alone in the hallway, I found myself turning toward it."],
+		"next": ["intro_40"]
+	},
+	"intro_40": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "scene1",
+		"text": ["..."],
+		"next": ["intro_41"]
+	},
+	"intro_41": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["There's nothing there."],
+		"next": ["intro_42"]
+	},
+	"intro_42": {
+		"color": "blue",
+		"alignment": "center",
+		"scene": "",
+		"text": ["I turned away from the mirror and walked to the end of the hallway."],
+		"next": ["intro_43"]
+	},
+	"intro_43": {
+		"color": "blue",
+		"alignment": "center",
+		"text": ["I slowly opened the door."]
+	},
+	"end_start": {
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"background": "scene3a",
+		"text": [
+			"[PLACEHOLDER: End dialogue line 1]"
+		],
+		"next": ["end_2"]
+	},
+	"end_2": {
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"background": "scene3b",
+		"text": [
+			"[PLACEHOLDER: End dialogue line 2]"
+		]
 	}
 }

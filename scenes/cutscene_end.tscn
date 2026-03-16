@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://bw6n4k2j8t1y5"]
+
+[ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_cscne"]
+[ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="2_dui"]
+
+[node name="CutsceneEnd" type="Node" unique_id=2222222221]
+script = ExtResource("1_cscne")
+type = 1
+
+[node name="DialogueUi" parent="." unique_id=2222222222 instance=ExtResource("2_dui")]
+starting_key = "end_start"

@@ -3,6 +3,7 @@ extends Node
 
 signal start_dialogue()
 signal dialogue_typing()
+signal dialogue_finished()
 
 @export_file("*.json") var scene_text_file
 
@@ -29,8 +30,13 @@ var typing_counter = 0
 @onready var text_label = $MarginContainer/RichTextLabel
 @onready var background_color: ColorRect = $BackgroundColor
 @onready var background_texture: TextureRect = $BackgroundTexture
+@onready var scene_sprite: Sprite2D = $Scene
+@onready var sfx_player: AudioStreamPlayer = $SfxPlayer
 @onready var speaker_1: TileMapLayer = $Speaker1
 @onready var speaker_2: TileMapLayer = $Speaker2
+
+@export var scene_images: Dictionary[String, Texture2D] = {}
+@export var sfx_sounds: Dictionary[String, AudioStream] = {}
 
 func set_visible(toggle: bool) -> void:
 	self.visible = toggle
@@ -56,7 +62,6 @@ func type_text() -> void:
 		dialogue_typing.emit()
 	else:
 		is_typing = false
-		next_line()
 
 func finish_typing() -> void:
 	text_label.visible_characters = -1
@@ -80,15 +85,12 @@ func end() -> void:
 
 func finish() -> void:
 	in_progress = false
-	#if len(dialog_options) > 0:
-		#show_options()
 	if len(next) != 0:
 		on_display_dialog(next.pop_back())
-		
 		return
-	
 	text_label.text = ""
 	set_visible(false)
+	dialogue_finished.emit()
 
 func on_display_dialog(text_key):
 	if in_progress:
@@ -114,13 +116,12 @@ func process_text_data(data:Dictionary) -> Array:
 		
 	if data.has("font_size"):
 		font_size = data["font_size"]
-	else:
-		font_size = 36
 		
 	if data.has("alignment"):
 		alignment = data["alignment"]
 	else:
-		alignment = "center"
+		var spk = data.get("speaker", current_speaker)
+		alignment = "left" if spk == speaker_1_name else "right"
 	
 	if data.has("next"):
 		next.append_array(data["next"])
@@ -131,8 +132,22 @@ func process_text_data(data:Dictionary) -> Array:
 	if data.has("speaker") and current_speaker != data["speaker"]:
 		set_speaker(data["speaker"])
 	
+	if data.has("sfx"):
+		var stream = sfx_sounds.get(data["sfx"])
+		if stream:
+			sfx_player.stream = stream
+			sfx_player.play()
+
 	if data.has("background"):
 		background_texture.texture = backgrounds.get(data["background"])
+
+	if data.has("scene"):
+		var key = data["scene"]
+		if key == null or key == "":
+			scene_sprite.visible = false
+		else:
+			scene_sprite.texture = scene_images.get(key)
+			scene_sprite.visible = true
 
 	var texts = data["text"].duplicate()
 	
@@ -151,15 +166,30 @@ func process_text_data(data:Dictionary) -> Array:
 func set_speaker(speak: String):
 	if current_speaker == speaker_1_name:
 		speaker_1.visible = false
-	else:
+	elif current_speaker == speaker_2_name:
 		speaker_2.visible = false
 	current_speaker = speak
 	if current_speaker == speaker_1_name:
 		speaker_1.visible = true
-	else:
+	elif current_speaker == speaker_2_name:
 		speaker_2.visible = true
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not get("visible") or not in_progress:
+		return
+	if event.is_action_pressed("skip"):
+		if is_typing:
+			finish_typing()
+		else:
+			next_line()
 
 func _on_background_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			on_display_dialog(starting_key)
+			if in_progress:
+				if is_typing:
+					finish_typing()
+				else:
+					next_line()
+			else:
+				on_display_dialog(starting_key)

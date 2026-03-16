@@ -4,6 +4,8 @@ var options_menu = preload("uid://2ktt57lm6wu0").instantiate()
 const GAME_LEVEL = preload("uid://cmuevhd5wo1mp")
 const LEVEL_SELECT = preload("uid://dro5vu5pw0wrf")
 const TITLESCREEN = preload("uid://d2h0hblq55p8p")
+const CUTSCENE_INTRO = preload("res://scenes/cutscene_intro.tscn")
+const CUTSCENE_END = preload("res://scenes/cutscene_end.tscn")
 
 @export_category("Level 1")
 # Current song: test_low_tempo2
@@ -83,7 +85,17 @@ func game_restart() -> void:
 	select_level(current_level_audio, current_level_midi)
 
 func start_level() -> void:
+	get_tree().change_scene_to_packed(CUTSCENE_INTRO)
+
+func begin_level_1() -> void:
 	select_level(level1_audio, level1_midi)
+
+func open_cutscene_end() -> void:
+	get_tree().change_scene_to_packed(CUTSCENE_END)
+
+func level_completed() -> void:
+	if current_level_audio == level4_audio:
+		open_cutscene_end()
 
 func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	if audio != current_level_audio and midi != current_level_midi:

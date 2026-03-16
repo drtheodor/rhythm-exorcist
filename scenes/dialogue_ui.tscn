@@ -4,6 +4,7 @@
 [ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="2_e6usr"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_imsod"]
 [ext_resource type="Texture2D" uid="uid://igcp7m3onpx0" path="res://assets/textures/character_portraits.png" id="4_e6usr"]
+[ext_resource type="Texture2D" uid="uid://ohpvm4o8ij6q" path="res://assets/textures/scenes/scene4.png" id="5_imsod"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_imsod"]
 texture = ExtResource("4_e6usr")
@@ -30,25 +31,26 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 144.0
+offset_right = -64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_bottom = 25
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=741444607]
-z_index = 1
+z_index = 2
 texture_filter = 2
 texture_repeat = 1
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_e6usr")
 theme_override_fonts/bold_font = ExtResource("3_imsod")
-theme_override_font_sizes/normal_font_size = 16
-theme_override_font_sizes/bold_font_size = 16
+theme_override_font_sizes/normal_font_size = 8
+theme_override_font_sizes/bold_font_size = 8
 bbcode_enabled = true
 text = "Hello World"
 scroll_active = false
 scroll_following = true
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="BackgroundTexture" type="TextureRect" parent="." unique_id=442470775]
 layout_mode = 1
@@ -65,12 +67,22 @@ offset_bottom = 224.0
 color = Color(0, 0, 0, 1)
 
 [node name="Speaker1" type="TileMapLayer" parent="." unique_id=1019392813]
+position = Vector2(0, 32)
 tile_map_data = PackedByteArray(0, 0, 2, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_wlc0t")
 
 [node name="Speaker2" type="TileMapLayer" parent="." unique_id=1846907738]
 visible = false
+position = Vector2(0, 32)
 tile_map_data = PackedByteArray(0, 0, 13, 0, 9, 0, 0, 0, 1, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_wlc0t")
+
+[node name="Scene" type="Sprite2D" parent="." unique_id=543922209]
+z_index = 1
+position = Vector2(128, 76)
+texture = ExtResource("5_imsod")
+
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="." unique_id=654321098]
+bus = &"SFX"
 
 [connection signal="gui_input" from="BackgroundColor" to="." method="_on_background_gui_input"]

@@ -155,5 +155,5 @@ func draw_play_line():
 func _on_finished():
 	for note in self.notes:
 		note.queue_free()
-	
 	notes.clear()
+	GameManager.level_completed()
