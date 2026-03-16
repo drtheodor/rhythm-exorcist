@@ -1,6 +1,28 @@
 extends Node
 
 var options_menu = preload("uid://2ktt57lm6wu0").instantiate()
+const GAME_LEVEL = preload("uid://cmuevhd5wo1mp")
+const LEVEL_SELECT = preload("uid://dro5vu5pw0wrf")
+const TITLESCREEN = preload("uid://d2h0hblq55p8p")
+
+@export_category("Level 1")
+# Current song: test_low_tempo2
+@export var level1_audio: AudioStream = preload("uid://c2hprt6p8adds")
+@export var level1_midi: MidiResource = preload("uid://ben25xbc4akfs")
+
+@export_category("Level 2")
+# Current song: test_low_tempo
+@export var level2_audio: AudioStream = preload("uid://xq87kqybxnue")
+@export var level2_midi: MidiResource = preload("uid://b8wmtbj54p8q6")
+
+@export_category("Level 3")
+# Current song: thick_of_it
+@export var level3_audio: AudioStream = preload("uid://dv4sgm03p7cxp")
+@export var level3_midi: MidiResource = preload("uid://co1l3tkcbic3i")
+
+@export_category("Level 4")
+@export var level4_audio: AudioStream
+@export var level4_midi: MidiResource
 
 var sfx_volume : float = 5.0
 var music_volume : float = 5.0
@@ -51,4 +73,20 @@ func set_music_volume(val: float) -> void:
 	var sfx_index= AudioServer.get_bus_index("Music")
 	AudioServer.set_bus_volume_db(sfx_index, sfx_volume)
 
-const TITLESCREEN = preload("uid://d2h0hblq55p8p")
+
+
+func start_level() -> void:
+	select_level(level1_audio, level1_midi)
+
+func select_level(audio: AudioStream, midi: MidiResource) -> void:
+	get_tree().change_scene_to_packed(GAME_LEVEL)
+	await get_tree().scene_changed
+	var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
+	midi_player.audio = audio
+	midi_player.midi = midi
+
+func open_level_select() -> void:
+	get_tree().change_scene_to_packed(LEVEL_SELECT)
+
+func open_title_screen() -> void:
+	get_tree().change_scene_to_packed(TITLESCREEN)

@@ -114,7 +114,7 @@ position = Vector2(128, 64)
 libraries/ = SubResource("AnimationLibrary_t82je")
 autoplay = &"idle"
 
-[node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188]
+[node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188 groups=["MidiPlayer"]]
 midi = ExtResource("5_82nuq")
 process_mode = 3
 script = ExtResource("6_t82je")

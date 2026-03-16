@@ -1,4 +1,5 @@
 extends MidiPlayer
+class_name MidiManager
 
 const KEY = preload("res://scenes/objects/key_running.tscn")
 
