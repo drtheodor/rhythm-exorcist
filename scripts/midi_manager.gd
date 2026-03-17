@@ -23,6 +23,7 @@ const KEY = preload("res://scenes/objects/key_running.tscn")
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
 @export var perfect_heal: int = 1
+@export var faith_penalty: int = 2
 
 @export var keys: Array[String] = ["up", "down"]
 
@@ -104,6 +105,7 @@ func _process(_delta: float) -> void:
 			
 			if note.position.x + note_width < play_line_x:
 				GameManager.fear += self.fear
+				GameManager.faith -= faith_penalty
 				note.queue_free()
 				return false
 		return true

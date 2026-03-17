@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://cmuevhd5wo1mp"]
 
 [ext_resource type="Texture2D" uid="uid://btl24fwergpt0" path="res://assets/textures/background.png" id="1_p5vg0"]
-[ext_resource type="Texture2D" uid="uid://b114dkrbtbr8x" path="res://assets/textures/objects.png" id="2_708r6"]
 [ext_resource type="PackedScene" uid="uid://6f74tevkju0r" path="res://scenes/objects/key_listener.tscn" id="3_34im5"]
 [ext_resource type="PackedScene" uid="uid://cq8m57372ivc4" path="res://scenes/game_ui.tscn" id="4_6ycye"]
 [ext_resource type="PackedScene" uid="uid://bhes1rw6g6xlk" path="res://scenes/objects/clara.tscn" id="5_1dvly"]
@@ -78,34 +77,6 @@ tile_set = SubResource("TileSet_f6jnj")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1019960626]
 position = Vector2(128, 112)
-
-[node name="Cross" type="Sprite2D" parent="." unique_id=160852253]
-position = Vector2(72, 176)
-texture = ExtResource("2_708r6")
-offset = Vector2(12, 12)
-region_enabled = true
-region_rect = Rect2(0, 16, 24, 24)
-
-[node name="Water" type="Sprite2D" parent="." unique_id=1806981528]
-position = Vector2(104, 176)
-texture = ExtResource("2_708r6")
-offset = Vector2(12, 12)
-region_enabled = true
-region_rect = Rect2(24, 16, 24, 24)
-
-[node name="Bell" type="Sprite2D" parent="." unique_id=1898970133]
-position = Vector2(136, 176)
-texture = ExtResource("2_708r6")
-offset = Vector2(12, 12)
-region_enabled = true
-region_rect = Rect2(48, 16, 24, 24)
-
-[node name="Pentagram" type="Sprite2D" parent="." unique_id=879480021]
-position = Vector2(168, 176)
-texture = ExtResource("2_708r6")
-offset = Vector2(12, 12)
-region_enabled = true
-region_rect = Rect2(72, 16, 24, 24)
 
 [node name="Clara" parent="." unique_id=514047567 instance=ExtResource("5_1dvly")]
 position = Vector2(128, 64)

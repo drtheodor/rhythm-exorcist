@@ -7,6 +7,9 @@ const LEVEL_SELECT = preload("uid://dro5vu5pw0wrf")
 const TITLESCREEN = preload("uid://d2h0hblq55p8p")
 const CUTSCENE_INTRO = preload("res://scenes/cutscene_intro.tscn")
 const CUTSCENE_END = preload("res://scenes/cutscene_end.tscn")
+const INTERSTAGE_1 = preload("res://scenes/cutscene_interstage_1.tscn")
+const INTERSTAGE_2 = preload("res://scenes/cutscene_interstage_2.tscn")
+const INTERSTAGE_3 = preload("res://scenes/cutscene_interstage_3.tscn")
 
 @export_category("Level 1")
 # Current song: test_low_tempo2
@@ -15,20 +18,22 @@ const CUTSCENE_END = preload("res://scenes/cutscene_end.tscn")
 
 @export_category("Level 2")
 # Current song: test_low_tempo
-@export var level2_audio: AudioStream = preload("uid://xq87kqybxnue")
-@export var level2_midi: MidiResource = preload("uid://b8wmtbj54p8q6")
+@export var level2_audio: AudioStream = preload("uid://c2hprt6p8adds")
+@export var level2_midi: MidiResource = preload("uid://ben25xbc4akfs")
 
 @export_category("Level 3")
 # Current song: thick_of_it
-@export var level3_audio: AudioStream = preload("uid://dv4sgm03p7cxp")
-@export var level3_midi: MidiResource = preload("uid://co1l3tkcbic3i")
+@export var level3_audio: AudioStream = preload("uid://c2hprt6p8adds")
+@export var level3_midi: MidiResource = preload("uid://ben25xbc4akfs")
 
 @export_category("Level 4")
-@export var level4_audio: AudioStream
-@export var level4_midi: MidiResource
+@export var level4_audio: AudioStream = preload("uid://c2hprt6p8adds")
+@export var level4_midi: MidiResource = preload("uid://ben25xbc4akfs")
 
 var current_level_audio: AudioStream = null
 var current_level_midi: MidiResource = null
+var current_level_num: int = 0
+var animated_level_entry: bool = false
 
 var sfx_volume : float = 5.0
 var music_volume : float = 5.0
@@ -43,7 +48,13 @@ var fear: int:
 		fear = val
 		on_fear.emit(diff)
 
+var faith: int = 100:
+	set(val):
+		faith = clamp(val, 0, 100)
+		on_faith.emit(faith)
+
 signal on_fear(incr: int)
+signal on_faith(new_val: int)
 signal game_over_triggered
 signal toggle_options_visible
 signal pause_game
@@ -91,7 +102,8 @@ func game_over() -> void:
 
 func game_restart() -> void:
 	self.fear = 0
-	is_game_over = false 
+	is_game_over = false
+	animated_level_entry = false
 	select_level(current_level_audio, current_level_midi)
 
 func start_level() -> void:
@@ -100,6 +112,8 @@ func start_level() -> void:
 	TransitionManager.fade_in()
 
 func begin_level_1() -> void:
+	current_level_num = 1
+	animated_level_entry = false
 	select_level(level1_audio, level1_midi)
 
 func open_cutscene_end() -> void:
@@ -107,9 +121,33 @@ func open_cutscene_end() -> void:
 	get_tree().change_scene_to_packed(CUTSCENE_END)
 	TransitionManager.fade_in()
 
+func get_grade() -> String:
+	if faith == 100: return "S+"
+	if faith >= 85:  return "S"
+	if faith >= 70:  return "A"
+	if faith >= 55:  return "B"
+	if faith >= 35:  return "C"
+	if faith >= 15:  return "D"
+	return "F"
+
 func level_completed() -> void:
-	if current_level_audio == level4_audio:
-		open_cutscene_end()
+	if   current_level_audio == level1_audio: _go_interstage(INTERSTAGE_1)
+	elif current_level_audio == level2_audio: _go_interstage(INTERSTAGE_2)
+	elif current_level_audio == level3_audio: _go_interstage(INTERSTAGE_3)
+	elif current_level_audio == level4_audio: open_cutscene_end()
+
+func _go_interstage(scene: PackedScene) -> void:
+	await TransitionManager.fade_out()
+	get_tree().change_scene_to_packed(scene)
+	TransitionManager.fade_in()
+
+func advance_to_level(num: int) -> void:
+	current_level_num = num
+	animated_level_entry = true
+	match num:
+		2: select_level(level2_audio, level2_midi)
+		3: select_level(level3_audio, level3_midi)
+		4: select_level(level4_audio, level4_midi)
 
 func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	if audio != current_level_audio and midi != current_level_midi:

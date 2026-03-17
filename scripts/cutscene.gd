@@ -29,4 +29,18 @@ func _on_dialogue_finished() -> void:
 		Type.INTRO:
 			GameManager.begin_level_1()
 		Type.END:
+			await _show_grade()
 			GameManager.open_title_screen()
+
+func _show_grade() -> void:
+	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
+	if grade_label:
+		grade_label.text = GameManager.get_grade()
+		grade_label.get_parent().show()
+	await _wait_for_advance()
+
+func _wait_for_advance() -> void:
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("skip"):
+			return

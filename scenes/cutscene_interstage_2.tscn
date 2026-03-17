@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/interstage.gd" id="1_is2"]
+
+[node name="CutsceneInterstage2" type="Node"]
+script = ExtResource("1_is2")
+next_level_num = 3
+auto_advance = true
