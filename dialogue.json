@@ -65,6 +65,7 @@
 		"color": "lightgray",
 		"alignment": "right",
 		"scene": "scene4",
+		"sfx": "ghostwhisper",
 		"text": ["\"a box, old, no markings the father could describe clearly.\""],
 		"next": ["intro_6"]
 	},
