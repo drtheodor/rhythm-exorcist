@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dx8q7m3r5p9v2"]
+[gd_scene format=3 uid="uid://dx8q7m3r5qav2"]
 
 [ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_cscni"]
 [ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="2_dui"]

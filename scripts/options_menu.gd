@@ -1,4 +1,4 @@
-extends Node2D
+extends CanvasLayer
 
 class_name OptionsMenu
 
@@ -19,7 +19,6 @@ func _on_sfx_volume_value_changed(value: float) -> void:
 func _on_back_button_pressed() -> void:
 	hide()
 	GameManager.options_open = false
-	get_tree().paused = false
 
 func _on_toggle_visible() -> void:
 	visible = not visible
