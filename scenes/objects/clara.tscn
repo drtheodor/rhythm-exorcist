@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bhes1rw6g6xlk"]
 
 [ext_resource type="Texture2D" uid="uid://dvxrtuk852y44" path="res://assets/textures/claraface.png" id="1_1ho5c"]
+[ext_resource type="Script" uid="uid://c07pupkfriqvb" path="res://scripts/clara.gd" id="1_clara"]
 [ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="1_ht8ci"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uvcag"]
@@ -618,6 +619,10 @@ _data = {
 }
 
 [node name="Clara" type="Node2D" unique_id=514047567]
+script = ExtResource("1_clara")
+idle_anims = Array[String](["1", "3", "9", "d1"])
+miss_anims = Array[String](["2", "5", "10", "d2"])
+near_death_miss_anims = Array[String](["2", "4", "11", "d2"])
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=283036025]
 material = SubResource("ShaderMaterial_uvcag")
