@@ -1,5 +1,8 @@
 extends Node2D
 
+func _ready() -> void:
+	TransitionManager.set_ambient_pulse(true)
+
 func _on_play_button_pressed() -> void:
 	GameManager.start_level()
 

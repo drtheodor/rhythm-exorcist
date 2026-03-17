@@ -143,11 +143,13 @@ func process_text_data(data:Dictionary) -> Array:
 
 	if data.has("scene"):
 		var key = data["scene"]
-		if key == null or key == "":
-			scene_sprite.visible = false
-		else:
-			scene_sprite.texture = scene_images.get(key)
-			scene_sprite.visible = true
+		TransitionManager.flash(func():
+			if key == null or key == "":
+				scene_sprite.visible = false
+			else:
+				scene_sprite.texture = scene_images.get(key)
+				scene_sprite.visible = true
+		)
 
 	var texts = data["text"].duplicate()
 	

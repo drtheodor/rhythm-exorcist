@@ -5,7 +5,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhbaf"]
 resource_local_to_scene = true
 shader = ExtResource("1_bky16")
-shader_parameter/fade_stage = 0
+shader_parameter/fade_amount = 0.0
 
 [node name="DarkenRect" type="ColorRect" unique_id=512003992]
 z_index = 1
