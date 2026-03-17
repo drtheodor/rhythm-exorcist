@@ -1,6 +1,7 @@
 extends Node
 
 var options_menu = preload("uid://2ktt57lm6wu0").instantiate()
+var pause_menu = preload("uid://bkre0wsdf58lf").instantiate()
 const GAME_LEVEL = preload("uid://cmuevhd5wo1mp")
 const LEVEL_SELECT = preload("uid://dro5vu5pw0wrf")
 const TITLESCREEN = preload("uid://d2h0hblq55p8p")
@@ -34,6 +35,7 @@ var music_volume : float = 5.0
 
 var is_game_over: bool = false
 var options_open: bool = false
+var paused: bool = false
 
 var fear: int:
 	set(val):
@@ -44,17 +46,22 @@ var fear: int:
 signal on_fear(incr: int)
 signal game_over_triggered
 signal toggle_options_visible
+signal pause_game
 
 func _init() -> void:
 	self.on_fear.connect(self._on_fear)
 
 func _ready() -> void:
+	get_tree().root.add_child.call_deferred(pause_menu)
 	get_tree().root.add_child.call_deferred(options_menu)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
-		get_tree().paused = not options_open
-		options_visible()
+		if options_open:
+			options_visible()
+		else:
+			get_tree().paused = not paused
+			send_pause_game()
 
 func _on_fear(_incr: int) -> void:
 	if fear >= 100 and not is_game_over:
@@ -63,6 +70,9 @@ func _on_fear(_incr: int) -> void:
 
 func options_visible():
 	toggle_options_visible.emit()
+
+func send_pause_game() -> void:
+	pause_game.emit()
 
 func set_sfx_volume(val: float) -> void:
 	sfx_volume = linear_to_db(val)
@@ -116,11 +126,15 @@ func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	midi_player.start()
 
 func open_level_select() -> void:
+	self.fear = 0
+	is_game_over = false
 	await TransitionManager.fade_out()
 	get_tree().change_scene_to_packed(LEVEL_SELECT)
 	TransitionManager.fade_in()
 
 func open_title_screen() -> void:
+	self.fear = 0
+	is_game_over = false
 	await TransitionManager.fade_out()
 	get_tree().change_scene_to_packed(TITLESCREEN)
 	TransitionManager.fade_in()
