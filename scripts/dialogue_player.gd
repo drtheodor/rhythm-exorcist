@@ -35,8 +35,8 @@ var typing_counter = 0
 @onready var speaker_1: TileMapLayer = $Speaker1
 @onready var speaker_2: TileMapLayer = $Speaker2
 
-@export var scene_images: Dictionary[String, Texture2D] = {}
-@export var sfx_sounds: Dictionary[String, AudioStream] = {}
+@export var scene_images: Dictionary = {}
+@export var sfx_sounds: Dictionary = {}
 
 func set_visible(toggle: bool) -> void:
 	self.visible = toggle
@@ -133,7 +133,7 @@ func process_text_data(data:Dictionary) -> Array:
 		set_speaker(data["speaker"])
 	
 	if data.has("sfx"):
-		var stream = sfx_sounds.get(data["sfx"])
+		var stream = _load_audio(data["sfx"])
 		if stream:
 			sfx_player.stream = stream
 			sfx_player.play()
@@ -184,6 +184,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			finish_typing()
 		else:
 			next_line()
+
+func _load_audio(key: String) -> AudioStream:
+	for ext in ["mp3", "wav", "ogg"]:
+		var path = "res://assets/audio/" + key + "." + ext
+		if ResourceLoader.exists(path):
+			return load(path)
+	return null
 
 func _on_background_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

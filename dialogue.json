@@ -37,6 +37,7 @@
 	"intro_1": {
 		"color": "blue",
 		"alignment": "center",
+		"sfx": "sitdown",
 		"text": ["I remember the afternoon he called me into his study."],
 		"next": ["intro_2"]
 	},
@@ -103,6 +104,7 @@
 		"speaker": "narrator",
 		"color": "blue",
 		"alignment": "center",
+		"sfx": "paperflutter",
 		"text": ["He slid a manilla folder across the desk. I opened it."],
 		"next": ["intro_12"]
 	},
@@ -154,12 +156,14 @@
 	"intro_19": {
 		"color": "blue",
 		"alignment": "center",
+		"sfx": "paperflutter",
 		"text": ["I closed the folder and told him I understood."],
 		"next": ["intro_20"]
 	},
 	"intro_20": {
 		"color": "blue",
 		"alignment": "center",
+		"sfx": "situp",
 		"text": ["I would be lying if I said I wasn't afraid. But I went anyway."],
 		"next": ["intro_21"]
 	},
@@ -173,12 +177,14 @@
 	"intro_22": {
 		"color": "blue",
 		"alignment": "center",
+		"sfx": "knocking",
 		"text": ["I knocked twice. After a while the door opened to reveal a young woman."],
 		"next": ["intro_23"]
 	},
 	"intro_23": {
 		"speaker": "speaker2",
 		"color": "orange",
+		"sfx": "dooropen",
 		"text": ["\"You're from the church.\""],
 		"next": ["intro_24"]
 	},
@@ -214,7 +220,9 @@
 	"intro_29": {
 		"speaker": "narrator",
 		"color": "blue",
+		"scene": "",
 		"alignment": "center",
+		"sfx": "doorclose",
 		"text": ["She stepped back and let me in without another word."],
 		"next": ["intro_30"]
 	},
@@ -222,6 +230,7 @@
 		"color": "blue",
 		"alignment": "center",
 		"scene": "scene3b",
+		"sfx": "woodsteps",
 		"text": ["She led me down a narrow hallway and stopped midway."],
 		"next": ["intro_31"]
 	},
@@ -267,6 +276,7 @@
 		"color": "blue",
 		"alignment": "center",
 		"scene": "scene3a",
+		"sfx": "woodsteps",
 		"text": ["Then she nodded and turned to go into another room."],
 		"next": ["intro_38"]
 	},
