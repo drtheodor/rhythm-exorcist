@@ -18,7 +18,6 @@ const KEY = preload("res://scenes/objects/key_running.tscn")
 @export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
 @export var play_line_y: float = 144.0
-@export var scroll_speed: float = 100.0
 @export var debug: bool = false
 
 @export var perfect_threshold: float = 1
@@ -42,11 +41,8 @@ func start() -> void:
 	var microseconds_per_tick: float = (self.midi.tempo as float) / self.midi.division
 	var seconds_per_tick: float = microseconds_per_tick / 1000000.0
 	
-	var maxx = get_viewport().get_visible_rect().size.x
-	var timing_factor = (maxx + 2.0 * play_line_x) / (maxx + play_line_x)
-
 	var temp_notes = []
-
+	
 	for track in self.midi.tracks:
 		var last_note: Variant = null
 		var time: float = 0
@@ -55,12 +51,11 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
-					last_note = {
-						"track": event.track,
-						"note": event.note,
-						"time": time,
-						"duration": 0,#(time - last_note.time if last_note else 0.1)
-						"timing_factor": timing_factor,
+					last_note = { 
+						"track": event.track, 
+						"note": event.note, 
+						"time": time, 
+						"duration": 0#(time - last_note.time if last_note else 0.1)
 					}
 					
 					temp_notes.append(last_note)
@@ -88,7 +83,14 @@ func _process(_delta: float) -> void:
 
 	for note in notes:
 		var note_start_time = note.get_meta("start_time")
-		note.position.x = play_line_x + (note_start_time - current_time) * scroll_speed
+		
+		var d = (current_time) / (note_start_time) if note_start_time else 2
+		var maxx = get_viewport().get_visible_rect().size.x
+		
+		# Do not question.
+		note.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
+		
+		#print(note.get_meta("note"), "/", "start: ", note_start_time, "; cur: ", current_time, "; d: ", d, "; x: ", note.position.x)
 	
 	self.notes = notes.filter(func(note):
 		if note.position.x + note_width < trigger_line_x:
@@ -119,7 +121,7 @@ func create_note(note_data: Dictionary):
 	self.running_parent.add_child(box)
 	
 	# Store metadata
-	box.set_meta("start_time", note_data.time * note_data.timing_factor)
+	box.set_meta("start_time", note_data.time)
 	box.set_meta("duration", note_data.duration)
 	box.set_meta("track", note_data.track)
 	box.set_meta("note", note_data.note)
