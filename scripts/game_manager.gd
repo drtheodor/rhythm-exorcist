@@ -9,6 +9,14 @@ const TITLESCREEN = preload("uid://d2h0hblq55p8p")
 const CUTSCENE_INTRO = preload("res://scenes/cutscene_intro.tscn")
 const CUTSCENE_END = preload("res://scenes/cutscene_end.tscn")
 
+var _crt_display: Node = null
+
+var crt_enabled: bool = true:
+	set(val):
+		crt_enabled = val
+		if _crt_display:
+			_crt_display.set_crt_enabled(val)
+
 @export_category("Level 1")
 # Current song: test_low_tempo2
 @export var level1_audio: AudioStream = preload("uid://c2hprt6p8adds")
@@ -61,9 +69,24 @@ signal go_interstage(num: int)
 func _init() -> void:
 	self.on_fear.connect(self._on_fear)
 
+func _get_crt_display() -> Node:
+	if _crt_display == null:
+		_crt_display = get_tree().root.get_node("CRTDisplay")
+	return _crt_display
+
+func _get_sub_viewport() -> SubViewport:
+	return _get_crt_display().sub_viewport
+
+func _change_scene(packed: PackedScene) -> void:
+	_get_crt_display().change_scene(packed)
+
 func _ready() -> void:
-	get_tree().root.add_child.call_deferred(pause_menu)
-	get_tree().root.add_child.call_deferred(options_menu)
+	call_deferred("_add_menus_to_viewport")
+
+func _add_menus_to_viewport() -> void:
+	var sv = _get_sub_viewport()
+	sv.add_child(pause_menu)
+	sv.add_child(options_menu)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
@@ -107,7 +130,7 @@ func game_restart() -> void:
 
 func start_level() -> void:
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(CUTSCENE_INTRO)
+	_change_scene(CUTSCENE_INTRO)
 	TransitionManager.fade_in()
 
 func begin_level_1() -> void:
@@ -117,7 +140,7 @@ func begin_level_1() -> void:
 
 func open_cutscene_end() -> void:
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(CUTSCENE_END)
+	_change_scene(CUTSCENE_END)
 	TransitionManager.fade_in()
 
 func get_grade() -> String:
@@ -154,9 +177,10 @@ func select_level(audio: AudioStream, midi: MidiResource) -> void:
 		current_level_midi = midi
 
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(GAME_LEVEL)
+	_change_scene(GAME_LEVEL)
 	TransitionManager.fade_in()
-	await get_tree().scene_changed
+	await get_tree().process_frame
+	await get_tree().process_frame
 	var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
 	midi_player.audio = audio
 	midi_player.midi = midi
@@ -166,12 +190,12 @@ func open_level_select() -> void:
 	self.fear = 0
 	is_game_over = false
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(LEVEL_SELECT)
+	_change_scene(LEVEL_SELECT)
 	TransitionManager.fade_in()
 
 func open_title_screen() -> void:
 	self.fear = 0
 	is_game_over = false
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(TITLESCREEN)
+	_change_scene(TITLESCREEN)
 	TransitionManager.fade_in()

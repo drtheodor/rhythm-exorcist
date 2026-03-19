@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Rhythm Exorcist"
 config/version="0.0.1s"
-run/main_scene="uid://d2h0hblq55p8p"
+run/main_scene="res://scenes/crt_display.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/use_filter=false
 boot_splash/image="uid://b4wefa8jgpoyg"
@@ -28,7 +28,8 @@ TransitionManager="*res://scripts/transition_manager.gd"
 window/size/viewport_width=256
 window/size/viewport_height=224
 window/size/mode=3
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
 
 [editor_plugins]
 

@@ -3,15 +3,21 @@ extends Node
 var _material: ShaderMaterial
 var _is_transitioning: bool = false
 
+var _canvas: CanvasLayer = null
+
 func _ready() -> void:
 	var darken_node = preload("res://scenes/effects/darken_rect.tscn").instantiate()
 	_material = darken_node.material as ShaderMaterial
 	_material.set_shader_parameter("fade_amount", 1.0)  # start fully black
-	var canvas = CanvasLayer.new()
-	canvas.layer = 100
-	canvas.add_child(darken_node)
-	get_tree().root.call_deferred("add_child", canvas)
+	_canvas = CanvasLayer.new()
+	_canvas.layer = 100
+	_canvas.add_child(darken_node)
+	call_deferred("_add_canvas_to_viewport")
 	call_deferred("_start_fade_in")
+
+func _add_canvas_to_viewport() -> void:
+	var crt = get_tree().root.get_node("CRTDisplay")
+	crt.sub_viewport.add_child(_canvas)
 
 # Kept for API compatibility — no-op (discrete stages don't suit a subtle pulse)
 func set_ambient_pulse(_enabled: bool) -> void:

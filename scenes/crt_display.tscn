@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://ey4dfyjgurti"]
+
+[ext_resource type="Shader" uid="uid://drj8q0mfekhey" path="res://assets/shaders/crt.gdshader" id="1_crt"]
+[ext_resource type="Script" uid="uid://c6rtxnnve2hiv" path="res://scripts/crt_display.gd" id="2_script"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("1_crt")
+shader_parameter/mask_type = 1
+shader_parameter/curve = 0.1050000049875
+shader_parameter/sharpness = 0.6666667
+shader_parameter/color_offset = 0.5
+shader_parameter/mask_brightness = 1.0
+shader_parameter/scanline_brightness = 1.0
+shader_parameter/min_scanline_thickness = 0.5
+shader_parameter/aspect = 0.875
+shader_parameter/wobble_strength = 0.0
+
+[node name="CRTDisplay" type="Control" unique_id=1513583389]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_script")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1831226157]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(256, 224)
+render_target_update_mode = 3
+
+[node name="CRTRect" type="TextureRect" parent="." unique_id=1012164018]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

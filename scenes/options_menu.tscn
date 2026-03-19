@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://btl24fwergpt0" path="res://assets/textures/background.png" id="2_dhn0l"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="4_7txom"]
 [ext_resource type="FontFile" uid="uid://b754fovu6ug0w" path="res://assets/Fami-Sans-Condensed-Bold.otf" id="4_lfjc7"]
-[ext_resource type="Script" path="res://scripts/menu_button.gd" id="5_binsn"]
+[ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="5_binsn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
 texture = ExtResource("2_dhn0l")
@@ -139,6 +139,45 @@ theme_override_fonts/font = ExtResource("4_lfjc7")
 text = "100"
 horizontal_alignment = 1
 
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1534989659]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer3" unique_id=1012703043]
+layout_mode = 2
+
+[node name="CrtLabel" type="Label" parent="VBoxContainer/MarginContainer3/VBoxContainer" unique_id=573200375]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_7txom")
+theme_override_font_sizes/font_size = 8
+text = "CRT SHADER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer3/VBoxContainer" unique_id=1211973729]
+layout_mode = 2
+alignment = 1
+
+[node name="CrtToggle" type="Button" parent="VBoxContainer/MarginContainer3/VBoxContainer/HBoxContainer" unique_id=1576577611]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_7txom")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
+text = "TOGGLE"
+flat = true
+
+[node name="CrtValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/VBoxContainer/HBoxContainer" unique_id=1652195293]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_7txom")
+theme_override_font_sizes/font_size = 8
+text = "ON"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/MusicVolume" to="." method="_on_music_volume_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SfxVolume" to="." method="_on_sfx_volume_value_changed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer3/VBoxContainer/HBoxContainer/CrtToggle" to="." method="_on_crt_toggle_pressed"]
