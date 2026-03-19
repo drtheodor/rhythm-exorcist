@@ -1,8 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bd5fkrcl853ve"]
 
-[ext_resource type="Script" path="res://scripts/interstage.gd" id="1_is2"]
+[ext_resource type="Script" uid="uid://b6ak6q6g0bb7f" path="res://scripts/interstage.gd" id="1_is2"]
 
-[node name="CutsceneInterstage2" type="Node"]
+[node name="CutsceneInterstage2" type="CanvasLayer" unique_id=1216177300]
 script = ExtResource("1_is2")
 next_level_num = 3
-auto_advance = true

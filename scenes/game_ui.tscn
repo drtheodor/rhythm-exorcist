@@ -9,7 +9,7 @@
 [ext_resource type="FontFile" uid="uid://b754fovu6ug0w" path="res://assets/Fami-Sans-Condensed-Bold.otf" id="6_o3bws"]
 [ext_resource type="PackedScene" uid="uid://cvgpur1616u3u" path="res://scenes/effects/gameover_effect_rect.tscn" id="7_e0pfi"]
 [ext_resource type="Shader" uid="uid://bxu18vgujl0cx" path="res://assets/shaders/gameover.gdshader" id="8_sjwyb"]
-[ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="9_3huio"]
+[ext_resource type="Script" path="res://scripts/menu_button.gd" id="9_3huio"]
 [ext_resource type="Texture2D" uid="uid://bl86bccnf63x6" path="res://assets/textures/eyesdark.png" id="11_5kh4o"]
 [ext_resource type="AudioStream" uid="uid://4pxuyi7ce37w" path="res://assets/audio/imwatchingyou.wav" id="12_s2npe"]
 [ext_resource type="Texture2D" uid="uid://b114dkrbtbr8x" path="res://assets/textures/objects.png" id="13_objs"]
@@ -463,10 +463,6 @@ N"
 
 [node name="DialogueUi" parent="CanvasLayer" unique_id=22267864 instance=ExtResource("6_djwj0")]
 visible = false
-offset_left = 27.0
-offset_top = 51.0
-offset_right = -27.0
-offset_bottom = -122.0
 
 [node name="GameoverEffectRect" parent="CanvasLayer" unique_id=846579070 instance=ExtResource("7_e0pfi")]
 visible = false

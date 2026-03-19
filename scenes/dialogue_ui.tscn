@@ -36,7 +36,10 @@ offset_top = 144.0
 offset_right = -64.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_bottom = 25
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 15
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=741444607]
 z_index = 2
@@ -51,6 +54,8 @@ bbcode_enabled = true
 text = "Hello World"
 scroll_active = false
 scroll_following = true
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BackgroundTexture" type="TextureRect" parent="." unique_id=442470775]
 layout_mode = 1

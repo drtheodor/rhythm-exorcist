@@ -25,7 +25,6 @@ func _ready() -> void:
 	faith_bar.value = GameManager.faith
 	_init_symbols()
 
-# TODO: use snake case
 func _on_fear(incr: int):
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
 
