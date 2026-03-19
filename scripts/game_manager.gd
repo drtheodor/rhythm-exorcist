@@ -2,14 +2,12 @@ extends Node
 
 var options_menu = preload("uid://2ktt57lm6wu0").instantiate()
 var pause_menu = preload("uid://bkre0wsdf58lf").instantiate()
+
 const GAME_LEVEL = preload("uid://cmuevhd5wo1mp")
 const LEVEL_SELECT = preload("uid://dro5vu5pw0wrf")
 const TITLESCREEN = preload("uid://d2h0hblq55p8p")
 const CUTSCENE_INTRO = preload("res://scenes/cutscene_intro.tscn")
 const CUTSCENE_END = preload("res://scenes/cutscene_end.tscn")
-const INTERSTAGE_1 = preload("res://scenes/cutscene_interstage_1.tscn")
-const INTERSTAGE_2 = preload("res://scenes/cutscene_interstage_2.tscn")
-const INTERSTAGE_3 = preload("res://scenes/cutscene_interstage_3.tscn")
 
 @export_category("Level 1")
 # Current song: test_low_tempo2
@@ -58,6 +56,7 @@ signal on_faith(new_val: int)
 signal game_over_triggered
 signal toggle_options_visible
 signal pause_game
+signal go_interstage(num: int)
 
 func _init() -> void:
 	self.on_fear.connect(self._on_fear)
@@ -131,14 +130,14 @@ func get_grade() -> String:
 	return "F"
 
 func level_completed() -> void:
-	if   current_level_audio == level1_audio: _go_interstage(INTERSTAGE_1)
-	elif current_level_audio == level2_audio: _go_interstage(INTERSTAGE_2)
-	elif current_level_audio == level3_audio: _go_interstage(INTERSTAGE_3)
+	if   current_level_audio == level1_audio: _go_interstage(1)
+	elif current_level_audio == level2_audio: _go_interstage(2)
+	elif current_level_audio == level3_audio: _go_interstage(3)
 	elif current_level_audio == level4_audio: open_cutscene_end()
 
-func _go_interstage(scene: PackedScene) -> void:
+func _go_interstage(inter_num: int) -> void:
 	await TransitionManager.fade_out()
-	get_tree().change_scene_to_packed(scene)
+	go_interstage.emit(inter_num)
 	TransitionManager.fade_in()
 
 func advance_to_level(num: int) -> void:
