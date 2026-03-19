@@ -2,6 +2,7 @@ extends MidiPlayer
 class_name MidiManager
 
 const KEY = preload("res://scenes/objects/key_running.tscn")
+const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
 
 #@export var note_colors : Array[Color] = [
 	#Color.hex(0xff4747),
@@ -51,13 +52,17 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
-					last_note = { 
-						"track": event.track, 
-						"note": event.note, 
-						"time": time, 
-						"duration": 0#(time - last_note.time if last_note else 0.1)
+					var is_bad = event.track >= 3
+					var lane = event.track if event.track <= 2 else (event.track - 2)
+					last_note = {
+						"track": event.track,
+						"note": event.note,
+						"time": time,
+						"duration": 0,
+						"bad": is_bad,
+						"lane": lane,
 					}
-					
+
 					temp_notes.append(last_note)
 				
 				if event.subtype == MIDI_MESSAGE_NOTE_OFF and last_note != null:
@@ -94,41 +99,45 @@ func _process(_delta: float) -> void:
 	
 	self.notes = notes.filter(func(note):
 		if note.position.x + note_width < trigger_line_x:
-			if Input.is_action_just_pressed(keys[note.get_meta("track") - 1]):
-				var distance = abs(perfect_line_x - note.position.x)
-				
-				if distance <= perfect_threshold:
-					GameManager.fear -= self.perfect_heal
-				
+			var lane = note.get_meta("lane")
+			var is_bad = note.get_meta("bad")
+
+			if Input.is_action_just_pressed(keys[lane - 1]):
+				if is_bad:
+					GameManager.fear += self.fear
+					GameManager.faith -= faith_penalty
+				else:
+					var distance = abs(perfect_line_x - note.position.x)
+					if distance <= perfect_threshold:
+						GameManager.fear -= self.perfect_heal
+
 				note.queue_free()
 				return false
-			
+
 			if note.position.x + note_width < play_line_x:
-				GameManager.fear += self.fear
-				GameManager.faith -= faith_penalty
+				if not is_bad:
+					GameManager.fear += self.fear
+					GameManager.faith -= faith_penalty
 				note.queue_free()
 				return false
 		return true
 	)
 
 func create_note(note_data: Dictionary):
-	#var box: ColorRect = ColorRect.new()
-	#box.color = note_colors[note_data.track % note_colors.size()]
-	
-	# Width based on duration and pixels per second
-	#box.size = Vector2(note_data.duration * pixels_per_second, note_height)
-	var box = KEY.instantiate()
+	var box = (KEY_BAD if note_data.bad else KEY).instantiate()
 	self.running_parent.add_child(box)
-	
+
 	# Store metadata
 	box.set_meta("start_time", note_data.time)
 	box.set_meta("duration", note_data.duration)
 	box.set_meta("track", note_data.track)
 	box.set_meta("note", note_data.note)
-	
+	box.set_meta("bad", note_data.bad)
+	box.set_meta("lane", note_data.lane)
+
 	# Initial position (will be updated in _process)
-	box.position.y = (note_data.track - 1) * note_height + play_line_y
-	
+	box.position.y = (note_data.lane - 1) * note_height + play_line_y
+
 	notes.append(box)
 
 func draw_play_line():
