@@ -3,6 +3,7 @@ class_name MidiManager
 
 const KEY = preload("res://scenes/objects/key_running.tscn")
 const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
+const KEY_SWITCH = preload("res://scenes/objects/key_running_switch.tscn")
 
 #@export var note_colors : Array[Color] = [
 	#Color.hex(0xff4747),
@@ -19,6 +20,7 @@ const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
 @export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
 @export var play_line_y: float = 144.0
+@export var switch_line_x: float = 160.0
 @export var debug: bool = false
 
 @export var perfect_threshold: float = 1
@@ -52,8 +54,19 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
-					var is_bad = event.track >= 3
-					var lane = event.track if event.track <= 2 else (event.track - 2)
+					var is_bad = event.track >= 3 and event.track <= 4
+					var is_switch = event.track >= 5 and event.track <= 6
+					var lane: int
+					var target_lane: int
+					if event.track <= 2:
+						lane = event.track
+						target_lane = lane
+					elif event.track <= 4:
+						lane = event.track - 2
+						target_lane = lane
+					else:
+						lane = event.track - 4
+						target_lane = (2 if lane == 1 else 1)
 					last_note = {
 						"track": event.track,
 						"note": event.note,
@@ -61,6 +74,8 @@ func start() -> void:
 						"duration": 0,
 						"bad": is_bad,
 						"lane": lane,
+						"target_lane": target_lane,
+						"switch": is_switch,
 					}
 
 					temp_notes.append(last_note)
@@ -94,6 +109,14 @@ func _process(_delta: float) -> void:
 		
 		# Do not question.
 		note.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
+
+		if note.get_meta("switch") and not note.get_meta("switched") and note.position.x <= switch_line_x:
+			var target = note.get_meta("target_lane")
+			note.set_meta("lane", target)
+			note.set_meta("switched", true)
+			var target_y = (target - 1) * note_height + play_line_y
+			var tween = create_tween()
+			tween.tween_property(note, "position:y", target_y, 0.3)
 		
 		#print(note.get_meta("note"), "/", "start: ", note_start_time, "; cur: ", current_time, "; d: ", d, "; x: ", note.position.x)
 	
@@ -124,18 +147,24 @@ func _process(_delta: float) -> void:
 	)
 
 func create_note(note_data: Dictionary):
-	var box = (KEY_BAD if note_data.bad else KEY).instantiate()
+	var scene = KEY
+	if note_data.bad:
+		scene = KEY_BAD
+	elif note_data["switch"]:
+		scene = KEY_SWITCH
+	var box = scene.instantiate()
 	self.running_parent.add_child(box)
 
-	# Store metadata
 	box.set_meta("start_time", note_data.time)
 	box.set_meta("duration", note_data.duration)
 	box.set_meta("track", note_data.track)
 	box.set_meta("note", note_data.note)
 	box.set_meta("bad", note_data.bad)
 	box.set_meta("lane", note_data.lane)
+	box.set_meta("target_lane", note_data.target_lane)
+	box.set_meta("switch", note_data["switch"])
+	box.set_meta("switched", false)
 
-	# Initial position (will be updated in _process)
 	box.position.y = (note_data.lane - 1) * note_height + play_line_y
 
 	notes.append(box)
@@ -161,6 +190,12 @@ func draw_play_line():
 	line.color = Color.GREEN
 	line.size = Vector2(2, h)
 	line.position = Vector2(perfect_line_x - 2, y)
+	add_child(line)
+
+	line = ColorRect.new()
+	line.color = Color.YELLOW
+	line.size = Vector2(2, h)
+	line.position = Vector2(switch_line_x - 2, y)
 	add_child(line)
 
 func _on_finished():
