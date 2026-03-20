@@ -3,17 +3,9 @@
 [ext_resource type="Script" uid="uid://b8454s4oi2l5y" path="res://scripts/dialogue_player.gd" id="1_jx1sv"]
 [ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="2_e6usr"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_imsod"]
-[ext_resource type="Texture2D" uid="uid://igcp7m3onpx0" path="res://assets/textures/character_portraits.png" id="4_e6usr"]
+[ext_resource type="Texture2D" uid="uid://cymo7np46dcq5" path="res://assets/textures/character_portrait_1.png" id="4_wlc0t"]
 [ext_resource type="Texture2D" uid="uid://ohpvm4o8ij6q" path="res://assets/textures/scenes/scene4.png" id="5_imsod"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_imsod"]
-texture = ExtResource("4_e6usr")
-texture_region_size = Vector2i(48, 48)
-0:0/0 = 0
-1:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_wlc0t"]
-sources/0 = SubResource("TileSetAtlasSource_imsod")
+[ext_resource type="Texture2D" uid="uid://cfic20d7asgew" path="res://assets/textures/character_portrait_2.png" id="7_x1ric"]
 
 [node name="DialogueUi" type="Control" unique_id=1477838171]
 layout_mode = 3
@@ -25,37 +17,6 @@ grow_vertical = 2
 script = ExtResource("1_jx1sv")
 scene_text_file = "res://dialogue.json"
 starting_key = "test1"
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1870564904]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 64.0
-offset_top = 144.0
-offset_right = -64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 15
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=741444607]
-z_index = 2
-texture_filter = 2
-texture_repeat = 1
-layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("2_e6usr")
-theme_override_fonts/bold_font = ExtResource("3_imsod")
-theme_override_font_sizes/normal_font_size = 8
-theme_override_font_sizes/bold_font_size = 8
-bbcode_enabled = true
-text = "Hello World"
-scroll_active = false
-scroll_following = true
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="BackgroundTexture" type="TextureRect" parent="." unique_id=442470775]
 layout_mode = 1
@@ -71,17 +32,6 @@ offset_right = 256.0
 offset_bottom = 224.0
 color = Color(0, 0, 0, 1)
 
-[node name="Speaker1" type="TileMapLayer" parent="." unique_id=1019392813]
-position = Vector2(0, 32)
-tile_map_data = PackedByteArray(0, 0, 2, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-tile_set = SubResource("TileSet_wlc0t")
-
-[node name="Speaker2" type="TileMapLayer" parent="." unique_id=1846907738]
-visible = false
-position = Vector2(0, 32)
-tile_map_data = PackedByteArray(0, 0, 13, 0, 9, 0, 0, 0, 1, 0, 0, 0, 0, 0)
-tile_set = SubResource("TileSet_wlc0t")
-
 [node name="Scene" type="Sprite2D" parent="." unique_id=543922209]
 z_index = 1
 position = Vector2(128, 76)
@@ -89,5 +39,63 @@ texture = ExtResource("5_imsod")
 
 [node name="SfxPlayer" type="AudioStreamPlayer" parent="." unique_id=654321098]
 bus = &"SFX"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=502198296]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 145.0
+offset_right = 256.0
+offset_bottom = 224.0
+alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1117624093]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=2145302074]
+visible = false
+layout_mode = 2
+texture = ExtResource("4_wlc0t")
+stretch_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1870564904]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 15
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer" unique_id=741444607]
+z_index = 2
+texture_filter = 2
+texture_repeat = 1
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_e6usr")
+theme_override_fonts/bold_font = ExtResource("3_imsod")
+theme_override_font_sizes/normal_font_size = 8
+theme_override_font_sizes/bold_font_size = 8
+bbcode_enabled = true
+text = "Hello World"
+scroll_active = false
+scroll_following = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" unique_id=1981643505]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer3" unique_id=860420283]
+visible = false
+layout_mode = 2
+texture = ExtResource("7_x1ric")
+stretch_mode = 2
 
 [connection signal="gui_input" from="BackgroundColor" to="." method="_on_background_gui_input"]

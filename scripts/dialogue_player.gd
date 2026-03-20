@@ -32,8 +32,8 @@ var typing_counter = 0
 @onready var background_texture: TextureRect = $BackgroundTexture
 @onready var scene_sprite: Sprite2D = $Scene
 @onready var sfx_player: AudioStreamPlayer = $SfxPlayer
-@onready var speaker_1: TileMapLayer = $Speaker1
-@onready var speaker_2: TileMapLayer = $Speaker2
+@onready var speaker_1: TileMapLayer = $HBoxContainer/MarginContainer2/TextureRect
+@onready var speaker_2: TileMapLayer = $HBoxContainer/MarginContainer3/TextureRect
 
 @export var scene_images: Dictionary = {}
 @export var sfx_sounds: Dictionary = {}
