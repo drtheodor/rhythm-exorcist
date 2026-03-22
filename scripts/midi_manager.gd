@@ -104,11 +104,12 @@ func _process(_delta: float) -> void:
 	for note in notes:
 		var note_start_time = note.get_meta("start_time")
 		
-		var d = (current_time) / (note_start_time) if note_start_time else 2
+		var d: float = (current_time) / (note_start_time) if note_start_time else 0.
 		var maxx = get_viewport().get_visible_rect().size.x
 		
 		# Do not question.
 		note.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
+		#note.position.x = lerpf(maxx, play_line_x, current_time / note_start_time)
 
 		if note.get_meta("switch") and not note.get_meta("switched") and note.position.x <= switch_line_x:
 			var target = note.get_meta("target_lane")
@@ -152,7 +153,7 @@ func create_note(note_data: Dictionary):
 		scene = KEY_BAD
 	elif note_data["switch"]:
 		scene = KEY_SWITCH
-	var box = scene.instantiate()
+	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
 	box.set_meta("start_time", note_data.time)
@@ -165,7 +166,11 @@ func create_note(note_data: Dictionary):
 	box.set_meta("switch", note_data["switch"])
 	box.set_meta("switched", false)
 
-	var d = (current_time) / (note_data.time) if note_data.time else 2
+	if note_data.duration > 1:
+		box.region_rect.position.x += 16
+		box.region_rect.size.x += 16
+
+	var d = (current_time) / (note_data.time) if note_data.time else 0.
 	var maxx = get_viewport().get_visible_rect().size.x
 	
 	# Do not question.
