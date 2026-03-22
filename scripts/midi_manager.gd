@@ -125,6 +125,7 @@ func _process(_delta: float) -> void:
 		if note.position.x + note_width < trigger_line_x:
 			var lane = note.get_meta("lane")
 			var is_bad = note.get_meta("bad")
+			var duration = note.get_meta("duration")
 
 			if Input.is_action_just_pressed(keys[lane - 1]):
 				if is_bad:
@@ -176,6 +177,8 @@ func create_note(note_data: Dictionary):
 		box = create_note_box(note_data, 0)
 		box.region_rect.position.x += 16
 		box.region_rect.size.x = 16 * len
+	else:
+		box = create_note_box(note_data, 0)
 
 	var d = (current_time) / (note_data.time) if note_data.time else 0.
 	var maxx = get_viewport().get_visible_rect().size.x
