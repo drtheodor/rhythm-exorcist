@@ -165,6 +165,11 @@ func create_note(note_data: Dictionary):
 	box.set_meta("switch", note_data["switch"])
 	box.set_meta("switched", false)
 
+	var d = (current_time) / (note_data.time) if note_data.time else 2
+	var maxx = get_viewport().get_visible_rect().size.x
+	
+	# Do not question.
+	box.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
 	box.position.y = (note_data.lane - 1) * note_height + play_line_y
 
 	notes.append(box)
