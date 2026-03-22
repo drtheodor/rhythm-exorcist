@@ -129,5 +129,6 @@ key_name = "up"
 position = Vector2(64, 160)
 region_rect = Rect2(16, 0, 16, 16)
 key_name = "down"
+y_offset = 3.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MidiPlayer" unique_id=821598419]
