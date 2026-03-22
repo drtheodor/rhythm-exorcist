@@ -102,7 +102,6 @@ midi = ExtResource("5_82nuq")
 process_mode = 3
 script = ExtResource("6_t82je")
 audio = ExtResource("7_82nuq")
-note_width = 0
 play_line_x = 60.0
 debug = true
 

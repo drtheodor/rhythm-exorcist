@@ -147,7 +147,7 @@ func _process(_delta: float) -> void:
 		return true
 	)
 
-func create_note(note_data: Dictionary):
+func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	var scene = KEY
 	if note_data.bad:
 		scene = KEY_BAD
@@ -156,7 +156,7 @@ func create_note(note_data: Dictionary):
 	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
-	box.set_meta("start_time", note_data.time)
+	box.set_meta("start_time", note_data.time + offset)
 	box.set_meta("duration", note_data.duration)
 	box.set_meta("track", note_data.track)
 	box.set_meta("note", note_data.note)
@@ -165,10 +165,17 @@ func create_note(note_data: Dictionary):
 	box.set_meta("target_lane", note_data.target_lane)
 	box.set_meta("switch", note_data["switch"])
 	box.set_meta("switched", false)
+	return box
 
-	if note_data.duration > 1:
+func create_note(note_data: Dictionary):
+	var len = int(note_data.duration)
+	var box: Sprite2D
+	
+	if len > 1:
+		#for dur in range(len):
+		box = create_note_box(note_data, 0)
 		box.region_rect.position.x += 16
-		box.region_rect.size.x += 16
+		box.region_rect.size.x = 16 * len
 
 	var d = (current_time) / (note_data.time) if note_data.time else 0.
 	var maxx = get_viewport().get_visible_rect().size.x
