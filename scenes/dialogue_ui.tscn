@@ -69,7 +69,8 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 15
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer" unique_id=741444607]
+[node name="DialogueText" type="RichTextLabel" parent="HBoxContainer/MarginContainer" unique_id=741444607]
+unique_name_in_owner = true
 z_index = 2
 texture_filter = 2
 texture_repeat = 1

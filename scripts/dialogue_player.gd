@@ -27,13 +27,13 @@ var typing_counter = 0
 
 @export var end_padding: int = 5
 
-@onready var text_label = $MarginContainer/RichTextLabel
+@onready var text_label = %DialogueText
 @onready var background_color: ColorRect = $BackgroundColor
 @onready var background_texture: TextureRect = $BackgroundTexture
 @onready var scene_sprite: Sprite2D = $Scene
 @onready var sfx_player: AudioStreamPlayer = $SfxPlayer
-@onready var speaker_1: TileMapLayer = $HBoxContainer/MarginContainer2/TextureRect
-@onready var speaker_2: TileMapLayer = $HBoxContainer/MarginContainer3/TextureRect
+@onready var speaker_1: TextureRect = $HBoxContainer/MarginContainer2/TextureRect
+@onready var speaker_2: TextureRect = $HBoxContainer/MarginContainer3/TextureRect
 
 @export var scene_images: Dictionary = {}
 @export var sfx_sounds: Dictionary = {}
