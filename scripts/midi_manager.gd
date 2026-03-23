@@ -4,6 +4,7 @@ class_name MidiManager
 const KEY = preload("res://scenes/objects/key_running.tscn")
 const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
 const KEY_SWITCH = preload("res://scenes/objects/key_running_switch.tscn")
+const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 
 #@export var note_colors : Array[Color] = [
 	#Color.hex(0xff4747),
@@ -25,12 +26,13 @@ const KEY_SWITCH = preload("res://scenes/objects/key_running_switch.tscn")
 
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
-@export var perfect_heal: int = 1
+@export var combo_heal: int = 3
 @export var faith_penalty: int = 2
 
 @export var keys: Array[String] = ["up", "down"]
 
 var notes: Array = []
+var _next_combo_id: int = 0
 
 func start() -> void:
 	var asp = $AudioStreamPlayer
@@ -48,6 +50,7 @@ func start() -> void:
 	
 	for track in self.midi.tracks:
 		var last_note: Variant = null
+		var last_combo_notes: Array = []
 		var time: float = 0
 		
 		for event in track.events:
@@ -56,6 +59,7 @@ func start() -> void:
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
 					var is_bad = event.track >= 3 and event.track <= 4
 					var is_switch = event.track >= 5 and event.track <= 6
+					var is_combo = event.track == 7
 					var lane: int
 					var target_lane: int
 					if event.track <= 2:
@@ -64,24 +68,55 @@ func start() -> void:
 					elif event.track <= 4:
 						lane = event.track - 2
 						target_lane = lane
-					else:
+					elif event.track <= 6:
 						lane = event.track - 4
 						target_lane = (2 if lane == 1 else 1)
-					last_note = {
-						"track": event.track,
-						"note": event.note,
-						"time": time,
-						"duration": 0,
-						"bad": is_bad,
-						"lane": lane,
-						"target_lane": target_lane,
-						"switch": is_switch,
-					}
+					else:
+						lane = 1
+						target_lane = 1
 
-					temp_notes.append(last_note)
-				
+					if is_combo:
+						var combo_id = _next_combo_id
+						_next_combo_id += 1
+						last_combo_notes = []
+						for combo_lane in [1, 2]:
+							var combo_note = {
+								"track": event.track,
+								"note": event.note,
+								"time": time,
+								"duration": 0,
+								"bad": false,
+								"lane": combo_lane,
+								"target_lane": combo_lane,
+								"switch": false,
+								"combo": true,
+								"combo_id": combo_id,
+							}
+							temp_notes.append(combo_note)
+							last_combo_notes.append(combo_note)
+						last_note = last_combo_notes[0]
+					else:
+						last_note = {
+							"track": event.track,
+							"note": event.note,
+							"time": time,
+							"duration": 0,
+							"bad": is_bad,
+							"lane": lane,
+							"target_lane": target_lane,
+							"switch": is_switch,
+							"combo": false,
+							"combo_id": -1,
+						}
+						temp_notes.append(last_note)
+
 				if event.subtype == MIDI_MESSAGE_NOTE_OFF and last_note != null:
-					last_note.duration = time - last_note.time
+					if last_combo_notes.size() > 0:
+						for cn in last_combo_notes:
+							cn.duration = time - cn.time
+						last_combo_notes = []
+					else:
+						last_note.duration = time - last_note.time
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
@@ -121,30 +156,52 @@ func _process(_delta: float) -> void:
 		
 		#print(note.get_meta("note"), "/", "start: ", note_start_time, "; cur: ", current_time, "; d: ", d, "; x: ", note.position.x)
 	
+	# Track which combo_ids were hit or missed this frame
+	var _combo_hit_ids: Array = []
+	var _combo_miss_ids: Array = []
+
 	self.notes = notes.filter(func(note):
 		if note.position.x + note_width < trigger_line_x:
 			var lane = note.get_meta("lane")
 			var is_bad = note.get_meta("bad")
-			var duration = note.get_meta("duration")
+			var is_combo = note.get_meta("combo")
+			var combo_id = note.get_meta("combo_id")
 
-			if Input.is_action_just_pressed(keys[lane - 1]):
-				if is_bad:
+			if is_combo:
+				# Skip if this combo pair was already resolved this frame
+				if combo_id in _combo_hit_ids or combo_id in _combo_miss_ids:
+					note.queue_free()
+					return false
+
+				# Combo notes require both keys pressed simultaneously
+				if Input.is_action_just_pressed(keys[0]) and Input.is_action_just_pressed(keys[1]):
+					_combo_hit_ids.append(combo_id)
+					GameManager.fear -= combo_heal
+					GameManager.on_combo.emit()
+					note.queue_free()
+					return false
+
+				if note.position.x + note_width < play_line_x:
+					_combo_miss_ids.append(combo_id)
 					GameManager.fear += self.fear
 					GameManager.faith -= faith_penalty
-				else:
-					var distance = abs(perfect_line_x - note.position.x)
-					if distance <= perfect_threshold:
-						GameManager.fear -= self.perfect_heal
+					note.queue_free()
+					return false
+			else:
+				if Input.is_action_just_pressed(keys[lane - 1]):
+					if is_bad:
+						GameManager.fear += self.fear
+						GameManager.faith -= faith_penalty
 
-				note.queue_free()
-				return false
+					note.queue_free()
+					return false
 
-			if note.position.x + note_width < play_line_x:
-				if not is_bad:
-					GameManager.fear += self.fear
-					GameManager.faith -= faith_penalty
-				note.queue_free()
-				return false
+				if note.position.x + note_width < play_line_x:
+					if not is_bad:
+						GameManager.fear += self.fear
+						GameManager.faith -= faith_penalty
+					note.queue_free()
+					return false
 		return true
 	)
 
@@ -154,6 +211,8 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 		scene = KEY_BAD
 	elif note_data["switch"]:
 		scene = KEY_SWITCH
+	elif note_data.get("combo", false):
+		scene = KEY_COMBO
 	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
@@ -166,6 +225,8 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	box.set_meta("target_lane", note_data.target_lane)
 	box.set_meta("switch", note_data["switch"])
 	box.set_meta("switched", false)
+	box.set_meta("combo", note_data.get("combo", false))
+	box.set_meta("combo_id", note_data.get("combo_id", -1))
 	return box
 
 func create_note(note_data: Dictionary):

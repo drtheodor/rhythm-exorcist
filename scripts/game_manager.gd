@@ -61,6 +61,7 @@ var faith: int = 100:
 
 signal on_fear(incr: int)
 signal on_faith(new_val: int)
+signal on_combo
 signal game_over_triggered
 signal toggle_options_visible
 signal pause_game

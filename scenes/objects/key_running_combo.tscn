@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://yvysywf3042y"]
+
+[ext_resource type="Texture2D" uid="uid://b114dkrbtbr8x" path="res://assets/textures/objects.png" id="1_qpk06"]
+
+[node name="KeyRunningCombo" type="Sprite2D" unique_id=1530126084]
+texture = ExtResource("1_qpk06")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)

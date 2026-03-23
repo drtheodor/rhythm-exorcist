@@ -7,6 +7,8 @@ extends Node2D
 @export var near_death_thresholds: Array[int]     = [70, 70, 70, 70]
 @export var miss_durations: Array[float]          = [1.5, 1.5, 1.5, 1.5]
 @export var near_death_miss_durations: Array[float] = [3.0, 3.0, 3.0, 3.0]
+@export var combo_anims: Array[String]            = ["1", "1", "1", "1"]
+@export var combo_durations: Array[float]         = [1.0, 1.0, 1.0, 1.0]
 
 @onready var faces: AnimationPlayer = $ClaraFaces
 
@@ -18,6 +20,7 @@ var _miss_count: int = 0
 
 func _ready() -> void:
 	GameManager.on_fear.connect(_on_fear)
+	GameManager.on_combo.connect(_on_combo)
 	_play_idle()
 
 func _process(delta: float) -> void:
@@ -41,6 +44,12 @@ func _on_fear(incr: int) -> void:
 		_start_reaction(near_death_miss_anims[idx], near_death_miss_durations[idx], 2)
 	else:
 		_start_reaction(miss_anims[idx], miss_durations[idx], 1)
+
+func _on_combo() -> void:
+	var idx = GameManager.current_level_num - 1
+	if idx < 0 or idx >= combo_anims.size():
+		return
+	_start_reaction(combo_anims[idx], combo_durations[idx], 1)
 
 func _start_reaction(anim: String, duration: float, priority: int) -> void:
 	if priority < _reaction_priority:
