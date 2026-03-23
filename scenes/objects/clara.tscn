@@ -8,7 +8,7 @@
 shader = ExtResource("1_ht8ci")
 shader_parameter/white_replace = Color(1, 0.79607844, 0.7294118, 1)
 shader_parameter/gray_replace = Color(0.7647059, 0.44313726, 0, 1)
-shader_parameter/black_replace = Color(0.0707212, 0.021646716, 3.008172e-09, 1)
+shader_parameter/black_replace = Color(0.07058824, 0.023529412, 0, 1)
 
 [sub_resource type="Animation" id="Animation_1ho5c"]
 resource_name = "1"
