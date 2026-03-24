@@ -11,6 +11,7 @@ const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 	"scene3a": preload("res://assets/textures/scenes/scene3a.png"),
 	"scene3b": preload("res://assets/textures/scenes/scene3b.png"),
 	"scene4": preload("res://assets/textures/scenes/scene4.png"),
+	"scene5": preload("res://assets/textures/scenes/scene5.png"),
 }
 
 const SFX_SOUNDS: Dictionary[String, AudioStream] = {

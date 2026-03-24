@@ -319,22 +319,49 @@
 		"text": ["I slowly opened the door."]
 	},
 	"end_start": {
+		"speaker": "narrator",
+		"scene": "scene5",
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene3a",
+		"background": "scene4",
 		"text": [
-			"[PLACEHOLDER: End dialogue line 1]"
+			"...",
+			"There I am.",
+			"...",
+			"..."
 		],
 		"next": ["end_2"]
 	},
 	"end_2": {
+		"speaker": "narrator",
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene3b",
+		"background": "scene4",
 		"text": [
-			"[PLACEHOLDER: End dialogue line 2]"
+			"I felt a hand on my shoulder."
+		],
+		"next": ["end_3"]
+	},
+	"end_3": {
+		"speaker": "narrator",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"background": "scene5",
+		"text": [
+			"..."
+		],
+		"next": ["end_4"]
+	},
+	"end_4": {
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"background": "scene5",
+		"text": [
+			"We're going to have so much fun."
 		]
 	}
 }
