@@ -14,6 +14,7 @@ var current: String = ""
 var current_speaker: String = "speaker1"
 var in_progress = false
 var is_typing = false
+@export var in_main_scene = false
 
 @export var starting_key : String
 
@@ -40,6 +41,9 @@ var typing_counter = 0
 
 func set_visible(toggle: bool) -> void:
 	self.visible = toggle
+	background_texture.visible = not in_main_scene
+	background_color.visible = not in_main_scene
+	scene_sprite.visible = not in_main_scene
 
 func _ready() -> void:
 	scene_text = load_scene_text()

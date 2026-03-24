@@ -27,6 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=196464201]
+visible = false
 layout_mode = 0
 offset_right = 256.0
 offset_bottom = 224.0

@@ -386,6 +386,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rns2u")
 
+[node name="DialogueUi" parent="." unique_id=22267864 instance=ExtResource("6_djwj0")]
+visible = false
+layout_mode = 1
+in_main_scene = true
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=430000400]
 
 [node name="FearBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1344384834]
@@ -460,9 +465,6 @@ S
 I
 O
 N"
-
-[node name="DialogueUi" parent="CanvasLayer" unique_id=22267864 instance=ExtResource("6_djwj0")]
-visible = false
 
 [node name="GameoverEffectRect" parent="CanvasLayer" unique_id=846579070 instance=ExtResource("7_e0pfi")]
 visible = false
