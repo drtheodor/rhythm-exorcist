@@ -35,8 +35,16 @@ func _on_dialogue_finished() -> void:
 
 func _show_grade() -> void:
 	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
+	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
 	if grade_label:
 		grade_label.text = GameManager.get_grade()
+	if stats_label:
+		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
+			GameManager.notes_hit,
+			GameManager.notes_missed,
+			GameManager.combos_hit
+		]
+	if grade_label:
 		grade_label.get_parent().show()
 	await _wait_for_advance()
 

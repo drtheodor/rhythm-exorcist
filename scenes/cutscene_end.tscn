@@ -1,23 +1,33 @@
 [gd_scene format=3 uid="uid://bw6n4k2j8t1y5"]
 
-[ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_cscne"]
+[ext_resource type="Script" uid="uid://cmgp80s7uh00l" path="res://scripts/cutscene.gd" id="1_cscne"]
 [ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="2_dui"]
 
-[node name="CutsceneEnd" type="Node" unique_id=2222222221]
+[node name="CutsceneEnd" type="Node" unique_id=-2072745075]
 script = ExtResource("1_cscne")
 type = 1
 
-[node name="DialogueUi" parent="." unique_id=2222222222 instance=ExtResource("2_dui")]
+[node name="DialogueUi" parent="." unique_id=-2072745074 instance=ExtResource("2_dui")]
 starting_key = "end_start"
 
-[node name="GradeCanvas" type="CanvasLayer" parent="."]
+[node name="GradeCanvas" type="CanvasLayer" parent="." unique_id=1863877354]
 visible = false
 
-[node name="GradeLabel" type="Label" parent="GradeCanvas"]
+[node name="GradeLabel" type="Label" parent="GradeCanvas" unique_id=322841211]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.3
+anchor_right = 0.5
+anchor_bottom = 0.3
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsLabel" type="Label" parent="GradeCanvas" unique_id=645491439]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-text = ""
+horizontal_alignment = 1

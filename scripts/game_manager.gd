@@ -48,6 +48,10 @@ var is_game_over: bool = false
 var options_open: bool = false
 var paused: bool = false
 
+var notes_hit: int = 0
+var notes_missed: int = 0
+var combos_hit: int = 0
+
 var fear: int:
 	set(val):
 		var diff = val - fear
@@ -126,6 +130,9 @@ func game_over() -> void:
 func game_restart() -> void:
 	self.fear = 0
 	is_game_over = false
+	notes_hit = 0
+	notes_missed = 0
+	combos_hit = 0
 	animated_level_entry = false
 	select_level(current_level_audio, current_level_midi)
 

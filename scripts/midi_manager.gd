@@ -177,12 +177,14 @@ func _process(_delta: float) -> void:
 				if Input.is_action_just_pressed(keys[0]) and Input.is_action_just_pressed(keys[1]):
 					_combo_hit_ids.append(combo_id)
 					GameManager.fear -= combo_heal
+					GameManager.combos_hit += 1
 					GameManager.on_combo.emit()
 					note.queue_free()
 					return false
 
 				if note.position.x + note_width < play_line_x:
 					_combo_miss_ids.append(combo_id)
+					GameManager.notes_missed += 1
 					GameManager.fear += self.fear
 					GameManager.faith -= faith_penalty
 					note.queue_free()
@@ -192,12 +194,15 @@ func _process(_delta: float) -> void:
 					if is_bad:
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
+					else:
+						GameManager.notes_hit += 1
 
 					note.queue_free()
 					return false
 
 				if note.position.x + note_width < play_line_x:
 					if not is_bad:
+						GameManager.notes_missed += 1
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
 					note.queue_free()
