@@ -296,7 +296,7 @@
 	"intro_40": {
 		"color": "blue",
 		"alignment": "center",
-		"scene": "scene1",
+		"scene": "scene6",
 		"text": ["..."],
 		"next": ["intro_41"]
 	},
@@ -324,7 +324,7 @@
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene4",
+		"background": "scene6",
 		"text": [
 			"...",
 			"There I am.",
@@ -338,7 +338,7 @@
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene4",
+		"background": "",
 		"text": [
 			"I felt a hand on my shoulder."
 		],
@@ -349,7 +349,7 @@
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene5",
+		"background": "scene7",
 		"text": [
 			"..."
 		],
@@ -359,7 +359,7 @@
 		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene5",
+		"background": "",
 		"text": [
 			"We're going to have so much fun."
 		]
