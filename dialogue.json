@@ -303,7 +303,7 @@
 	"intro_41": {
 		"color": "blue",
 		"alignment": "center",
-		"text": ["There's nothing there."],
+		"text": ["There I am."],
 		"next": ["intro_42"]
 	},
 	"intro_42": {
@@ -316,6 +316,7 @@
 	"intro_43": {
 		"color": "blue",
 		"alignment": "center",
+		"scene": "",
 		"text": ["I slowly opened the door."]
 	},
 	"end_start": {

@@ -14,6 +14,7 @@ var current: String = ""
 var current_speaker: String = "speaker1"
 var in_progress = false
 var is_typing = false
+var scene_hidden = true
 @export var in_main_scene = false
 
 @export var starting_key : String
@@ -43,7 +44,7 @@ func set_visible(toggle: bool) -> void:
 	self.visible = toggle
 	background_texture.visible = not in_main_scene
 	background_color.visible = not in_main_scene
-	scene_sprite.visible = not in_main_scene
+	scene_sprite.visible = not in_main_scene and not scene_hidden
 
 func _ready() -> void:
 	scene_text = load_scene_text()
@@ -147,6 +148,10 @@ func process_text_data(data:Dictionary) -> Array:
 
 	if data.has("scene"):
 		var key = data["scene"]
+		if key == null or key == "":
+			scene_hidden = true
+		else:
+			scene_hidden = false
 		TransitionManager.flash(func():
 			if key == null or key == "":
 				scene_sprite.visible = false

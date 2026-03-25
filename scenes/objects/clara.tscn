@@ -623,6 +623,7 @@ script = ExtResource("1_clara")
 idle_anims = Array[String](["1", "3", "9", "d1"])
 miss_anims = Array[String](["2", "5", "10", "d2"])
 near_death_miss_anims = Array[String](["2", "4", "11", "d2"])
+combo_anims = Array[String](["7", "13", "6", "d2"])
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=283036025]
 material = SubResource("ShaderMaterial_uvcag")
