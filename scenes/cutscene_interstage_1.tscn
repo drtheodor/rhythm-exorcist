@@ -1,6 +1,12 @@
 [gd_scene format=3 uid="uid://ddt30y7fjldwf"]
 
 [ext_resource type="Script" uid="uid://b6ak6q6g0bb7f" path="res://scripts/interstage.gd" id="1_is1"]
+[ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="2_8u3cr"]
 
 [node name="CutsceneInterstage1" type="CanvasLayer" unique_id=270175726]
+visible = false
 script = ExtResource("1_is1")
+
+[node name="DialogueUi" parent="." unique_id=1477838171 instance=ExtResource("2_8u3cr")]
+in_main_scene = true
+starting_key = "interstage1_1"

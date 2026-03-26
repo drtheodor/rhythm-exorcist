@@ -202,6 +202,9 @@ func _load_audio(key: String) -> AudioStream:
 	return null
 
 func _on_background_gui_input(event: InputEvent) -> void:
+	if not self.visible:
+		return
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if in_progress:

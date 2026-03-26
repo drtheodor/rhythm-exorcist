@@ -8,6 +8,8 @@ const SYMBOL_REGIONS: Array[Rect2] = [
 ]
 const SYMBOL_HEIGHT: int = 24
 
+@onready var canvas_layer: CanvasLayer = $CanvasLayer
+
 @onready var fear_label = $CanvasLayer/FearText
 @onready var fear_bar = $CanvasLayer/FearBar
 @onready var faith_bar = $CanvasLayer/FaithBar
@@ -22,6 +24,7 @@ func _ready() -> void:
 	GameManager.on_fear.connect(self._on_fear)
 	GameManager.on_faith.connect(_on_faith)
 	GameManager.game_over_triggered.connect(_on_game_over_notified)
+	GameManager.go_interstage.connect(_in_scene_dialogue)
 	faith_bar.value = GameManager.faith
 	_init_symbols()
 
@@ -55,3 +58,6 @@ func _shake_symbol(sprite: Sprite2D) -> void:
 
 func _on_retry_button_pressed() -> void:
 	GameManager.game_restart()
+
+func _in_scene_dialogue(_num: int) -> void:
+	canvas_layer.visible = false

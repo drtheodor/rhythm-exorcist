@@ -32,5 +32,6 @@ func _on_main_menu_button_pressed() -> void:
 	GameManager.open_title_screen()
 
 func _on_pause() -> void:
+	get_tree().paused = true
 	visible = not visible
 	GameManager.paused = visible

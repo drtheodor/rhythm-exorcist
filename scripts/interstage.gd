@@ -3,6 +3,8 @@ extends CanvasLayer
 @export var next_level_num: int = 2
 @export var auto_advance: bool = true   # set false when dialogue is wired in
 
+@onready var ui: DialoguePlayer = $DialogueUi
+
 func _ready() -> void:
 	GameManager.go_interstage.connect(_on_go_interstage)
 
