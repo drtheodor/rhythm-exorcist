@@ -169,7 +169,11 @@ func level_completed() -> void:
 func _go_interstage(inter_num: int) -> void:
 	await TransitionManager.fade_out()
 	go_interstage.emit(inter_num)
-	get_tree().get_first_node_in_group("MidiPlayer").hide()
+	for node in get_tree().get_nodes_in_group("GameplayLayer"):
+		node.hide()
+	for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
+		if node.has_method("hide"):
+			node.hide()
 	TransitionManager.fade_in()
 
 func advance_to_level(num: int) -> void:

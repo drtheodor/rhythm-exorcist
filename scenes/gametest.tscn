@@ -124,25 +124,25 @@ debug = true
 
 [node name="Running" type="Node" parent="MidiPlayer" unique_id=489803820]
 
-[node name="NoteHider2" type="ColorRect" parent="MidiPlayer" unique_id=1048274858]
+[node name="NoteHider2" type="ColorRect" parent="MidiPlayer" unique_id=1048274858 groups=["GameplayLayer"]]
 offset_left = 201.0
 offset_top = 137.0
 offset_right = 256.0
 offset_bottom = 167.0
 color = Color(0, 0, 0, 1)
 
-[node name="NoteHider" type="ColorRect" parent="MidiPlayer" unique_id=1062773405]
+[node name="NoteHider" type="ColorRect" parent="MidiPlayer" unique_id=1062773405 groups=["GameplayLayer"]]
 offset_left = 55.0
 offset_top = 137.0
 offset_right = 71.0
 offset_bottom = 167.0
 color = Color(0, 0, 0, 1)
 
-[node name="UpKey" parent="MidiPlayer" unique_id=2070705062 instance=ExtResource("3_34im5")]
+[node name="UpKey" parent="MidiPlayer" unique_id=2070705062 groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
 position = Vector2(64, 144)
 key_name = "up"
 
-[node name="DownKey" parent="MidiPlayer" unique_id=843859615 instance=ExtResource("3_34im5")]
+[node name="DownKey" parent="MidiPlayer" unique_id=843859615 groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
 position = Vector2(64, 160)
 region_rect = Rect2(16, 0, 16, 16)
 key_name = "down"

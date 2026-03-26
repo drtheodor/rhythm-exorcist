@@ -22,6 +22,8 @@ func _start() -> void:
 	show()
 	if auto_advance:
 		_advance()
+	else:
+		ui.on_display_dialog(ui.starting_key)
 
 func _advance() -> void:
 	hide()
