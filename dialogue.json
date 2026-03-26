@@ -319,6 +319,33 @@
 		"scene": "",
 		"text": ["I slowly opened the door."]
 	},
+	"interstage1_1": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			". . ."
+		]
+	},
+	"interstage2_1": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			". . ."
+		]
+	},
+	"interstage3_1": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			". . ."
+		]
+	},
 	"end_start": {
 		"speaker": "narrator",
 		"scene": "scene5",
