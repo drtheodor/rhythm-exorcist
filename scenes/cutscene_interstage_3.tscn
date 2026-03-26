@@ -7,6 +7,7 @@
 visible = false
 script = ExtResource("1_is3")
 next_level_num = 4
+auto_advance = false
 
 [node name="DialogueUi" parent="." unique_id=1477838171 instance=ExtResource("2_b7h48")]
 in_main_scene = true

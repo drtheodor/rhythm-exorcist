@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://coh5lq7ky41y6" path="res://scenes/cutscene_interstage_3.tscn" id="6_o6yrp"]
 [ext_resource type="Script" uid="uid://bitpgscy8bwyx" path="res://scripts/midi_manager.gd" id="6_t82je"]
 [ext_resource type="AudioStream" uid="uid://c2hprt6p8adds" path="res://test_low_tempo2.wav" id="7_82nuq"]
-[ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
+[ext_resource type="Shader" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
 [ext_resource type="Texture2D" uid="uid://wdm5a2dqx51i" path="res://assets/textures/clarabody.png" id="12_ooobp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
@@ -82,6 +82,7 @@ shader_parameter/gray_replace = Color(0.7647059, 0.44313726, 0, 1)
 shader_parameter/black_replace = Color(0.07058824, 0.023529412, 0, 1)
 
 [node name="GameTest" type="Node2D" unique_id=1813943640]
+process_mode = 1
 
 [node name="GameUI" parent="." unique_id=1827341359 instance=ExtResource("4_6ycye")]
 
@@ -108,13 +109,10 @@ libraries/ = SubResource("AnimationLibrary_t82je")
 autoplay = &"idle"
 
 [node name="CutsceneInterstage1" parent="." unique_id=1779723792 instance=ExtResource("4_18hib")]
-visible = false
 
 [node name="CutsceneInterstage2" parent="." unique_id=2107067178 instance=ExtResource("5_1uq2d")]
-visible = false
 
 [node name="CutsceneInterstage3" parent="." unique_id=1123250583 instance=ExtResource("6_o6yrp")]
-visible = false
 
 [node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188 groups=["MidiPlayer"]]
 midi = ExtResource("5_82nuq")
@@ -152,7 +150,7 @@ y_offset = 3.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MidiPlayer" unique_id=821598419]
 
-[node name="GameplayLayer" type="TileMapLayer" parent="." unique_id=169655427]
+[node name="GameplayLayer" type="TileMapLayer" parent="." unique_id=169655427 groups=["GameplayLayer"]]
 tile_map_data = PackedByteArray("AAAIABcAAAAAAAMAAAAYABcAAAACAAMAAAAMABcAAAABAAMAAAAQABcAAAABAAMAAAAUABcAAAABAAMAAAAJABAAAAABAAAAAAAKABAAAAABAAAAAAALABAAAAABAAAAAAAMABAAAAABAAAAAAANABAAAAABAAAAAAAOABAAAAABAAAAAAAPABAAAAABAAAAAAAQABAAAAABAAAAAAARABAAAAABAAAAAAASABAAAAABAAAAAAATABAAAAABAAAAAAAUABAAAAABAAAAAAAVABAAAAABAAAAAAAWABAAAAABAAAAAAAXABAAAAABAAAAAAAYABAAAAABAAAAAAAYABQAAAABAAAAAAAXABQAAAABAAAAAAAWABQAAAABAAAAAAAVABQAAAABAAAAAAAUABQAAAABAAAAAAATABQAAAABAAAAAAASABQAAAABAAAAAAARABQAAAABAAAAAAAQABQAAAABAAAAAAAPABQAAAABAAAAAAAOABQAAAABAAAAAAANABQAAAABAAAAAAAMABQAAAABAAAAAAALABQAAAABAAAAAAAKABQAAAABAAAAAAAJABQAAAABAAAAAAAJABIAAAADAAAAAAAKABIAAAADAAAAAAALABIAAAADAAAAAAANABIAAAADAAAAAAAOABIAAAADAAAAAAAPABIAAAADAAAAAAAMABIAAAADAAAAAAAQABIAAAADAAAAAAARABIAAAADAAAAAAASABIAAAADAAAAAAATABIAAAADAAAAAAAUABIAAAADAAAAAAAVABIAAAADAAAAAAAWABIAAAADAAAAAAAXABIAAAADAAAAAAAYABIAAAADAAAAAAA=")
 tile_set = SubResource("TileSet_f6jnj")
 

@@ -34,7 +34,11 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 var notes: Array = []
 var _next_combo_id: int = 0
 
+func _ready() -> void:
+	self.finished.connect(_on_finished)
+
 func start() -> void:
+	is_finished = false
 	var asp = $AudioStreamPlayer
 	asp.stream = self.audio
 	
@@ -129,8 +133,6 @@ func start() -> void:
 		draw_play_line()
 	
 	self.play()
-	
-	self.finished.connect(_on_finished)
 
 func _process(_delta: float) -> void:
 	if self.get_state() != 0: # only when playing
@@ -284,8 +286,15 @@ func draw_play_line():
 	line.position = Vector2(switch_line_x - 2, y)
 	add_child(line)
 
+var is_finished : bool = false
+
 func _on_finished():
+	if is_finished:
+		return
+	
+	is_finished = true
 	for note in self.notes:
 		note.queue_free()
 	notes.clear()
+	self.stop()
 	GameManager.level_completed()

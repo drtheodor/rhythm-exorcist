@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://ey4dfyjgurti"]
+[gd_scene format=3 uid="uid://3txq326n70kh"]
 
-[ext_resource type="Shader" uid="uid://drj8q0mfekhey" path="res://assets/shaders/crt.gdshader" id="1_crt"]
-[ext_resource type="Script" uid="uid://c6rtxnnve2hiv" path="res://scripts/crt_display.gd" id="2_script"]
+[ext_resource type="Shader" path="res://assets/shaders/crt.gdshader" id="1_crt"]
+[ext_resource type="Script" path="res://scripts/crt_display.gd" id="2_script"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
 shader = ExtResource("1_crt")
@@ -16,6 +16,7 @@ shader_parameter/aspect = 0.875
 shader_parameter/wobble_strength = 0.0
 
 [node name="CRTDisplay" type="Control" unique_id=1513583389]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

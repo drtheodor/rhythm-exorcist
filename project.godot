@@ -37,6 +37,7 @@ enabled=PackedStringArray("res://addons/godot_midi/plugin.cfg")
 [global_group]
 
 MidiPlayer=""
+GameplayLayer=""
 
 [input]
 

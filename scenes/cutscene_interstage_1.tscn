@@ -6,6 +6,7 @@
 [node name="CutsceneInterstage1" type="CanvasLayer" unique_id=270175726]
 visible = false
 script = ExtResource("1_is1")
+auto_advance = false
 
 [node name="DialogueUi" parent="." unique_id=1477838171 instance=ExtResource("2_8u3cr")]
 in_main_scene = true

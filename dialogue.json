@@ -391,5 +391,14 @@
 		"text": [
 			"We're going to have so much fun."
 		]
+	},
+	"interscene1_1": {
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"background": "",
+		"text": [
+			"We're going to have so much fun."
+		]
 	}
 }

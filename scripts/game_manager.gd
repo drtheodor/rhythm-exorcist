@@ -169,9 +169,13 @@ func level_completed() -> void:
 func _go_interstage(inter_num: int) -> void:
 	await TransitionManager.fade_out()
 	go_interstage.emit(inter_num)
+	get_tree().get_first_node_in_group("MidiPlayer").hide()
 	TransitionManager.fade_in()
 
 func advance_to_level(num: int) -> void:
+	if in_level_transition:
+		return
+	
 	current_level_num = num
 	animated_level_entry = true
 	match num:
@@ -179,11 +183,14 @@ func advance_to_level(num: int) -> void:
 		3: select_level(level3_audio, level3_midi)
 		4: select_level(level4_audio, level4_midi)
 
+var in_level_transition : bool = false
+
 func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	if audio != current_level_audio and midi != current_level_midi:
 		current_level_audio = audio
 		current_level_midi = midi
 
+	in_level_transition = true
 	await TransitionManager.fade_out()
 	_change_scene(GAME_LEVEL)
 	TransitionManager.fade_in()
@@ -193,6 +200,7 @@ func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	midi_player.audio = audio
 	midi_player.midi = midi
 	midi_player.start()
+	in_level_transition = false
 
 func open_level_select() -> void:
 	self.fear = 0
