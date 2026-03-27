@@ -15,8 +15,9 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @onready var running_parent = $Running
 
 @export var audio: AudioStream
+@export var approach_duration: float = 11.25
 @export var note_height: int = 16
-@export var note_width: int = 4
+@export var note_width: int = 16
 @export var trigger_line_x: float = 70
 @export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
@@ -43,9 +44,6 @@ func start() -> void:
 	asp.stream = self.audio
 	
 	self.link_audio_stream_player([asp])
-	
-	# Calculate tempo-based pixels per second
-	#var beats_per_second = 1000000.0 / self.midi.tempo
 	
 	var microseconds_per_tick: float = (self.midi.tempo as float) / self.midi.division
 	var seconds_per_tick: float = microseconds_per_tick / 1000000.0
@@ -140,13 +138,11 @@ func _process(_delta: float) -> void:
 
 	for note in notes:
 		var note_start_time = note.get_meta("start_time")
+
+		var spawn_x = get_viewport().get_visible_rect().size.x
+		var target_x = play_line_x + note_width
 		
-		var d: float = (current_time) / (note_start_time) if note_start_time else 0.
-		var maxx = get_viewport().get_visible_rect().size.x
-		
-		# Do not question.
-		note.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
-		#note.position.x = lerpf(maxx, play_line_x, current_time / note_start_time)
+		note.position.x = lerp(spawn_x, target_x, (current_time - note_start_time + approach_duration) / approach_duration)
 
 		if note.get_meta("switch") and not note.get_meta("switched") and note.position.x <= switch_line_x:
 			var target = note.get_meta("target_lane")
@@ -163,7 +159,7 @@ func _process(_delta: float) -> void:
 	var _combo_miss_ids: Array = []
 
 	self.notes = notes.filter(func(note):
-		if note.position.x + note_width < trigger_line_x:
+		if note.position.x < trigger_line_x:
 			var lane = note.get_meta("lane")
 			var is_bad = note.get_meta("bad")
 			var is_combo = note.get_meta("combo")
@@ -224,7 +220,7 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	self.running_parent.add_child(box)
 
 	box.set_meta("start_time", note_data.time + offset)
-	box.set_meta("duration", note_data.duration)
+	#box.set_meta("duration", duration)
 	box.set_meta("track", note_data.track)
 	box.set_meta("note", note_data.note)
 	box.set_meta("bad", note_data.bad)
@@ -234,6 +230,14 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	box.set_meta("switched", false)
 	box.set_meta("combo", note_data.get("combo", false))
 	box.set_meta("combo_id", note_data.get("combo_id", -1))
+	
+	var d = (current_time) / (note_data.time + offset) if note_data.time else offset
+	var maxx = get_viewport().get_visible_rect().size.x
+	
+	# Do not question.
+	box.position.x = (maxx + play_line_x) * (1 - d) + 2 * play_line_x
+	box.position.y = (note_data.lane - 1) * note_height + play_line_y
+
 	return box
 
 func create_note(note_data: Dictionary):
@@ -241,21 +245,13 @@ func create_note(note_data: Dictionary):
 	var box: Sprite2D
 	
 	if len > 1:
-		#for dur in range(len):
-		box = create_note_box(note_data, 0)
-		box.region_rect.position.x += 16
-		box.region_rect.size.x = 16 * len
+		for dur in range(len):
+			box = create_note_box(note_data, dur)
+			box.region_rect.position.x += 16 * (dur + 1)
+			notes.append(box)
 	else:
 		box = create_note_box(note_data, 0)
-
-	var d = (current_time) / (note_data.time) if note_data.time else 0.
-	var maxx = get_viewport().get_visible_rect().size.x
-	
-	# Do not question.
-	box.position.x = (maxx + play_line_x) * (1 - d) + 2*play_line_x
-	box.position.y = (note_data.lane - 1) * note_height + play_line_y
-
-	notes.append(box)
+		notes.append(box)
 
 func draw_play_line():
 	var y = play_line_y - note_height / 2.
