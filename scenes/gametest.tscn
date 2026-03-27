@@ -138,13 +138,15 @@ offset_right = 71.0
 offset_bottom = 167.0
 color = Color(0, 0, 0, 1)
 
-[node name="UpKey" parent="MidiPlayer" unique_id=2070705062 groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
+[node name="UpKey" parent="MidiPlayer" unique_id=2070705062 node_paths=PackedStringArray("manager") groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
 position = Vector2(64, 144)
+manager = NodePath("..")
 key_name = "up"
 
-[node name="DownKey" parent="MidiPlayer" unique_id=843859615 groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
+[node name="DownKey" parent="MidiPlayer" unique_id=843859615 node_paths=PackedStringArray("manager") groups=["GameplayLayer"] instance=ExtResource("3_34im5")]
 position = Vector2(64, 160)
 region_rect = Rect2(16, 0, 16, 16)
+manager = NodePath("..")
 key_name = "down"
 y_offset = 3.0
 

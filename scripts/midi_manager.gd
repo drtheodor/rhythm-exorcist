@@ -32,6 +32,12 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 
 @export var keys: Array[String] = ["up", "down"]
 
+const NONE = 0
+const PRESSED = 1
+const HOLDING = 2
+const RELEASED = 3
+
+var key_state = {}
 var notes: Array = []
 var _next_combo_id: int = 0
 
@@ -59,23 +65,23 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
+					var is_normal = event.track <= 2
 					var is_bad = event.track >= 3 and event.track <= 4
 					var is_switch = event.track >= 5 and event.track <= 6
 					var is_combo = event.track == 7
-					var lane: int
-					var target_lane: int
-					if event.track <= 2:
+					
+					var lane: int = 1
+					var target_lane: int = lane
+					
+					if is_normal:
 						lane = event.track
 						target_lane = lane
-					elif event.track <= 4:
+					elif is_bad:
 						lane = event.track - 2
 						target_lane = lane
-					elif event.track <= 6:
+					elif is_switch:
 						lane = event.track - 4
 						target_lane = (2 if lane == 1 else 1)
-					else:
-						lane = 1
-						target_lane = 1
 
 					if is_combo:
 						var combo_id = _next_combo_id
@@ -149,6 +155,16 @@ func _process(_delta: float) -> void:
 	# Track which combo_ids were hit or missed this frame
 	var _combo_hit_ids: Array = []
 	var _combo_miss_ids: Array = []
+	
+	for key in keys:
+		if Input.is_action_just_pressed(key) and self.key_state.get(key, NONE) == NONE:
+			self.key_state[key] = PRESSED
+		elif Input.is_action_pressed(key):
+			self.key_state[key] = HOLDING
+		elif Input.is_action_just_released(key):
+			self.key_state[key] = RELEASED
+		else:
+			self.key_state[key] = NONE
 
 	self.notes = notes.filter(func(note):
 		if note.position.x < trigger_line_x:
@@ -181,7 +197,10 @@ func _process(_delta: float) -> void:
 					note.queue_free()
 					return false
 			elif is_long:
-				if Input.is_action_pressed(keys[lane - 1]):
+				var key = keys[lane - 1]
+				var part = note.get_meta("part")
+				
+				if self.key_state[key] == HOLDING:
 					if is_bad:
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
@@ -189,6 +208,10 @@ func _process(_delta: float) -> void:
 						GameManager.notes_hit += 1
 
 					note.queue_free()
+					
+					if part != 0:
+						self.key_state[key] = RELEASED
+					
 					return false
 
 				if note.position.x + note_width < play_line_x:
@@ -199,7 +222,8 @@ func _process(_delta: float) -> void:
 					note.queue_free()
 					return false
 			else:
-				if Input.is_action_just_pressed(keys[lane - 1]):
+				var key = keys[lane - 1]
+				if self.key_state[key] == PRESSED:
 					if is_bad:
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
@@ -219,7 +243,7 @@ func _process(_delta: float) -> void:
 		return true
 	)
 
-func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
+func create_note_box(note_data: Dictionary, offset: float = 0.) -> Sprite2D:
 	var scene = KEY
 	if note_data.bad:
 		scene = KEY_BAD
@@ -227,6 +251,7 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 		scene = KEY_SWITCH
 	elif note_data.get("combo", false):
 		scene = KEY_COMBO
+	
 	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
@@ -254,7 +279,7 @@ func create_note(note_data: Dictionary):
 			box.region_rect.position.x += 16 * (dur + 1)
 			notes.append(box)
 	else:
-		box = create_note_box(note_data, 0)
+		box = create_note_box(note_data)
 		notes.append(box)
 
 func draw_play_line():
