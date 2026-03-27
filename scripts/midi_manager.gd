@@ -81,17 +81,13 @@ func start() -> void:
 						var combo_id = _next_combo_id
 						_next_combo_id += 1
 						last_combo_notes = []
-						for combo_lane in [1, 2]:
+						for combo_lane in range(len(self.keys)):
 							var combo_note = {
-								"track": event.track,
-								"note": event.note,
 								"time": time,
 								"duration": 0,
 								"bad": false,
-								"lane": combo_lane,
-								"target_lane": combo_lane,
-								"switch": false,
-								"combo": true,
+								"lane": combo_lane + 1,
+								"target_lane": combo_lane + 1,
 								"combo_id": combo_id,
 							}
 							temp_notes.append(combo_note)
@@ -99,15 +95,11 @@ func start() -> void:
 						last_note = last_combo_notes[0]
 					else:
 						last_note = {
-							"track": event.track,
-							"note": event.note,
 							"time": time,
 							"duration": 0,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
-							"switch": is_switch,
-							"combo": false,
 							"combo_id": -1,
 						}
 						temp_notes.append(last_note)
@@ -144,15 +136,15 @@ func _process(_delta: float) -> void:
 		
 		note.position.x = lerp(spawn_x, target_x, (current_time - note_start_time + approach_duration) / approach_duration)
 
-		if note.get_meta("switch") and not note.get_meta("switched") and note.position.x <= switch_line_x:
+		if note.position.x <= switch_line_x:
+			var lane = note.get_meta("lane")
 			var target = note.get_meta("target_lane")
-			note.set_meta("lane", target)
-			note.set_meta("switched", true)
-			var target_y = (target - 1) * note_height + play_line_y
-			var tween = create_tween()
-			tween.tween_property(note, "position:y", target_y, 0.3)
+			if lane != target:
+				note.set_meta("lane", target)
+				var target_y = (target - 1) * note_height + play_line_y
+				var tween = create_tween()
+				tween.tween_property(note, "position:y", target_y, 0.3)
 		
-		#print(note.get_meta("note"), "/", "start: ", note_start_time, "; cur: ", current_time, "; d: ", d, "; x: ", note.position.x)
 	
 	# Track which combo_ids were hit or missed this frame
 	var _combo_hit_ids: Array = []
@@ -162,8 +154,9 @@ func _process(_delta: float) -> void:
 		if note.position.x < trigger_line_x:
 			var lane = note.get_meta("lane")
 			var is_bad = note.get_meta("bad")
-			var is_combo = note.get_meta("combo")
 			var combo_id = note.get_meta("combo_id")
+			var is_combo = combo_id >= 0
+			var is_long = note.has_meta("part")
 
 			if is_combo:
 				# Skip if this combo pair was already resolved this frame
@@ -185,6 +178,24 @@ func _process(_delta: float) -> void:
 					GameManager.notes_missed += 1
 					GameManager.fear += self.fear
 					GameManager.faith -= faith_penalty
+					note.queue_free()
+					return false
+			elif is_long:
+				if Input.is_action_pressed(keys[lane - 1]):
+					if is_bad:
+						GameManager.fear += self.fear
+						GameManager.faith -= faith_penalty
+					else:
+						GameManager.notes_hit += 1
+
+					note.queue_free()
+					return false
+
+				if note.position.x + note_width < play_line_x:
+					if not is_bad:
+						GameManager.notes_missed += 1
+						GameManager.fear += self.fear
+						GameManager.faith -= faith_penalty
 					note.queue_free()
 					return false
 			else:
@@ -212,7 +223,7 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	var scene = KEY
 	if note_data.bad:
 		scene = KEY_BAD
-	elif note_data["switch"]:
+	elif note_data.lane != note_data.target_lane:
 		scene = KEY_SWITCH
 	elif note_data.get("combo", false):
 		scene = KEY_COMBO
@@ -220,22 +231,14 @@ func create_note_box(note_data: Dictionary, offset: float) -> Sprite2D:
 	self.running_parent.add_child(box)
 
 	box.set_meta("start_time", note_data.time + offset)
-	#box.set_meta("duration", duration)
-	box.set_meta("track", note_data.track)
-	box.set_meta("note", note_data.note)
 	box.set_meta("bad", note_data.bad)
 	box.set_meta("lane", note_data.lane)
 	box.set_meta("target_lane", note_data.target_lane)
-	box.set_meta("switch", note_data["switch"])
-	box.set_meta("switched", false)
-	box.set_meta("combo", note_data.get("combo", false))
 	box.set_meta("combo_id", note_data.get("combo_id", -1))
 	
-	var d = (current_time) / (note_data.time + offset) if note_data.time else offset
 	var maxx = get_viewport().get_visible_rect().size.x
 	
-	# Do not question.
-	box.position.x = (maxx + play_line_x) * (1 - d) + 2 * play_line_x
+	box.position.x = maxx
 	box.position.y = (note_data.lane - 1) * note_height + play_line_y
 
 	return box
@@ -247,6 +250,7 @@ func create_note(note_data: Dictionary):
 	if len > 1:
 		for dur in range(len):
 			box = create_note_box(note_data, dur)
+			box.set_meta("part", dur)
 			box.region_rect.position.x += 16 * (dur + 1)
 			notes.append(box)
 	else:
