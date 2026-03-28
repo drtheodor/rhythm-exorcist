@@ -144,7 +144,15 @@ func start_level() -> void:
 func begin_level_1() -> void:
 	current_level_num = 1
 	animated_level_entry = false
-	select_level(level1_audio, level1_midi)
+	# Load the game scene so interstage nodes are in the tree, then trigger interstage 0
+	current_level_audio = level1_audio
+	current_level_midi = level1_midi
+	await TransitionManager.fade_out()
+	_change_scene(GAME_LEVEL)
+	TransitionManager.fade_in()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_go_interstage(0)
 
 func open_cutscene_end() -> void:
 	await TransitionManager.fade_out()
@@ -183,6 +191,7 @@ func advance_to_level(num: int) -> void:
 	current_level_num = num
 	animated_level_entry = true
 	match num:
+		1: select_level(level1_audio, level1_midi)
 		2: select_level(level2_audio, level2_midi)
 		3: select_level(level3_audio, level3_midi)
 		4: select_level(level4_audio, level4_midi)

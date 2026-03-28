@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://6f74tevkju0r" path="res://scenes/objects/key_listener.tscn" id="3_34im5"]
 [ext_resource type="Texture2D" uid="uid://b0o3r831n2n36" path="res://assets/textures/scenes/scene5.png" id="3_ooobp"]
 [ext_resource type="PackedScene" uid="uid://cq8m57372ivc4" path="res://scenes/game_ui.tscn" id="4_6ycye"]
+[ext_resource type="PackedScene" path="res://scenes/cutscene_interstage_0.tscn" id="3_is0"]
 [ext_resource type="PackedScene" uid="uid://ddt30y7fjldwf" path="res://scenes/cutscene_interstage_1.tscn" id="4_18hib"]
 [ext_resource type="PackedScene" uid="uid://bhes1rw6g6xlk" path="res://scenes/objects/clara.tscn" id="5_1dvly"]
 [ext_resource type="PackedScene" uid="uid://bd5fkrcl853ve" path="res://scenes/cutscene_interstage_2.tscn" id="5_1uq2d"]
@@ -107,6 +108,8 @@ position = Vector2(128, 64)
 [node name="ClaraAnimations" type="AnimationPlayer" parent="." unique_id=304925286]
 libraries/ = SubResource("AnimationLibrary_t82je")
 autoplay = &"idle"
+
+[node name="CutsceneInterstage0" parent="." instance=ExtResource("3_is0")]
 
 [node name="CutsceneInterstage1" parent="." unique_id=1779723792 instance=ExtResource("4_18hib")]
 

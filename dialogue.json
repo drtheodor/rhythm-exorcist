@@ -319,6 +319,15 @@
 		"scene": "",
 		"text": ["I slowly opened the door."]
 	},
+	"interstage0_1": {
+		"speaker": "narrator",
+		"color": "blue",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			". . ."
+		]
+	},
 	"interstage1_1": {
 		"speaker": "narrator",
 		"color": "blue",
