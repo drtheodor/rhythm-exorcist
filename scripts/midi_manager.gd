@@ -44,7 +44,7 @@ var _next_combo_id: int = 0
 func _ready() -> void:
 	self.finished.connect(_on_finished)
 
-const NOTE_OFFSET = 24
+const NOTE_OFFSET = 60
 
 func start() -> void:
 	is_finished = false
@@ -71,7 +71,7 @@ func start() -> void:
 					var is_long = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 26-27
 					var is_bad = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 28-29
 					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 30-31
-					var is_combo = event.track == NOTE_OFFSET + 8 # 32
+					var is_combo = event.note == NOTE_OFFSET + 8 # 32
 					
 					var lane: int = (event.note % 2) + 1
 					var target_lane: int = lane
@@ -273,7 +273,6 @@ const LONG_END = 64
 
 func create_note(note_data: Dictionary):
 	var len = ceili(note_data.duration)
-	print(note_data.duration)
 	var box: Sprite2D
 	
 	if len > 1:
