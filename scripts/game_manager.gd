@@ -161,10 +161,10 @@ func get_grade(faith_: int) -> String:
 	return "F"
 
 func level_completed() -> void:
-	if   current_level_audio == level1_audio: _go_interstage(1)
-	elif current_level_audio == level2_audio: _go_interstage(2)
-	elif current_level_audio == level3_audio: _go_interstage(3)
-	elif current_level_audio == level4_audio: open_cutscene_end()
+	if current_level_num <= 3:
+		_go_interstage(current_level_num)
+	else:
+		open_cutscene_end()
 
 func _go_interstage(inter_num: int) -> void:
 	await TransitionManager.fade_out()
