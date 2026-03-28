@@ -68,9 +68,10 @@ func start() -> void:
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
 					var is_normal = event.note < NOTE_OFFSET + 2 # 24-25
-					var is_bad = event.note >= NOTE_OFFSET + 2 and event.track < NOTE_OFFSET + 4 # 25-26
-					var is_switch = event.note >= NOTE_OFFSET + 4 and event.track < NOTE_OFFSET + 6 # 27-28
-					var is_combo = event.track == NOTE_OFFSET + 6 # 29
+					var is_bad = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 25-26
+					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 27-28
+					var is_long = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 29-30
+					var is_combo = event.track == NOTE_OFFSET + 6 # 31
 					
 					var lane: int = 1
 					var target_lane: int = lane
@@ -92,7 +93,7 @@ func start() -> void:
 						for combo_lane in range(len(self.keys)):
 							var combo_note = {
 								"time": time,
-								"duration": -1,
+								"duration": 1,
 								"bad": false,
 								"lane": combo_lane + 1,
 								"target_lane": combo_lane + 1,
@@ -104,7 +105,7 @@ func start() -> void:
 					else:
 						last_note = {
 							"time": time,
-							"duration": -1,
+							"duration": 0 if is_long else 1,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
@@ -114,10 +115,13 @@ func start() -> void:
 
 				if event.subtype == MIDI_MESSAGE_NOTE_OFF and last_note != null:
 					if last_combo_notes.size() > 0:
-						for cn in last_combo_notes:
-							cn.duration = time - cn.time
+						#for cn in last_combo_notes:
+						#	cn.duration = 1 #time - cn.time
 						last_combo_notes = []
-					else:
+					#else:
+					#	if last_note.is_long:
+					#		last_note.duration = time - last_note.time
+					if not last_note.duration:
 						last_note.duration = time - last_note.time
 					last_note = null
 	
