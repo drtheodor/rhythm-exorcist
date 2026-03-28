@@ -19,8 +19,8 @@ var crt_enabled: bool = true:
 
 @export_category("Level 1")
 # Current song: test_low_tempo2
-@export var level1_audio: AudioStream = preload("uid://c2hprt6p8adds")
-@export var level1_midi: MidiResource = preload("uid://ben25xbc4akfs")
+@export var level1_audio: AudioStream = preload("res://stage1.wav")
+@export var level1_midi: MidiResource = preload("res://stage1.mid")
 
 @export_category("Level 2")
 # Current song: test_low_tempo
