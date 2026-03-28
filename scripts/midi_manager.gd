@@ -71,7 +71,7 @@ func start() -> void:
 					var is_bad = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 25-26
 					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 27-28
 					var is_long = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 29-30
-					var is_combo = event.track == NOTE_OFFSET + 6 # 31
+					var is_combo = event.track == NOTE_OFFSET + 8 # 31
 					
 					var lane: int = 1
 					var target_lane: int = lane
