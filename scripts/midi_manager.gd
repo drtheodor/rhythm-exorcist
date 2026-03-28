@@ -73,17 +73,10 @@ func start() -> void:
 					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 30-31
 					var is_combo = event.track == NOTE_OFFSET + 8 # 32
 					
-					var lane: int = 1
+					var lane: int = (event.note % 2) + 1
 					var target_lane: int = lane
 					
-					if is_normal:
-						lane = event.track
-						target_lane = lane
-					elif is_bad:
-						lane = event.track - 2
-						target_lane = lane
-					elif is_switch:
-						lane = event.track - 4
+					if is_switch:
 						target_lane = (2 if lane == 1 else 1)
 
 					if is_combo:
