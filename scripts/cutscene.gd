@@ -1,4 +1,5 @@
 extends Node
+class_name Cutscene
 
 enum Type { INTRO, END }
 @export var type: Type = Type.INTRO
@@ -39,16 +40,36 @@ func _show_grade() -> void:
 	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
 	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
 	if grade_label:
-		grade_label.text = GameManager.get_grade()
+		grade_label.text = GameManager.get_grade(0)
 	if stats_label:
 		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
-			GameManager.notes_hit,
-			GameManager.notes_missed,
-			GameManager.combos_hit
+			0, 0, 0
 		]
 	if grade_label:
 		grade_label.get_parent().show()
+	
+	await _animate_score()
 	await _wait_for_advance()
+
+func _animate_score() -> void:
+	var tween = create_tween()
+	tween.tween_method(_update_label, 0, 100, 2.0)
+	tween.tween_method(_update_grade, 0, 100, 2.0)
+	await tween.finished
+
+func _update_label(percent: int) -> void:
+	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
+	if stats_label:
+		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
+				GameManager.notes_hit * percent * 0.01,
+				GameManager.notes_missed * percent * 0.01,
+				GameManager.combos_hit * percent * 0.01
+			]
+
+func _update_grade(percent: int) -> void:
+	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
+	if grade_label:
+		grade_label.text = GameManager.get_grade(GameManager.faith * percent * 0.01)
 
 func _wait_for_advance() -> void:
 	while true:

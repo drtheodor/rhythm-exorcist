@@ -11,7 +11,6 @@ type = 1
 starting_key = "end_start"
 
 [node name="GradeCanvas" type="CanvasLayer" parent="." unique_id=1863877354]
-visible = false
 
 [node name="GradeLabel" type="Label" parent="GradeCanvas" unique_id=322841211]
 anchors_preset = -1
@@ -21,6 +20,7 @@ anchor_right = 0.5
 anchor_bottom = 0.3
 grow_horizontal = 2
 grow_vertical = 2
+text = "S+"
 
 [node name="StatsLabel" type="Label" parent="GradeCanvas" unique_id=645491439]
 anchors_preset = 8
