@@ -8,6 +8,7 @@ visible = false
 script = ExtResource("1_is0")
 next_level_num = 1
 auto_advance = false
+face_anim = "1"
 
 [node name="DialogueUi" parent="." instance=ExtResource("2_dui0")]
 in_main_scene = true

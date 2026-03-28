@@ -324,35 +324,288 @@
 		"color": "blue",
 		"alignment": "center",
 		"speed": 0.05,
+		"face": "1",
+		"text": ["She was sitting on the edge of the bed."],
+		"next": ["interstage0_2"]
+	},
+	"interstage0_2": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Who are you?\""],
+		"next": ["interstage0_3"]
+	},
+	"interstage0_3": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"I'm a priest. A friend of mine asked me to come and see you.\""],
+		"next": ["interstage0_4"]
+	},
+	"interstage0_4": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Father Aldric?\""],
+		"next": ["interstage0_5"]
+	},
+	"interstage0_5": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"That's right.\""],
+		"next": ["interstage0_6"]
+	},
+	"interstage0_6": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
 		"text": [
-			". . ."
-		]
+			"\"My mom called him.\"",
+			"\"...\"",
+			"\"She's been crying a lot.\""
+		],
+		"next": ["interstage0_7"]
+	},
+	"interstage0_7": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": [
+			"\"I know. That's why I'm here.\"",
+			"\"How are you feeling, Clara?\""
+		],
+		"next": ["interstage0_8"]
+	},
+	"interstage0_8": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"Tired.\"",
+			"\"I keep having bad dreams.\""
+		],
+		"next": ["interstage0_9"]
+	},
+	"interstage0_9": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": [
+			"\"That's okay.\"",
+			"\"I'm just going to say a few words, if that's alright with you. It won't take long.\""
+		],
+		"next": ["interstage0_10"]
+	},
+	"interstage0_10": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"...\"",
+			"\"Is it going to hurt?\""
+		],
+		"next": ["interstage0_11"]
+	},
+	"interstage0_11": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"No. I promise it won't.\""],
+		"next": ["interstage0_12"]
+	},
+	"interstage0_12": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Okay.\""]
 	},
 	"interstage1_1": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Father Thomas?\""],
+		"next": ["interstage1_2"]
+	},
+	"interstage1_2": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"Yes?\""],
+		"next": ["interstage1_3"]
+	},
+	"interstage1_3": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Do you know what it felt like? When I opened the box?\""],
+		"next": ["interstage1_4"]
+	},
+	"interstage1_4": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"What did it feel like?\""],
+		"next": ["interstage1_5"]
+	},
+	"interstage1_5": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"Like something finally coming home.\"",
+			"\"...\"",
+			"\"That's what it told me, anyway.\""
+		],
+		"next": ["interstage1_6"]
+	},
+	"interstage1_6": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"W\u2014 what?\""],
+		"next": ["interstage1_7"]
+	},
+	"interstage1_7": {
+		"speaker": "clara",
+		"color": "orange",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"You look scared.\"",
+			"\"...\"",
+			"\"Do you practice in the mirror often?\""
+		],
+		"next": ["interstage1_8"]
+	},
+	"interstage1_8": {
 		"speaker": "narrator",
 		"color": "blue",
 		"alignment": "center",
 		"speed": 0.05,
+		"face": "3",
 		"text": [
-			". . ."
-		]
+			"I took a step back.",
+			"My hand tightened around my bible."
+		],
+		"next": ["interstage1_9"]
+	},
+	"interstage1_9": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"She's still in here, if that helps.\"",
+			"\"It doesn't, does it.\""
+		],
+		"next": ["interstage1_10"]
+	},
+	"interstage1_10": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"...\""],
+		"next": ["interstage1_11"]
+	},
+	"interstage1_11": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": ["\"Hello, priest.\""]
 	},
 	"interstage2_1": {
-		"speaker": "narrator",
-		"color": "blue",
+		"speaker": "clara",
+		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
 		"text": [
-			". . ."
-		]
+			"\"You're doing well.\"",
+			"\"Really. Better than the last one.\""
+		],
+		"next": ["interstage2_2"]
+	},
+	"interstage2_2": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"...\""],
+		"next": ["interstage2_3"]
+	},
+	"interstage2_3": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"Do you know what happens when you push something out of a vessel?\"",
+			"\"It doesn't disappear.\"",
+			"\"There's always somewhere else to be.\"",
+			"\"There are so many people, Father.\"",
+			"\"So many little girls who are curious about old boxes.\""
+		],
+		"next": ["interstage2_4"]
+	},
+	"interstage2_4": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"Be quiet.\""],
+		"next": ["interstage2_5"]
+	},
+	"interstage2_5": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"Why the long face?\"",
+			"\"I'm saying it because I want you to understand.\"",
+			"\"Even if you win today\u2014\"",
+			"\"What exactly have you won?\""
+		],
+		"next": ["interstage2_6"]
+	},
+	"interstage2_6": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"speed": 0.05,
+		"text": ["\"...\""]
 	},
 	"interstage3_1": {
-		"speaker": "narrator",
-		"color": "blue",
+		"speaker": "clara",
+		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
 		"text": [
-			". . ."
+			"\"You really think you can defeat me.\"",
+			"\"I have been here longer than your church. Longer than your God has had a name.\"",
+			"\"I have watched every priest that ever lived return to the dirt.\"",
+			"\"And you.\"",
+			"\"You are a NOVICE.\"",
+			"\"You are afraid. I can feel it. Every prayer you've said since you walked through that door has been half a prayer.\"",
+			"\"...\""
+		],
+		"next": ["interstage3_2"]
+	},
+	"interstage3_2": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"\"So go ahead, finish this.\"",
+			"\"SHOW ME WHAT YOU HAVE.\""
 		]
 	},
 	"end_start": {
