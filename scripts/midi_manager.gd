@@ -15,7 +15,7 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @onready var running_parent = $Running
 
 @export var audio: AudioStream
-@export var approach_duration: float = 11.25
+@export var approach_duration: float = 5 #11.25
 @export var note_height: int = 16
 @export var note_width: int = 16
 @export var trigger_line_x: float = 70
@@ -53,8 +53,10 @@ func start() -> void:
 	
 	self.link_audio_stream_player([asp])
 	
-	var microseconds_per_tick: float = (self.midi.tempo as float) / self.midi.division
+	var microseconds_per_tick: float = float(self.midi.tempo) / float(self.midi.division)
 	var seconds_per_tick: float = microseconds_per_tick / 1000000.0
+	
+	print(self.midi.tempo, " ", self.midi.division)
 	
 	var temp_notes = []
 	
@@ -77,7 +79,7 @@ func start() -> void:
 					var target_lane: int = lane
 					
 					if is_switch:
-						target_lane = (2 if lane == 1 else 1)
+						target_lane = 2 if lane == 1 else 1
 
 					if is_combo:
 						var combo_id = _next_combo_id
@@ -137,7 +139,7 @@ func _process(_delta: float) -> void:
 		var note_start_time = note.get_meta("start_time")
 
 		var spawn_x = get_viewport().get_visible_rect().size.x
-		var target_x = play_line_x + note_width
+		var target_x = play_line_x + note_width / 2.0
 		
 		note.position.x = lerp(spawn_x, target_x, (current_time - note_start_time + approach_duration) / approach_duration)
 

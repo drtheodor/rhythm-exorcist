@@ -21,6 +21,7 @@ var crt_enabled: bool = true:
 # Current song: test_low_tempo2
 @export var level1_audio: AudioStream = preload("res://stage1.wav")
 @export var level1_midi: MidiResource = preload("res://stage1.mid")
+@export var level1_tempo: int = 769230
 
 @export_category("Level 2")
 # Current song: test_low_tempo
@@ -38,6 +39,7 @@ var crt_enabled: bool = true:
 
 var current_level_audio: AudioStream = null
 var current_level_midi: MidiResource = null
+var current_level_tempo: int = 0
 var current_level_num: int = 0
 var animated_level_entry: bool = false
 
@@ -134,7 +136,7 @@ func game_restart() -> void:
 	notes_missed = 0
 	combos_hit = 0
 	animated_level_entry = false
-	select_level(current_level_audio, current_level_midi)
+	select_level(current_level_audio, current_level_midi, current_level_tempo)
 
 func start_level() -> void:
 	await TransitionManager.fade_out()
@@ -191,17 +193,18 @@ func advance_to_level(num: int) -> void:
 	current_level_num = num
 	animated_level_entry = true
 	match num:
-		1: select_level(level1_audio, level1_midi)
-		2: select_level(level2_audio, level2_midi)
-		3: select_level(level3_audio, level3_midi)
-		4: select_level(level4_audio, level4_midi)
+		1: select_level(level1_audio, level1_midi, level1_tempo)
+		2: select_level(level2_audio, level2_midi, level2_midi.tempo)
+		3: select_level(level3_audio, level3_midi, level3_midi.tempo)
+		4: select_level(level4_audio, level4_midi, level4_midi.tempo)
 
 var in_level_transition : bool = false
 
-func select_level(audio: AudioStream, midi: MidiResource) -> void:
-	if audio != current_level_audio and midi != current_level_midi:
+func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
+	if audio != current_level_audio or midi != current_level_midi or current_level_tempo != tempo:
 		current_level_audio = audio
 		current_level_midi = midi
+		current_level_tempo = tempo
 
 	in_level_transition = true
 	await TransitionManager.fade_out()
@@ -211,6 +214,7 @@ func select_level(audio: AudioStream, midi: MidiResource) -> void:
 	await get_tree().process_frame
 	var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
 	midi_player.audio = audio
+	midi.tempo = tempo
 	midi_player.midi = midi
 	midi_player.start()
 	in_level_transition = false
