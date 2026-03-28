@@ -104,6 +104,7 @@ position = Vector2(128, 112)
 [node name="Clara" parent="." unique_id=514047567 instance=ExtResource("5_1dvly")]
 z_index = 1
 position = Vector2(128, 64)
+groups = ["Clara"]
 
 [node name="ClaraAnimations" type="AnimationPlayer" parent="." unique_id=304925286]
 libraries/ = SubResource("AnimationLibrary_t82je")

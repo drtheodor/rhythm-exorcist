@@ -4,6 +4,7 @@ extends Node
 signal start_dialogue()
 signal dialogue_typing()
 signal dialogue_finished()
+signal face_changed(anim_name: String)
 
 @export_file("*.json") var scene_text_file
 
@@ -137,6 +138,9 @@ func process_text_data(data:Dictionary) -> Array:
 	if data.has("speaker") and current_speaker != data["speaker"]:
 		set_speaker(data["speaker"])
 	
+	if data.has("face"):
+		face_changed.emit(data["face"])
+
 	if data.has("sfx"):
 		var stream = _load_audio(data["sfx"])
 		if stream:
