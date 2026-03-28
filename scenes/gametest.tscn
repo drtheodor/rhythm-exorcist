@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://coh5lq7ky41y6" path="res://scenes/cutscene_interstage_3.tscn" id="6_o6yrp"]
 [ext_resource type="Script" uid="uid://bitpgscy8bwyx" path="res://scripts/midi_manager.gd" id="6_t82je"]
 [ext_resource type="AudioStream" uid="uid://c2hprt6p8adds" path="res://test_low_tempo2.wav" id="7_82nuq"]
-[ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
+[ext_resource type="Shader" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
 [ext_resource type="Texture2D" uid="uid://wdm5a2dqx51i" path="res://assets/textures/clarabody.png" id="12_ooobp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
