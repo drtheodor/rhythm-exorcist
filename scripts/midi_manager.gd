@@ -44,6 +44,8 @@ var _next_combo_id: int = 0
 func _ready() -> void:
 	self.finished.connect(_on_finished)
 
+const NOTE_OFFSET = 24
+
 func start() -> void:
 	is_finished = false
 	var asp = $AudioStreamPlayer
@@ -65,10 +67,10 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
-					var is_normal = event.track <= 2
-					var is_bad = event.track >= 3 and event.track <= 4
-					var is_switch = event.track >= 5 and event.track <= 6
-					var is_combo = event.track == 7
+					var is_normal = event.note < NOTE_OFFSET + 2 # 24-25
+					var is_bad = event.note >= NOTE_OFFSET + 2 and event.track < NOTE_OFFSET + 4 # 25-26
+					var is_switch = event.note >= NOTE_OFFSET + 4 and event.track < NOTE_OFFSET + 6 # 27-28
+					var is_combo = event.track == NOTE_OFFSET + 6 # 29
 					
 					var lane: int = 1
 					var target_lane: int = lane
