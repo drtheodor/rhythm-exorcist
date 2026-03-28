@@ -44,7 +44,7 @@ var _next_combo_id: int = 0
 func _ready() -> void:
 	self.finished.connect(_on_finished)
 
-const NOTE_OFFSET = 60
+const NOTE_OFFSET = 48
 
 func start() -> void:
 	is_finished = false
@@ -75,6 +75,7 @@ func start() -> void:
 					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 30-31
 					var is_combo = event.note == NOTE_OFFSET + 8 # 32
 					
+					print(event.note, " long: ", is_long, "; bad: ", is_bad, "; switch: ", is_switch, "; combo: ", is_combo)
 					var lane: int = (event.note % 2) + 1
 					var target_lane: int = lane
 					
