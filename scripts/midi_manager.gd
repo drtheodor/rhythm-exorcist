@@ -68,10 +68,10 @@ func start() -> void:
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
 					var is_normal = event.note < NOTE_OFFSET + 2 # 24-25
-					var is_bad = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 25-26
-					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 27-28
-					var is_long = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 29-30
-					var is_combo = event.track == NOTE_OFFSET + 6 # 31
+					var is_long = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 26-27
+					var is_bad = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 28-29
+					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 30-31
+					var is_combo = event.track == NOTE_OFFSET + 8 # 32
 					
 					var lane: int = 1
 					var target_lane: int = lane
