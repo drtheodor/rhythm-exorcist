@@ -8,11 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://ddt30y7fjldwf" path="res://scenes/cutscene_interstage_1.tscn" id="4_18hib"]
 [ext_resource type="PackedScene" uid="uid://bhes1rw6g6xlk" path="res://scenes/objects/clara.tscn" id="5_1dvly"]
 [ext_resource type="PackedScene" uid="uid://bd5fkrcl853ve" path="res://scenes/cutscene_interstage_2.tscn" id="5_1uq2d"]
-[ext_resource type="MidiResource" uid="uid://ben25xbc4akfs" path="res://test_low_tempo2.mid" id="5_82nuq"]
 [ext_resource type="PackedScene" uid="uid://coh5lq7ky41y6" path="res://scenes/cutscene_interstage_3.tscn" id="6_o6yrp"]
 [ext_resource type="Script" uid="uid://bitpgscy8bwyx" path="res://scripts/midi_manager.gd" id="6_t82je"]
-[ext_resource type="AudioStream" uid="uid://c2hprt6p8adds" path="res://test_low_tempo2.wav" id="7_82nuq"]
-[ext_resource type="Shader" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
+[ext_resource type="MidiResource" uid="uid://utrbekj1pgn1" path="res://stage1.mid" id="8_ooobp"]
+[ext_resource type="AudioStream" uid="uid://c04g2ofsft06t" path="res://stage1.wav" id="10_8qdvn"]
+[ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
 [ext_resource type="Texture2D" uid="uid://wdm5a2dqx51i" path="res://assets/textures/clarabody.png" id="12_ooobp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
@@ -118,10 +118,10 @@ autoplay = &"idle"
 [node name="CutsceneInterstage3" parent="." unique_id=1123250583 instance=ExtResource("6_o6yrp")]
 
 [node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188 groups=["MidiPlayer"]]
-midi = ExtResource("5_82nuq")
+midi = ExtResource("8_ooobp")
 process_mode = 3
 script = ExtResource("6_t82je")
-audio = ExtResource("7_82nuq")
+audio = ExtResource("10_8qdvn")
 play_line_x = 60.0
 debug = true
 

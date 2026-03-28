@@ -90,7 +90,7 @@ func start() -> void:
 						for combo_lane in range(len(self.keys)):
 							var combo_note = {
 								"time": time,
-								"duration": 0,
+								"duration": -1,
 								"bad": false,
 								"lane": combo_lane + 1,
 								"target_lane": combo_lane + 1,
@@ -102,7 +102,7 @@ func start() -> void:
 					else:
 						last_note = {
 							"time": time,
-							"duration": 0,
+							"duration": -1,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
@@ -268,15 +268,27 @@ func create_note_box(note_data: Dictionary, offset: float = 0.) -> Sprite2D:
 
 	return box
 
+const LONG_START = 48
+const LONG_MIDDLE = 57
+const LONG_END = 64
+
 func create_note(note_data: Dictionary):
-	var len = int(note_data.duration)
+	var len = ceili(note_data.duration)
+	print(note_data.duration)
 	var box: Sprite2D
 	
 	if len > 1:
 		for dur in range(len):
 			box = create_note_box(note_data, dur)
 			box.set_meta("part", dur)
-			box.region_rect.position.x += 16 * (dur + 1)
+			var sprite_x
+			if dur == 0:
+				sprite_x = LONG_START
+			elif dur == len - 1:
+				sprite_x = LONG_END
+			else:
+				sprite_x = LONG_MIDDLE
+			box.region_rect.position.x = sprite_x
 			notes.append(box)
 	else:
 		box = create_note_box(note_data)
