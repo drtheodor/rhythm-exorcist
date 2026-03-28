@@ -117,7 +117,7 @@ func start() -> void:
 					#	if last_note.is_long:
 					#		last_note.duration = time - last_note.time
 					if not last_note.duration:
-						last_note.duration = time - last_note.time
+						last_note.duration = min(time - last_note.time, 2)
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
