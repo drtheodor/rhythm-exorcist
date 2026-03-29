@@ -56,8 +56,6 @@ func start() -> void:
 	var microseconds_per_tick: float = float(self.midi.tempo) / float(self.midi.division)
 	var seconds_per_tick: float = microseconds_per_tick / 1000000.0
 	
-	print(self.midi.tempo, " ", self.midi.division)
-	
 	var temp_notes = []
 	
 	for track in self.midi.tracks:
@@ -251,7 +249,7 @@ func create_note_box(note_data: Dictionary, offset: float = 0.) -> Sprite2D:
 		scene = KEY_BAD
 	elif note_data.lane != note_data.target_lane:
 		scene = KEY_SWITCH
-	elif note_data.get("combo", false):
+	elif note_data.combo_id != -1:
 		scene = KEY_COMBO
 	
 	var box: Sprite2D = scene.instantiate()
