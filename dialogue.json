@@ -317,6 +317,7 @@
 		"color": "blue",
 		"alignment": "center",
 		"scene": "",
+		"sfx": "dooropen",
 		"text": ["I slowly opened the door."]
 	},
 	"interstage0_1": {
@@ -325,6 +326,7 @@
 		"alignment": "center",
 		"speed": 0.05,
 		"face": "1",
+		"sfx":"doorclose",
 		"text": ["She was sitting on the edge of the bed."],
 		"next": ["interstage0_2"]
 	},
@@ -431,13 +433,15 @@
 		"color": "orange",
 		"alignment": "center",
 		"speed": 0.05,
-		"text": ["\"Father Thomas?\""],
+		"face": "7",
+		"text": ["\"Father?\""],
 		"next": ["interstage1_2"]
 	},
 	"interstage1_2": {
 		"speaker": "speaker1",
 		"color": "blue",
 		"speed": 0.05,
+		"face": "1",
 		"text": ["\"Yes?\""],
 		"next": ["interstage1_3"]
 	},
@@ -480,6 +484,7 @@
 		"color": "orange",
 		"alignment": "center",
 		"speed": 0.05,
+		"face": "2",
 		"text": [
 			"\"You look scared.\"",
 			"\"...\"",
@@ -504,6 +509,7 @@
 		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
+		"face": "3",
 		"text": [
 			"\"She's still in here, if that helps.\"",
 			"\"It doesn't, does it.\""
@@ -529,6 +535,7 @@
 		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
+		"face": "9",
 		"text": [
 			"\"You're doing well.\"",
 			"\"Really. Better than the last one.\""
@@ -545,13 +552,24 @@
 	"interstage2_3": {
 		"speaker": "clara",
 		"color": "red",
+		"face": "8",
 		"alignment": "center",
 		"speed": 0.05,
 		"text": [
 			"\"Do you know what happens when you push something out of a vessel?\"",
 			"\"It doesn't disappear.\"",
 			"\"There's always somewhere else to be.\"",
-			"\"There are so many people, Father.\"",
+			"\"There are so many people, Father.\""
+		],
+		"next": ["interstage2_3b"]
+	},
+	"interstage2_3b": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"face": "10",
+		"text": [
 			"\"So many little girls who are curious about old boxes.\""
 		],
 		"next": ["interstage2_4"]
@@ -560,12 +578,14 @@
 		"speaker": "speaker1",
 		"color": "blue",
 		"speed": 0.05,
+		"face": "9",
 		"text": ["\"Be quiet.\""],
 		"next": ["interstage2_5"]
 	},
 	"interstage2_5": {
 		"speaker": "clara",
 		"color": "red",
+		"face": "6",
 		"alignment": "center",
 		"speed": 0.05,
 		"text": [
@@ -579,6 +599,7 @@
 	"interstage2_6": {
 		"speaker": "speaker1",
 		"color": "blue",
+		"face": "9",
 		"speed": 0.05,
 		"text": ["\"...\""]
 	},

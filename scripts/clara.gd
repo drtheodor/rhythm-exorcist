@@ -17,13 +17,17 @@ extends Node2D
 var _reaction_timer: float = 0.0
 var _reaction_priority: int = 0   # 0=idle, 1=miss, 2=near_death_miss
 var _miss_count: int = 0
+var face_override: bool = false    # when true, gameplay signals don't change face
 
 func _ready() -> void:
 	GameManager.on_fear.connect(_on_fear)
 	GameManager.on_combo.connect(_on_combo)
-	_play_idle()
+	if not face_override:
+		_play_idle()
 
 func _process(delta: float) -> void:
+	if face_override:
+		return
 	if _reaction_priority > 0:
 		_reaction_timer -= delta
 		if _reaction_timer <= 0.0:
@@ -31,6 +35,8 @@ func _process(delta: float) -> void:
 			_play_idle()
 
 func _on_fear(incr: int) -> void:
+	if face_override:
+		return
 	if incr <= 0:
 		return
 	_miss_count += 1
@@ -46,6 +52,8 @@ func _on_fear(incr: int) -> void:
 		_start_reaction(miss_anims[idx], miss_durations[idx], 1)
 
 func _on_combo() -> void:
+	if face_override:
+		return
 	var idx = GameManager.current_level_num - 1
 	if idx < 0 or idx >= combo_anims.size():
 		return

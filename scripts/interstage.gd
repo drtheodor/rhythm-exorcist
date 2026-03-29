@@ -30,6 +30,9 @@ func _start() -> void:
 		ui.on_display_dialog(ui.starting_key)
 
 func _advance() -> void:
+	var clara = _get_clara()
+	if clara:
+		clara.face_override = false
 	hide()
 	GameManager.advance_to_level(next_level_num)
 	is_active_interstage = false
@@ -38,7 +41,11 @@ func _on_face_changed(anim_name: String) -> void:
 	if is_active_interstage:
 		_set_clara_face(anim_name)
 
+func _get_clara() -> Node:
+	return get_tree().get_first_node_in_group("Clara") if get_tree() else null
+
 func _set_clara_face(anim_name: String) -> void:
-	var clara = get_tree().get_first_node_in_group("Clara") if get_tree() else null
-	if clara and clara.faces:
+	var clara = _get_clara()
+	if clara:
+		clara.face_override = true
 		clara.faces.play(anim_name)
