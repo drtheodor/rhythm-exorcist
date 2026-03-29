@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b4wefa8jgpoyg" path="res://assets/textures/title.png" id="2_3jj3l"]
 [ext_resource type="Texture2D" uid="uid://btl24fwergpt0" path="res://assets/textures/background.png" id="2_vhbaf"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_tt55a"]
-[ext_resource type="Script" path="res://scripts/menu_button.gd" id="4_t7v6v"]
+[ext_resource type="Script" uid="uid://c8m1020dxlfw4" path="res://scripts/menu_button.gd" id="4_t7v6v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
 texture = ExtResource("2_vhbaf")

@@ -27,7 +27,7 @@ var crt_enabled: bool = true:
 # Current song: test_low_tempo
 @export var level2_audio: AudioStream = preload("res://stage2.wav")
 @export var level2_midi: MidiResource = preload("res://stage2.mid")
-@export var level2_tempo: int = 500000
+@export var level2_tempo: int = 638297
 
 @export_category("Level 3")
 # Current song: thick_of_it
