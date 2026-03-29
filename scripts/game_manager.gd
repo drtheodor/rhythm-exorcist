@@ -25,8 +25,9 @@ var crt_enabled: bool = true:
 
 @export_category("Level 2")
 # Current song: test_low_tempo
-@export var level2_audio: AudioStream = preload("uid://c2hprt6p8adds")
-@export var level2_midi: MidiResource = preload("uid://ben25xbc4akfs")
+@export var level2_audio: AudioStream = preload("res://stage2.wav")
+@export var level2_midi: MidiResource = preload("res://stage2.mid")
+@export var level2_tempo: int = 500000
 
 @export_category("Level 3")
 # Current song: thick_of_it
@@ -194,7 +195,7 @@ func advance_to_level(num: int) -> void:
 	animated_level_entry = true
 	match num:
 		1: select_level(level1_audio, level1_midi, level1_tempo)
-		2: select_level(level2_audio, level2_midi, level2_midi.tempo)
+		2: select_level(level2_audio, level2_midi, level2_tempo)
 		3: select_level(level3_audio, level3_midi, level3_midi.tempo)
 		4: select_level(level4_audio, level4_midi, level4_midi.tempo)
 

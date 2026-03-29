@@ -1,0 +1,14 @@
+[remap]
+
+importer="com.nlaha.godotmidi"
+type="MidiResource"
+uid="uid://dsuobmmixakbo"
+path="res://.godot/imported/stage2.mid-78545d442eced35b20376f86593b5946.res"
+
+[deps]
+
+source_file="res://stage2.mid"
+dest_files=["res://.godot/imported/stage2.mid-78545d442eced35b20376f86593b5946.res"]
+
+[params]
+
