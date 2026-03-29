@@ -215,6 +215,9 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 	await get_tree().process_frame
 	var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
 	midi_player.audio = audio
+	
+	print(midi.tempo, " -> ", tempo, "; ", midi.division)
+	
 	midi.tempo = tempo
 	midi_player.midi = midi
 	midi_player.start()
