@@ -67,7 +67,10 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
-					var is_normal = event.note >= NOTE_OFFSET and event.note < NOTE_OFFSET + 2 # 24-25
+					if event.note < NOTE_OFFSET or event.note > NOTE_OFFSET + 8:
+						push_warning("Note ", event.note, " is out of range!")
+						continue
+					
 					var is_long = event.note >= NOTE_OFFSET + 2 and event.note < NOTE_OFFSET + 4 # 26-27
 					var is_bad = event.note >= NOTE_OFFSET + 6 and event.note < NOTE_OFFSET + 8 # 28-29
 					var is_switch = event.note >= NOTE_OFFSET + 4 and event.note < NOTE_OFFSET + 6 # 30-31
