@@ -15,7 +15,7 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @onready var running_parent = $Running
 
 @export var audio: AudioStream
-@export var approach_duration: float = 5 #11.25
+@export var approach_duration: float = 2 #11.25
 @export var note_height: int = 16
 @export var note_width: int = 16
 @export var trigger_line_x: float = 70
