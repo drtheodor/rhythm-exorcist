@@ -109,6 +109,7 @@ func start() -> void:
 						last_note = {
 							"time": time,
 							"duration": 0 if is_long else 1,
+							"long": is_long,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
@@ -124,8 +125,8 @@ func start() -> void:
 					#else:
 					#	if last_note.is_long:
 					#		last_note.duration = time - last_note.time
-					if not last_note.duration:
-						last_note.duration = max(time - last_note.time, 2)
+					if last_note.duration == 0:
+						last_note.duration = time - last_note.time
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
@@ -217,6 +218,8 @@ func _process(_delta: float) -> void:
 					GameManager.on_combo.emit()
 					self.key_state[keys[0]] = RELEASED
 					self.key_state[keys[1]] = RELEASED
+					key_listeners[0].hit()
+					key_listeners[1].hit()
 					_play_hit_glow(note, 0.15)
 					return false
 
@@ -243,7 +246,9 @@ func _process(_delta: float) -> void:
 						GameManager.notes_hit += 1
 						_play_hit_glow(note)
 
-					if part != 0:
+					# Release on tail (last part)
+					var part_count = note.get_meta("part_count", 0)
+					if part == part_count - 1:
 						self.key_state[key] = RELEASED
 
 					return false
@@ -268,6 +273,7 @@ func _process(_delta: float) -> void:
 						note.queue_free()
 					else:
 						GameManager.notes_hit += 1
+						key_listeners[lane - 1].hit()
 						_play_hit_glow(note)
 					return false
 
@@ -330,21 +336,27 @@ const LONG_MIDDLE = 57
 const LONG_END = 64
 
 func create_note(note_data: Dictionary):
-	var len = ceili(note_data.duration)
+	var spawn_x = get_viewport().get_visible_rect().size.x
+	var target_x = play_line_x + note_width / 2.0
+	var seconds_per_pixel = approach_duration / (spawn_x - target_x)
+	var seconds_per_part = note_width * seconds_per_pixel
 	var box: Sprite2D
-	
-	if len > 1:
-		for dur in range(len):
-			box = create_note_box(note_data, dur)
-			box.set_meta("part", dur)
-			var sprite_x
-			if dur == 0:
-				sprite_x = LONG_START
-			elif dur == len - 1:
-				sprite_x = LONG_END
+
+	if note_data.get("long", false):
+		var middle_count = max(0, floori((note_data.duration - seconds_per_part) / seconds_per_part))
+		var part_count = middle_count + 2
+
+		for i in range(part_count):
+			var offset = i * seconds_per_part
+			box = create_note_box(note_data, offset)
+			box.set_meta("part", i)
+			box.set_meta("part_count", part_count)
+			if i == 0:
+				box.region_rect.position.x = LONG_START
+			elif i == part_count - 1:
+				box.region_rect.position.x = LONG_END
 			else:
-				sprite_x = LONG_MIDDLE
-			box.region_rect.position.x = sprite_x
+				box.region_rect.position.x = LONG_MIDDLE
 			notes.append(box)
 	else:
 		box = create_note_box(note_data)

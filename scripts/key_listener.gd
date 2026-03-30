@@ -8,6 +8,17 @@ extends Sprite2D
 @onready var _original_scale = self.scale.x
 var is_shaking: bool = false
 
+func hit() -> void:
+	is_shaking = true
+	var tween = create_tween()
+	tween.tween_property(self, "offset:y", y_offset, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "scale:x", hit_scale, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "scale:y", hit_scale, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.chain().tween_property(self, "offset:y", 0.0, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "scale:x", _original_scale, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "scale:y", _original_scale, 0.05).set_trans(Tween.TRANS_SINE)
+	tween.finished.connect(func(): is_shaking = false)
+
 func shake() -> void:
 	is_shaking = true
 	var tween = create_tween()
