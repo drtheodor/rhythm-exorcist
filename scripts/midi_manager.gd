@@ -58,6 +58,11 @@ func _ready() -> void:
 
 const NOTE_OFFSET = 48
 
+@onready var note_spawn_x = get_viewport().get_visible_rect().size.x
+@onready var note_target_x = self.play_line_x + self.note_width / 2.0
+@onready var note_seconds_per_pixel = self.approach_duration / (self.note_spawn_x - self.note_target_x)
+@onready var note_seconds_per_part = self.note_width * self.note_seconds_per_pixel
+
 func start() -> void:
 	is_finished = false
 	var asp = $AudioStreamPlayer
@@ -102,7 +107,7 @@ func start() -> void:
 						for combo_lane in range(len(self.keys)):
 							var combo_note = {
 								"time": time,
-								"duration": 1,
+								"length": 1,
 								"bad": false,
 								"lane": combo_lane + 1,
 								"target_lane": combo_lane + 1,
@@ -114,7 +119,7 @@ func start() -> void:
 					else:
 						last_note = {
 							"time": time,
-							"duration": 0 if is_long else 1,
+							"length": 0 if is_long else 1,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
@@ -130,22 +135,17 @@ func start() -> void:
 					#else:
 					#	if last_note.is_long:
 					#		last_note.duration = time - last_note.time
-					if not last_note.duration:
-						var spawn_x = get_viewport().get_visible_rect().size.x
-						var target_x = play_line_x + note_width / 2.0
-						var seconds_per_pixel = approach_duration / (spawn_x - target_x)
-						var seconds_per_part = note_width * seconds_per_pixel
+					if not last_note.length:
 						var duration = time - last_note.time
-						var middle_count = max(0, floori((duration - seconds_per_part) / seconds_per_part))
-						var part_count = middle_count + 2
-						last_note.duration = seconds_per_part * part_count
+						var middle_count = max(0, floori((duration - self.note_seconds_per_part) / self.note_seconds_per_part))
+						last_note.length = middle_count + 2
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
 
 	if temp_notes.size() > 0:
 		var last = temp_notes[-1]
-		song_duration = last.time + last.duration
+		song_duration = last.time + last.length * self.note_seconds_per_part
 	else:
 		song_duration = 0.0
 
@@ -169,11 +169,7 @@ func _process(_delta: float) -> void:
 
 	for note in notes:
 		var note_start_time = note.get_meta("start_time")
-
-		var spawn_x = get_viewport().get_visible_rect().size.x
-		var target_x = play_line_x + note_width / 2.0
-
-		note.position.x = lerp(spawn_x, target_x, (current_time - note_start_time + approach_duration) / approach_duration)
+		note.position.x = lerp(self.note_spawn_x, self.note_target_x, (current_time - note_start_time + self.approach_duration) / self.approach_duration)
 
 		# Switch note telegraph flash
 		var lane = note.get_meta("lane")
@@ -341,10 +337,8 @@ func create_note_box(note_data: Dictionary, offset: float = 0.) -> Sprite2D:
 	box.set_meta("target_lane", note_data.target_lane)
 	box.set_meta("combo_id", note_data.get("combo_id", -1))
 	
-	var maxx = get_viewport().get_visible_rect().size.x
-	
-	box.position.x = maxx
-	box.position.y = (note_data.lane - 1) * note_height + play_line_y
+	box.position.x = self.note_spawn_x
+	box.position.y = (note_data.lane - 1) * self.note_height + self.play_line_y
 
 	return box
 
@@ -355,25 +349,22 @@ const LONG_END = 64
 func create_note(note_data: Dictionary):
 	var box: Sprite2D
 
-	if note_data.duration > 1.:
-		var spawn_x = get_viewport().get_visible_rect().size.x
-		var target_x = play_line_x + note_width / 2.0
-		var seconds_per_pixel = approach_duration / (spawn_x - target_x)
-		var seconds_per_part = note_width * seconds_per_pixel
-		var middle_count = max(0, floori((note_data.duration - seconds_per_part) / seconds_per_part))
-		var part_count = middle_count + 2
+	if note_data.length > 1:
+		box = create_note_box(note_data, 0)
+		box.region_rect.position.x = LONG_START
+		box.set_meta("part", note_data.length - 1)
+		notes.append(box)
 
-		for i in range(part_count):
-			var offset = i * seconds_per_part
-			box = create_note_box(note_data, offset)
-			box.set_meta("part", part_count - i - 1)
-			if i == 0:
-				box.region_rect.position.x = LONG_START
-			elif i == part_count - 1:
-				box.region_rect.position.x = LONG_END
-			else:
-				box.region_rect.position.x = LONG_MIDDLE
+		for i in range(1, note_data.length - 1):
+			box = create_note_box(note_data, i * self.note_seconds_per_part)
+			box.region_rect.position.x = LONG_MIDDLE
+			box.set_meta("part", note_data.length - i - 1)
 			notes.append(box)
+
+		box = create_note_box(note_data, (note_data.length - 1) * self.note_seconds_per_part)
+		box.region_rect.position.x = LONG_END
+		box.set_meta("part", 0)
+		notes.append(box)
 	else:
 		box = create_note_box(note_data)
 		notes.append(box)
