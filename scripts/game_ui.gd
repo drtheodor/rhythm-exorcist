@@ -26,7 +26,13 @@ func _ready() -> void:
 	GameManager.game_over_triggered.connect(_on_game_over_notified)
 	GameManager.go_interstage.connect(_in_scene_dialogue)
 	faith_bar.value = GameManager.faith
+	var should_slide = GameManager.animated_level_entry
 	_init_symbols()
+	if should_slide:
+		canvas_layer.offset.y = 120.0
+		var tween = create_tween()
+		tween.tween_property(canvas_layer, "offset:y", 0.0, 1.5) \
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 func _on_fear(incr: int):
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
@@ -75,5 +81,12 @@ func _shake_symbol(sprite: Sprite2D) -> void:
 func _on_retry_button_pressed() -> void:
 	GameManager.game_restart()
 
-func _in_scene_dialogue(_num: int) -> void:
+func _in_scene_dialogue(num: int) -> void:
+	if num == 0:
+		canvas_layer.visible = false
+		return
+	var tween = create_tween()
+	tween.tween_property(canvas_layer, "offset:y", 120.0, 1.5) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	await tween.finished
 	canvas_layer.visible = false
