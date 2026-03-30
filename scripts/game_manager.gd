@@ -66,6 +66,8 @@ var fear: int:
 
 var faith: int = 100:
 	set(val):
+		if is_game_over and val < faith:
+			return
 		faith = clamp(val, 0, 100)
 		on_faith.emit(faith)
 

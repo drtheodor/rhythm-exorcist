@@ -25,6 +25,7 @@
 		"speaker": "speaker2",
 		"background": "background2"
 	},
+
 	"intro_start": {
 		"speaker": "narrator",
 		"color": "blue",
@@ -313,6 +314,7 @@
 		"text": ["I turned away from the mirror and walked to the end of the hallway."],
 		"next": ["intro_43"]
 	},
+
 	"intro_43": {
 		"color": "blue",
 		"alignment": "center",
@@ -631,33 +633,59 @@
 			"\"SHOW ME WHAT YOU HAVE.\""
 		]
 	},
-	"end_start": {
+
+	"ending_branch": {
+		"text": ["..."],
+		"next": ["end_asleep"]
+	},
+
+	"end_asleep": {
 		"speaker": "narrator",
-		"scene": "scene5",
+		"scene": "",
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "scene6",
+		"text": [
+			"She was fast asleep, and I thought it best to leave her alone."
+		],
+		"next": ["end_hallway"]
+	},
+	"end_hallway": {
+		"speaker": "narrator",
+		"scene": "scene3a",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"I walked out into the hallway.",
+			"The house was strangely empty now.",
+			"I felt the urge to look at myself in the mirror again..."
+		],
+		"next": ["end_mirror"]
+	},
+	"end_mirror": {
+		"speaker": "narrator",
+		"scene": "scene6",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
 		"text": [
 			"...",
-			"There I am.",
-			"...",
-			"..."
-		],
-		"next": ["end_2"]
+			"There I am."
+		]
 	},
-	"end_2": {
+
+	"bad_end_3": {
 		"speaker": "narrator",
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "",
 		"text": [
 			"I felt a hand on my shoulder."
 		],
-		"next": ["end_3"]
+		"next": ["bad_end_4"]
 	},
-	"end_3": {
+	"bad_end_4": {
 		"speaker": "narrator",
 		"color": "white",
 		"alignment": "center",
@@ -666,15 +694,136 @@
 		"text": [
 			"..."
 		],
-		"next": ["end_4"]
+		"next": ["bad_end_5"]
 	},
-	"end_4": {
+	"bad_end_5": {
 		"color": "red",
 		"alignment": "center",
 		"speed": 0.05,
-		"background": "",
 		"text": [
 			"We're going to have so much fun."
 		]
 	},
+
+	"good_end_3": {
+		"speaker": "narrator",
+		"scene": "",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"...",
+			"There's nothing there."
+		]
+	},
+
+	"secret_end_3": {
+		"speaker": "narrator",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"...",
+			"I laughed, quietly, to myself.",
+			"Not sure why."
+		],
+		"next": ["secret_end_4"]
+	},
+	"secret_end_4": {
+		"speaker": "narrator",
+		"scene": "",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			"I left the house soon after.",
+			"It was almost dusk by now"
+		],
+		"next": ["secret_end_5"]
+	},
+	"secret_end_5": {
+		"speaker": "narrator",
+		"scene": "scene8",
+		"color": "white",
+		"alignment": "center",
+		"speed": 0.05,
+		"sfx": "birdschirp",
+		"text": [
+			"Father Aldric was waiting on the church steps when I arrived.",
+			"I wasn't sure why, I hadn't called ahead.",
+			"He stood there with his hands folded, watching at me arrive."
+		],
+		"next": ["secret_end_6"]
+	},
+	"secret_end_6": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": [
+			"\"How did you know I was coming.\""
+		],
+		"next": ["secret_end_7"]
+	},
+	"secret_end_7": {
+		"speaker": "speaker2",
+		"color": "lightgray",
+		"alignment": "right",
+		"text": [
+			"\"I didn't.\"",
+			"\"I just like watching the sunset.\"",
+			"\"...\"",
+			"\"It's gone?\""
+		],
+		"next": ["secret_end_8"]
+	},
+	"secret_end_8": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": [
+			"\"Yes.\""
+		],
+		"next": ["secret_end_9"]
+	},
+	"secret_end_9": {
+		"speaker": "speaker2",
+		"color": "lightgray",
+		"text": [
+			"\"Completely?\""
+		],
+		"next": ["secret_end_10"]
+	},
+	"secret_end_10": {
+		"speaker": "speaker1",
+		"color": "blue",
+		"text": [
+			"I nodded."
+		],
+		"next": ["secret_end_11"]
+	},
+	"secret_end_11": {
+		"speaker": "narrator",
+		"color": "white",
+		"alignment": "center",
+		"text": [
+			"He reached over and briefly put his hand on my shoulder."
+		],
+		"next": ["secret_end_12"]
+	},
+	"secret_end_12": {
+		"speaker": "speaker2",
+		"color": "lightgray",
+		"text": [
+			"\"Come inside. I'll put the kettle on.\"",
+			"\"...\"",
+			"\"You can tell me about it. Or not.\""
+		],
+		"next": ["secret_end_13"]
+	},
+	"secret_end_13": {
+		"speaker": "speaker2",
+		"scene": "",
+		"color": "lightgray",
+		"text": [
+			"\"We have a lot to talk about anyway.\""
+		]
+	}
 }

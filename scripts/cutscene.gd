@@ -15,6 +15,7 @@ const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 	"scene5": preload("res://assets/textures/scenes/scene5.png"),
 	"scene6": preload("res://assets/textures/scenes/scene6.png"),
 	"scene7": preload("res://assets/textures/scenes/scene7.png"),
+	"scene8": preload("res://assets/textures/scenes/scene8.png"),
 }
 
 const SFX_SOUNDS: Dictionary[String, AudioStream] = {
@@ -26,6 +27,8 @@ func _ready() -> void:
 	dialogue_ui.scene_images = SCENE_BACKGROUNDS
 	dialogue_ui.sfx_sounds = SFX_SOUNDS
 	dialogue_ui.dialogue_finished.connect(_on_dialogue_finished)
+	if type == Type.END:
+		dialogue_ui.speaker_2.texture = preload("res://assets/textures/character_portrait_3.png")
 	dialogue_ui.on_display_dialog(dialogue_ui.starting_key)
 
 func _on_dialogue_finished() -> void:
@@ -33,8 +36,19 @@ func _on_dialogue_finished() -> void:
 		Type.INTRO:
 			GameManager.begin_level_1()
 		Type.END:
-			await _show_grade()
-			GameManager.open_title_screen()
+			if dialogue_ui.current == "end_mirror":
+				var faith = GameManager.faith
+				var ending_key: String
+				if faith == 100:
+					ending_key = "secret_end_3"
+				elif faith >= 60:
+					ending_key = "good_end_3"
+				else:
+					ending_key = "bad_end_3"
+				dialogue_ui.on_display_dialog(ending_key)
+			else:
+				await _show_grade()
+				GameManager.open_title_screen()
 
 func _show_grade() -> void:
 	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")

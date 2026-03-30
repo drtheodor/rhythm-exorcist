@@ -28,7 +28,7 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
 @export var combo_heal: int = 3
-@export var faith_penalty: int = 2
+@export var faith_penalty: int = 1
 
 @export var keys: Array[String] = ["up", "down"]
 

@@ -8,7 +8,7 @@ script = ExtResource("1_cscne")
 type = 1
 
 [node name="DialogueUi" parent="." unique_id=-2072745074 instance=ExtResource("2_dui")]
-starting_key = "end_start"
+starting_key = "ending_branch"
 
 [node name="GradeCanvas" type="CanvasLayer" parent="." unique_id=1863877354]
 
