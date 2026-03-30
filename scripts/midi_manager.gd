@@ -47,8 +47,11 @@ const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
 
 @onready var key_listeners: Array = [$UpKey, $DownKey]
 
+var _game_over_slowing: bool = false
+
 func _ready() -> void:
 	self.finished.connect(_on_finished)
+	GameManager.game_over_triggered.connect(_on_game_over)
 
 	for key in keys:
 		self.key_state[key] = NONE
@@ -407,13 +410,29 @@ func draw_play_line():
 var song_duration: float = 0.0
 var is_finished : bool = false
 
+func _on_game_over() -> void:
+	_game_over_slowing = true
+	var asp = $AudioStreamPlayer
+	var tween = create_tween()
+	tween.tween_property(asp, "pitch_scale", 0.0, 5.0) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	tween.tween_callback(_stop_after_game_over)
+
+func _stop_after_game_over() -> void:
+	for note in self.notes:
+		note.queue_free()
+	notes.clear()
+	self.stop()
+	$AudioStreamPlayer.stop()
+
 func _on_finished():
 	if is_finished:
 		return
-	
+
 	is_finished = true
 	for note in self.notes:
 		note.queue_free()
 	notes.clear()
 	self.stop()
-	GameManager.level_completed()
+	if not _game_over_slowing:
+		GameManager.level_completed()

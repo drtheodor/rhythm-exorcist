@@ -220,7 +220,9 @@ func _go_interstage(inter_num: int) -> void:
 func advance_to_level(num: int) -> void:
 	if in_level_transition:
 		return
-	
+
+	self.fear = 0
+	is_game_over = false
 	current_level_num = num
 	animated_level_entry = true
 	match num:
