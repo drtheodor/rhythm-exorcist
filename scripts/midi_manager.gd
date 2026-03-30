@@ -109,7 +109,6 @@ func start() -> void:
 						last_note = {
 							"time": time,
 							"duration": 0 if is_long else 1,
-							"long": is_long,
 							"bad": is_bad,
 							"lane": lane,
 							"target_lane": target_lane,
@@ -125,8 +124,8 @@ func start() -> void:
 					#else:
 					#	if last_note.is_long:
 					#		last_note.duration = time - last_note.time
-					if last_note.duration == 0:
-						last_note.duration = time - last_note.time
+					if not last_note.duration:
+						last_note.duration = max(time - last_note.time, 1.05)
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
@@ -247,8 +246,7 @@ func _process(_delta: float) -> void:
 						_play_hit_glow(note)
 
 					# Release on tail (last part)
-					var part_count = note.get_meta("part_count", 0)
-					if part == part_count - 1:
+					if part == 0:
 						self.key_state[key] = RELEASED
 
 					return false
@@ -336,21 +334,20 @@ const LONG_MIDDLE = 57
 const LONG_END = 64
 
 func create_note(note_data: Dictionary):
-	var spawn_x = get_viewport().get_visible_rect().size.x
-	var target_x = play_line_x + note_width / 2.0
-	var seconds_per_pixel = approach_duration / (spawn_x - target_x)
-	var seconds_per_part = note_width * seconds_per_pixel
 	var box: Sprite2D
 
-	if note_data.get("long", false):
+	if note_data.duration > 1.:
+		var spawn_x = get_viewport().get_visible_rect().size.x
+		var target_x = play_line_x + note_width / 2.0
+		var seconds_per_pixel = approach_duration / (spawn_x - target_x)
+		var seconds_per_part = note_width * seconds_per_pixel
 		var middle_count = max(0, floori((note_data.duration - seconds_per_part) / seconds_per_part))
 		var part_count = middle_count + 2
 
 		for i in range(part_count):
 			var offset = i * seconds_per_part
 			box = create_note_box(note_data, offset)
-			box.set_meta("part", i)
-			box.set_meta("part_count", part_count)
+			box.set_meta("part", part_count - i - 1)
 			if i == 0:
 				box.region_rect.position.x = LONG_START
 			elif i == part_count - 1:
