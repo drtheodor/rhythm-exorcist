@@ -51,7 +51,10 @@ var is_game_over: bool = false
 var options_open: bool = false
 var paused: bool = false
 
-var notes_hit: int = 0
+var notes_hit: int = 0:
+	set(val):
+		notes_hit = val
+		note_hit.emit()
 var notes_missed: int = 0
 var combos_hit: int = 0
 
@@ -69,6 +72,7 @@ var faith: int = 100:
 signal on_fear(incr: int)
 signal on_faith(new_val: int)
 signal on_combo
+signal note_hit
 signal game_over_triggered
 signal toggle_options_visible
 signal pause_game
