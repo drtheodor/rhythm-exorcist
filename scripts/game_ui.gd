@@ -30,11 +30,27 @@ func _ready() -> void:
 
 func _on_fear(incr: int):
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
+	if incr > 0:
+		_shake_ui()
+
+func _shake_ui() -> void:
+	var tween = create_tween()
+	tween.tween_property(canvas_layer, "offset:x", 2.0, 0.03)
+	tween.tween_property(canvas_layer, "offset:x", -2.0, 0.03)
+	tween.tween_property(canvas_layer, "offset:x", 1.0, 0.03)
+	tween.tween_property(canvas_layer, "offset:x", 0.0, 0.03)
 
 func _on_faith(new_val: int) -> void:
 	faith_bar.value = new_val
 
 func _on_game_over_notified() -> void:
+	if GameManager.current_level_num >= 2:
+		var total = GameManager.notes_hit + GameManager.notes_missed
+		var miss_ratio = float(GameManager.notes_missed) / max(total, 1)
+		var jumpscare_chance = miss_ratio * 0.5
+		if randf() < jumpscare_chance:
+			$AnimationPlayer.play("game_over_jump1")
+			return
 	$AnimationPlayer.play("game_over")
 
 func _init_symbols() -> void:

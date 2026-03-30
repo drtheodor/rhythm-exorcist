@@ -40,6 +40,12 @@ const RELEASED = 3
 var key_state = {}
 var notes: Array = []
 var _next_combo_id: int = 0
+var key_lockout: Dictionary = {}
+
+const MISS_LOCKOUT_DURATION: float = 0.16
+const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
+
+@onready var key_listeners: Array = [$UpKey, $DownKey]
 
 func _ready() -> void:
 	self.finished.connect(_on_finished)
@@ -137,29 +143,45 @@ func _process(_delta: float) -> void:
 	if self.get_state() != 0: # only when playing
 		return
 
+	# Tick down key lockouts
+	for key in keys:
+		if key_lockout.get(key, 0.0) > 0.0:
+			key_lockout[key] -= _delta
+
 	for note in notes:
 		var note_start_time = note.get_meta("start_time")
 
 		var spawn_x = get_viewport().get_visible_rect().size.x
 		var target_x = play_line_x + note_width / 2.0
-		
+
 		note.position.x = lerp(spawn_x, target_x, (current_time - note_start_time + approach_duration) / approach_duration)
 
+		# Switch note telegraph flash
+		var lane = note.get_meta("lane")
+		var target = note.get_meta("target_lane")
+		if lane != target:
+			var dist_to_switch = note.position.x - switch_line_x
+			if dist_to_switch > 0 and dist_to_switch < SWITCH_TELEGRAPH_DISTANCE:
+				var flash = sin(current_time * 30.0) > 0.0
+				note.modulate = Color(2.0, 2.0, 2.0, 1.0) if flash else Color(1, 1, 1, 1)
+
 		if note.position.x <= switch_line_x:
-			var lane = note.get_meta("lane")
-			var target = note.get_meta("target_lane")
 			if lane != target:
+				note.modulate = Color(1, 1, 1, 1)
 				note.set_meta("lane", target)
 				var target_y = (target - 1) * note_height + play_line_y
 				var tween = create_tween()
 				tween.tween_property(note, "position:y", target_y, 0.3)
-		
-	
+
+
 	# Track which combo_ids were hit or missed this frame
 	var _combo_hit_ids: Array = []
 	var _combo_miss_ids: Array = []
-	
+
 	for key in keys:
+		if key_lockout.get(key, 0.0) > 0.0:
+			self.key_state[key] = NONE
+			continue
 		if Input.is_action_just_pressed(key) and self.key_state.get(key, NONE) == NONE:
 			self.key_state[key] = PRESSED
 		elif Input.is_action_pressed(key):
@@ -168,6 +190,8 @@ func _process(_delta: float) -> void:
 			self.key_state[key] = RELEASED
 		else:
 			self.key_state[key] = NONE
+
+	var _keys_that_hit: Array = []
 
 	self.notes = notes.filter(func(note):
 		if note.position.x < trigger_line_x:
@@ -186,10 +210,14 @@ func _process(_delta: float) -> void:
 				# Combo notes require both keys pressed simultaneously
 				if Input.is_action_just_pressed(keys[0]) and Input.is_action_just_pressed(keys[1]):
 					_combo_hit_ids.append(combo_id)
+					_keys_that_hit.append(keys[0])
+					_keys_that_hit.append(keys[1])
 					GameManager.fear -= combo_heal
 					GameManager.combos_hit += 1
 					GameManager.on_combo.emit()
-					note.queue_free()
+					self.key_state[keys[0]] = RELEASED
+					self.key_state[keys[1]] = RELEASED
+					_play_hit_glow(note, 0.15)
 					return false
 
 				if note.position.x + note_width < play_line_x:
@@ -204,17 +232,20 @@ func _process(_delta: float) -> void:
 				var part = note.get_meta("part")
 				
 				if self.key_state[key] == HOLDING:
+					_keys_that_hit.append(key)
 					if is_bad:
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
+						key_listeners[lane - 1].shake()
+						_lock_key(lane)
+						note.queue_free()
 					else:
 						GameManager.notes_hit += 1
+						_play_hit_glow(note)
 
-					note.queue_free()
-					
 					if part != 0:
 						self.key_state[key] = RELEASED
-					
+
 					return false
 
 				if note.position.x + note_width < play_line_x:
@@ -227,13 +258,17 @@ func _process(_delta: float) -> void:
 			else:
 				var key = keys[lane - 1]
 				if self.key_state[key] == PRESSED:
+					_keys_that_hit.append(key)
+					self.key_state[key] = RELEASED
 					if is_bad:
 						GameManager.fear += self.fear
 						GameManager.faith -= faith_penalty
+						key_listeners[lane - 1].shake()
+						_lock_key(lane)
+						note.queue_free()
 					else:
 						GameManager.notes_hit += 1
-
-					note.queue_free()
+						_play_hit_glow(note)
 					return false
 
 				if note.position.x + note_width < play_line_x:
@@ -245,6 +280,25 @@ func _process(_delta: float) -> void:
 					return false
 		return true
 	)
+
+	# Whiff detection: key pressed but no note was hit
+	for i in range(keys.size()):
+		var key = keys[i]
+		if self.key_state[key] == PRESSED and key not in _keys_that_hit:
+			key_listeners[i].shake()
+			_lock_key(i + 1)
+
+func _play_hit_glow(note: Sprite2D, duration: float = 0.06) -> void:
+	note.z_index = 10
+	note.modulate = Color(1, 1, 1, 1)
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(note, "scale", Vector2(1.3, 1.3), duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(note, "modulate:a", 0.0, duration)
+	tween.tween_property(note, "self_modulate", Color(1.3, 1.3, 1.3, 1.0), duration)
+	tween.finished.connect(note.queue_free)
+
+func _lock_key(lane: int) -> void:
+	key_lockout[keys[lane - 1]] = MISS_LOCKOUT_DURATION
 
 func create_note_box(note_data: Dictionary, offset: float = 0.) -> Sprite2D:
 	var scene = KEY
