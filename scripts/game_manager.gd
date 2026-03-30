@@ -51,7 +51,10 @@ var is_game_over: bool = false
 var options_open: bool = false
 var paused: bool = false
 
-var notes_hit: int = 0
+var notes_hit: int = 0:
+	set(val):
+		notes_hit = val
+		note_hit.emit()
 var notes_missed: int = 0
 var combos_hit: int = 0
 
@@ -69,6 +72,7 @@ var faith: int = 100:
 signal on_fear(incr: int)
 signal on_faith(new_val: int)
 signal on_combo
+signal note_hit
 signal game_over_triggered
 signal toggle_options_visible
 signal pause_game
@@ -178,14 +182,40 @@ func level_completed() -> void:
 		open_cutscene_end()
 
 func _go_interstage(inter_num: int) -> void:
-	await TransitionManager.fade_out()
+	if inter_num == 0:
+		# Interstage 0: pre-gameplay intro, use existing fade
+		await TransitionManager.fade_out()
+		go_interstage.emit(inter_num)
+		for node in get_tree().get_nodes_in_group("GameplayLayer"):
+			node.hide()
+		for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
+			if node.has_method("hide"):
+				node.hide()
+		TransitionManager.fade_in()
+		return
+
+	# Interstages 1-3: slide gameplay down to reveal interstage
 	go_interstage.emit(inter_num)
+
+	var slide_tween = get_tree().create_tween()
+	slide_tween.set_parallel(true)
+
+	for node in get_tree().get_nodes_in_group("GameplayLayer"):
+		slide_tween.tween_property(node, "position:y", node.position.y + 120.0, 1.5) \
+			.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+
+	for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
+		if "position" in node and not node.is_in_group("GameplayLayer"):
+			slide_tween.tween_property(node, "position:y", node.position.y + 120.0, 1.5) \
+				.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+
+	await slide_tween.finished
+
 	for node in get_tree().get_nodes_in_group("GameplayLayer"):
 		node.hide()
 	for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
 		if node.has_method("hide"):
 			node.hide()
-	TransitionManager.fade_in()
 
 func advance_to_level(num: int) -> void:
 	if in_level_transition:
@@ -208,19 +238,51 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		current_level_tempo = tempo
 
 	in_level_transition = true
-	await TransitionManager.fade_out()
-	_change_scene(GAME_LEVEL)
-	TransitionManager.fade_in()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
-	midi_player.audio = audio
-	
-	print(midi.tempo, " -> ", tempo, "; ", midi.division)
-	
-	midi.tempo = tempo
-	midi_player.midi = midi
-	midi_player.start()
+
+	if animated_level_entry:
+		# No fade — slide handles the transition
+		_change_scene(GAME_LEVEL)
+		await get_tree().process_frame
+		await get_tree().process_frame
+
+		# Offset all gameplay elements below screen
+		for node in get_tree().get_nodes_in_group("GameplayLayer"):
+			node.position.y += 120.0
+		var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
+		for node in midi_player.get_children():
+			if "position" in node and not node.is_in_group("GameplayLayer"):
+				node.position.y += 120.0
+
+		midi_player.audio = audio
+		print(midi.tempo, " -> ", tempo, "; ", midi.division)
+		midi.tempo = tempo
+		midi_player.midi = midi
+		midi_player.start()
+
+		# Slide everything up
+		var slide_tween = get_tree().create_tween()
+		slide_tween.set_parallel(true)
+		for node in get_tree().get_nodes_in_group("GameplayLayer"):
+			slide_tween.tween_property(node, "position:y", node.position.y - 120.0, 1.5) \
+				.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		for node in midi_player.get_children():
+			if "position" in node and not node.is_in_group("GameplayLayer"):
+				slide_tween.tween_property(node, "position:y", node.position.y - 120.0, 1.5) \
+					.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	else:
+		# Original flow with fade (restart, level select, etc.)
+		await TransitionManager.fade_out()
+		_change_scene(GAME_LEVEL)
+		TransitionManager.fade_in()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
+		midi_player.audio = audio
+		print(midi.tempo, " -> ", tempo, "; ", midi.division)
+		midi.tempo = tempo
+		midi_player.midi = midi
+		midi_player.start()
+
 	in_level_transition = false
 
 func open_level_select() -> void:

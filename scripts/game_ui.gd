@@ -13,6 +13,7 @@ const SYMBOL_HEIGHT: int = 24
 @onready var fear_label = $CanvasLayer/FearText
 @onready var fear_bar = $CanvasLayer/FearBar
 @onready var faith_bar = $CanvasLayer/FaithBar
+@onready var poss_bar = $CanvasLayer/PossBar
 @onready var symbol_sprites: Array[Sprite2D] = [
 	$CanvasLayer/SymbolCross,
 	$CanvasLayer/SymbolWater,
@@ -25,8 +26,21 @@ func _ready() -> void:
 	GameManager.on_faith.connect(_on_faith)
 	GameManager.game_over_triggered.connect(_on_game_over_notified)
 	GameManager.go_interstage.connect(_in_scene_dialogue)
+	GameManager.note_hit.connect(_on_note_hit)
 	faith_bar.value = GameManager.faith
+	poss_bar.value = 100
+	var should_slide = GameManager.animated_level_entry
 	_init_symbols()
+	if should_slide:
+		canvas_layer.offset.y = 120.0
+		var tween = create_tween()
+		tween.tween_property(canvas_layer, "offset:y", 0.0, 1.5) \
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
+func _on_note_hit() -> void:
+	var midi_player = get_tree().get_first_node_in_group("MidiPlayer") as MidiManager
+	if midi_player and midi_player.song_duration > 0.0:
+		poss_bar.value = (1.0 - midi_player.current_time / midi_player.song_duration) * 100.0
 
 func _on_fear(incr: int):
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
@@ -75,5 +89,12 @@ func _shake_symbol(sprite: Sprite2D) -> void:
 func _on_retry_button_pressed() -> void:
 	GameManager.game_restart()
 
-func _in_scene_dialogue(_num: int) -> void:
+func _in_scene_dialogue(num: int) -> void:
+	if num == 0:
+		canvas_layer.visible = false
+		return
+	var tween = create_tween()
+	tween.tween_property(canvas_layer, "offset:y", 120.0, 1.5) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	await tween.finished
 	canvas_layer.visible = false

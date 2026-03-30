@@ -139,7 +139,13 @@ func start() -> void:
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
-	
+
+	if temp_notes.size() > 0:
+		var last = temp_notes[-1]
+		song_duration = last.time + last.duration
+	else:
+		song_duration = 0.0
+
 	for note in temp_notes:
 		create_note(note)
 	
@@ -398,6 +404,7 @@ func draw_play_line():
 	line.position = Vector2(switch_line_x - 2, y)
 	add_child(line)
 
+var song_duration: float = 0.0
 var is_finished : bool = false
 
 func _on_finished():
