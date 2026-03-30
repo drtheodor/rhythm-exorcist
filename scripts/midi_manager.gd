@@ -50,6 +50,9 @@ const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
 func _ready() -> void:
 	self.finished.connect(_on_finished)
 
+	for key in keys:
+		self.key_state[key] = NONE
+
 const NOTE_OFFSET = 48
 
 func start() -> void:
@@ -125,7 +128,14 @@ func start() -> void:
 					#	if last_note.is_long:
 					#		last_note.duration = time - last_note.time
 					if not last_note.duration:
-						last_note.duration = max(time - last_note.time, 1.05)
+						var spawn_x = get_viewport().get_visible_rect().size.x
+						var target_x = play_line_x + note_width / 2.0
+						var seconds_per_pixel = approach_duration / (spawn_x - target_x)
+						var seconds_per_part = note_width * seconds_per_pixel
+						var duration = time - last_note.time
+						var middle_count = max(0, floori((duration - seconds_per_part) / seconds_per_part))
+						var part_count = middle_count + 2
+						last_note.duration = seconds_per_part * part_count
 					last_note = null
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
