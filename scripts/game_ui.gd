@@ -44,8 +44,6 @@ func _on_fear(incr: int):
 	fear_bar.value = clamp(fear_bar.value + incr, 0, 100)
 	if incr > 0:
 		_shake_ui()
-	
-	self._update_poss_bar()
 
 func _shake_ui() -> void:
 	var tween = create_tween()
