@@ -18,19 +18,19 @@ var crt_enabled: bool = true:
 			_crt_display.set_crt_enabled(val)
 
 @export_category("Level 1")
-# Current song: test_low_tempo2
+# Current song: stage1
 @export var level1_audio: AudioStream = preload("res://stage1.wav")
 @export var level1_midi: MidiResource = preload("res://stage1.mid")
 @export var level1_tempo: int = 769230
 
 @export_category("Level 2")
-# Current song: test_low_tempo
+# Current song: stage2
 @export var level2_audio: AudioStream = preload("res://stage2.wav")
 @export var level2_midi: MidiResource = preload("res://stage2.mid")
 @export var level2_tempo: int = 631578
 
 @export_category("Level 3")
-# Current song: thick_of_it
+# Current song: stage3
 @export var level3_audio: AudioStream = preload("res://stage3.wav")
 @export var level3_midi: MidiResource = preload("res://stage3.mid")
 @export var level3_tempo: int = 480000
@@ -114,8 +114,10 @@ func _process(_delta: float) -> void:
 
 func _on_fear(_incr: int) -> void:
 	if fear >= 100 and not is_game_over:
-		is_game_over = true 
-		self.game_over()
+		# is_game_over = true 
+		# self.game_over()
+		return
+		# To enable GOD MODE
 
 func options_visible():
 	toggle_options_visible.emit()

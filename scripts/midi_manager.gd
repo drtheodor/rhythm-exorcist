@@ -175,6 +175,14 @@ func _process(_delta: float) -> void:
 
 	if _flash_trigger_time >= 0.0 and current_time >= _flash_trigger_time and not _flash_triggered and not _game_over_slowing:
 		_flash_triggered = true
+		# Clear all key states
+		for key in key_state.keys():
+			key_state[key] = NONE
+		key_lockout.clear()
+		# Clear all remaining notes from screen
+		for note in notes:
+			note.queue_free()
+		notes.clear()
 		flash_trigger.emit()
 		$AudioStreamPlayer.stop()
 		self.stop()
