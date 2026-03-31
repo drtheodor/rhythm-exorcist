@@ -24,7 +24,7 @@ const SYMBOL_HEIGHT: int = 24
 func _ready() -> void:
 	GameManager.on_fear.connect(self._on_fear)
 	GameManager.on_faith.connect(_on_faith)
-	GameManager.game_over_triggered.connect(_on_game_over_notified)
+	GameManager.on_game_over.connect(_on_game_over_notified)
 	GameManager.go_interstage.connect(_in_scene_dialogue)
 	GameManager.note_hit.connect(_on_note_hit)
 	faith_bar.value = GameManager.faith

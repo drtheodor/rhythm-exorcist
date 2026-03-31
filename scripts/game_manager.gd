@@ -75,9 +75,9 @@ var faith: int = 100:
 
 signal on_fear(incr: int)
 signal on_faith(new_val: int)
-signal on_combo
 signal note_hit
-signal game_over_triggered
+signal on_combo
+signal on_game_over
 signal toggle_options_visible
 signal pause_game
 signal go_interstage(num: int)
@@ -86,9 +86,9 @@ func _init() -> void:
 	self.on_fear.connect(self._on_fear)
 
 func _get_crt_display() -> Node:
-	if _crt_display == null:
-		_crt_display = get_tree().root.get_node("CRTDisplay")
-	return _crt_display
+	if self._crt_display == null:
+		self._crt_display = get_tree().root.get_node("CRTDisplay")
+	return self._crt_display
 
 func _get_sub_viewport() -> SubViewport:
 	return _get_crt_display().sub_viewport
@@ -106,24 +106,22 @@ func _add_menus_to_viewport() -> void:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
-		if options_open:
+		if self.options_open:
 			options_visible()
 		else:
-			get_tree().paused = not paused
+			get_tree().paused = not self.paused
 			send_pause_game()
 
 func _on_fear(_incr: int) -> void:
-	if fear >= 100 and not is_game_over:
-		# is_game_over = true 
-		# self.game_over()
-		return
-		# To enable GOD MODE
+	if self.fear >= 100 and not self.is_game_over:
+		self.is_game_over = true 
+		self.game_over()
 
 func options_visible():
-	toggle_options_visible.emit()
+	self.toggle_options_visible.emit()
 
 func send_pause_game() -> void:
-	pause_game.emit()
+	self.pause_game.emit()
 
 func set_sfx_volume(val: float) -> void:
 	sfx_volume = linear_to_db(val)
@@ -134,20 +132,15 @@ func set_sfx_volume(val: float) -> void:
 func set_music_volume(val: float) -> void:
 	music_volume = linear_to_db(val)
 	
-	var sfx_index= AudioServer.get_bus_index("Music")
+	var sfx_index = AudioServer.get_bus_index("Music")
 	AudioServer.set_bus_volume_db(sfx_index, sfx_volume)
 
 func game_over() -> void:
-	game_over_triggered.emit()
+	self.on_game_over.emit()
 
 func game_restart() -> void:
-	self.fear = 0
-	is_game_over = false
+	self._reset(true)
 	_interstage3_in_progress = false
-	notes_hit = 0
-	notes_missed = 0
-	combos_hit = 0
-	animated_level_entry = false
 	select_level(current_level_audio, current_level_midi, current_level_tempo)
 
 func start_level() -> void:
@@ -241,13 +234,13 @@ func _go_interstage(inter_num: int) -> void:
 		demonface.show()
 
 func advance_to_level(num: int) -> void:
-	if in_level_transition:
+	if self.in_level_transition:
 		return
-
-	self.fear = 0
-	is_game_over = false
-	current_level_num = num
-	animated_level_entry = true
+	
+	self._reset()
+	self.current_level_num = num
+	self.animated_level_entry = true
+	
 	match num:
 		1: select_level(level1_audio, level1_midi, level1_tempo)
 		2: select_level(level2_audio, level2_midi, level2_tempo)
@@ -257,14 +250,14 @@ func advance_to_level(num: int) -> void:
 var in_level_transition : bool = false
 
 func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
-	if audio != current_level_audio or midi != current_level_midi or current_level_tempo != tempo:
-		current_level_audio = audio
-		current_level_midi = midi
-		current_level_tempo = tempo
+	if audio != self.current_level_audio or midi != self.current_level_midi or tempo != self.current_level_tempo:
+		self.current_level_audio = audio
+		self.current_level_midi = midi
+		self.current_level_tempo = tempo
 
-	in_level_transition = true
+	self.in_level_transition = true
 
-	if animated_level_entry:
+	if self.animated_level_entry:
 		# No fade — slide handles the transition
 		_change_scene(GAME_LEVEL)
 		await get_tree().process_frame
@@ -319,21 +312,31 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		if current_level_num == 3 and not midi_player.flash_trigger.is_connected(_on_flash_trigger):
 			midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
 
-	in_level_transition = false
+	self.in_level_transition = false
 
 func open_level_select() -> void:
-	self.fear = 0
-	is_game_over = false
+	self._reset(true)
+	
 	await TransitionManager.fade_out()
 	_change_scene(LEVEL_SELECT)
 	TransitionManager.fade_in()
 
 func open_title_screen() -> void:
-	self.fear = 0
-	is_game_over = false
+	self._reset(true)
+	
 	await TransitionManager.fade_out()
 	_change_scene(TITLESCREEN)
 	TransitionManager.fade_in()
+
+func _reset(all: bool = false):
+	self.fear = 0
+	self.is_game_over = false
+	if all:
+		#self.faith = 100
+		self.notes_hit = 0
+		self.notes_missed = 0
+		self.combos_hit = 0
+		self.animated_level_entry = false
 
 func _setup_stage4_visuals() -> void:
 	for node in get_tree().get_nodes_in_group("Interstage3Hide"):

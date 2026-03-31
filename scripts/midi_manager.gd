@@ -6,12 +6,6 @@ const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
 const KEY_SWITCH = preload("res://scenes/objects/key_running_switch.tscn")
 const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 
-#@export var note_colors : Array[Color] = [
-	#Color.hex(0xff4747),
-	#Color.hex(0x2cff2c),
-	#Color.hex(0x4343ff),
-#]
-
 @onready var running_parent = $Running
 
 @export var audio: AudioStream
@@ -57,7 +51,7 @@ var _game_over_slowing: bool = false
 
 func _ready() -> void:
 	self.finished.connect(_on_finished)
-	GameManager.game_over_triggered.connect(_on_game_over)
+	GameManager.on_game_over.connect(_on_game_over)
 
 	for key in keys:
 		self.key_state[key] = NONE
@@ -84,7 +78,7 @@ func start() -> void:
 	var temp_notes = []
 	
 	for track in self.midi.tracks:
-		var last_note: Variant = null
+		var unresolved = {}
 		var last_combo_notes: Array = []
 		var time: float = 0
 		
@@ -111,24 +105,25 @@ func start() -> void:
 					if is_switch:
 						target_lane = 2 if lane == 1 else 1
 
+					var new_note
 					if is_combo:
 						var combo_id = _next_combo_id
 						_next_combo_id += 1
 						last_combo_notes = []
-						for combo_lane in range(len(self.keys)):
+						for combo_lane in range(1, len(self.keys) + 1):
 							var combo_note = {
 								"time": time,
 								"length": 1,
 								"bad": false,
-								"lane": combo_lane + 1,
-								"target_lane": combo_lane + 1,
+								"lane": combo_lane,
+								"target_lane": combo_lane,
 								"combo_id": combo_id,
 							}
 							temp_notes.append(combo_note)
 							last_combo_notes.append(combo_note)
-						last_note = last_combo_notes[0]
+						new_note = last_combo_notes[0]
 					else:
-						last_note = {
+						new_note = {
 							"time": time,
 							"length": 0 if is_long else 1,
 							"bad": is_bad,
@@ -136,21 +131,26 @@ func start() -> void:
 							"target_lane": target_lane,
 							"combo_id": -1,
 						}
-						temp_notes.append(last_note)
+						temp_notes.append(new_note)
 
-				if event.subtype == MIDI_MESSAGE_NOTE_OFF and last_note != null:
-					if last_combo_notes.size() > 0:
-						#for cn in last_combo_notes:
-						#	cn.duration = 1 #time - cn.time
-						last_combo_notes = []
-					#else:
-					#	if last_note.is_long:
-					#		last_note.duration = time - last_note.time
-					if not last_note.length:
-						var duration = time - last_note.time
+					if unresolved.has(event.note):
+						push_warning("Resorting to overriding note ", event.note)
+
+					unresolved[event.note] = new_note
+
+				if event.subtype == MIDI_MESSAGE_NOTE_OFF:
+					var resolving = unresolved.get(event.note)
+					if resolving == null: continue
+
+					unresolved.erase(event.note)
+					
+					if not resolving.length:
+						var duration = time - resolving.time
 						var middle_count = max(0, floori((duration - self.note_seconds_per_part) / self.note_seconds_per_part))
-						last_note.length = middle_count + 2
-					last_note = null
+						resolving.length = middle_count + 2
+	
+		if unresolved:
+			print("Unresolved notes left!")
 	
 	temp_notes.sort_custom(func(a, b): return a.time < b.time)
 
@@ -213,7 +213,6 @@ func _process(_delta: float) -> void:
 				var target_y = (target - 1) * note_height + play_line_y
 				var tween = create_tween()
 				tween.tween_property(note, "position:y", target_y, 0.3)
-
 
 	# Track which combo_ids were hit or missed this frame
 	var _combo_hit_ids: Array = []

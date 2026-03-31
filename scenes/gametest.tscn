@@ -13,7 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://c04g2ofsft06t" path="res://stage1.wav" id="10_8qdvn"]
 [ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
 [ext_resource type="Texture2D" uid="uid://wdm5a2dqx51i" path="res://assets/textures/clarabody.png" id="12_ooobp"]
-[ext_resource type="PackedScene" uid="uid://dldvebtvjjnr1" path="res://scenes/objects/demonface.tscn" id="14_8qdvn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/demonface.tscn" id="14_8qdvn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d3qq5"]
 texture = ExtResource("1_p5vg0")
