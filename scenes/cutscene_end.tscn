@@ -20,7 +20,6 @@ anchor_right = 0.5
 anchor_bottom = 0.3
 grow_horizontal = 2
 grow_vertical = 2
-text = "S+"
 
 [node name="StatsLabel" type="Label" parent="GradeCanvas" unique_id=645491439]
 anchors_preset = 8

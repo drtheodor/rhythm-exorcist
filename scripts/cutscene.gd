@@ -22,6 +22,20 @@ const SFX_SOUNDS: Dictionary[String, AudioStream] = {
 	"speaking": preload("uid://4wvhkiyrh3a8")
 }
 
+const ENDINGS : Dictionary[String, String] = {
+	"bad_end_3": "Low Faith Ending (1 of 3)",
+	"good_end_3": "Good Faith Ending (2 of 3)",
+	"secret_end_3": "Secret Ending (3 of 3)"
+}
+
+const ENDING_DESC : Dictionary[String, String] = {
+	"bad_end_3": "The demon found a new host. On the bright side, you're very comfortable.",
+	"good_end_3": "The demon is gone. Technically. You're going to need a few days off.",
+	"secret_end_3": "Flawless. The demon didn't stand a chance. Maybe you're cut out for this after all."
+}
+
+var ending_key : String
+
 func _ready() -> void:
 	dialogue_ui.backgrounds = SCENE_BACKGROUNDS
 	dialogue_ui.scene_images = SCENE_BACKGROUNDS
@@ -38,7 +52,6 @@ func _on_dialogue_finished() -> void:
 		Type.END:
 			if dialogue_ui.current == "end_mirror":
 				var faith = GameManager.faith
-				var ending_key: String
 				if faith == 100:
 					ending_key = "secret_end_3"
 				elif faith >= 60:
@@ -47,8 +60,19 @@ func _on_dialogue_finished() -> void:
 					ending_key = "bad_end_3"
 				dialogue_ui.on_display_dialog(ending_key)
 			else:
+				await _show_ending()
 				await _show_grade()
 				GameManager.open_title_screen()
+
+func _show_ending() -> void:
+	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
+	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
+	if grade_label and ending_key:
+		grade_label.text = ENDINGS[ending_key]
+	if stats_label and ending_key:
+		stats_label.text = ENDING_DESC[ending_key]
+	
+	await _wait_for_advance()
 
 func _show_grade() -> void:
 	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
