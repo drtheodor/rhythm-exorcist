@@ -57,6 +57,36 @@ tracks/3/keys = {
 "values": [ExtResource("1_1hp5q")]
 }
 
+[sub_resource type="Animation" id="Animation_nynt4"]
+resource_name = "d1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_1hp5q")]
+}
+
+[sub_resource type="Animation" id="Animation_g3dhu"]
+resource_name = "d2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_g3dhu")]
+}
+
 [sub_resource type="Animation" id="Animation_e1s1c"]
 resource_name = "start"
 length = 25.0
@@ -112,6 +142,8 @@ tracks/3/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cjd2h"]
 _data = {
 &"RESET": SubResource("Animation_1hp5q"),
+&"d1": SubResource("Animation_nynt4"),
+&"d2": SubResource("Animation_g3dhu"),
 &"start": SubResource("Animation_e1s1c")
 }
 
