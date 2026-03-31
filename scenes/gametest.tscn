@@ -125,7 +125,9 @@ autoplay = &"idle"
 process_mode = 1
 script = ExtResource("6_t82je")
 audio = ExtResource("10_8qdvn")
+trigger_line_x = 68.0
 play_line_x = 60.0
+debug = true
 
 [node name="Running" type="Node" parent="MidiPlayer" unique_id=489803820]
 
@@ -137,10 +139,10 @@ offset_bottom = 167.0
 color = Color(0, 0, 0, 1)
 
 [node name="NoteHider" type="ColorRect" parent="MidiPlayer" unique_id=1062773405 groups=["GameplayLayer"]]
-offset_left = 55.0
-offset_top = 137.0
-offset_right = 71.0
-offset_bottom = 167.0
+offset_left = 8.0
+offset_top = 136.0
+offset_right = 72.0
+offset_bottom = 168.0
 color = Color(0, 0, 0, 1)
 
 [node name="UpKey" parent="MidiPlayer" unique_id=2070705062 node_paths=PackedStringArray("manager") groups=["GameplayLayer"] instance=ExtResource("3_34im5")]

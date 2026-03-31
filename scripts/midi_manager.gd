@@ -26,7 +26,6 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 @export var note_width: int = 16
 @export var trigger_line_x: float = 70
 @export var bad_trigger_line_x: float = 70
-@export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
 @export var play_line_y: float = 144.0
 @export var switch_line_x: float = 160.0
@@ -438,31 +437,25 @@ func draw_play_line() -> void:
 	line.color = Color.WHITE
 	line.size = Vector2(2, h)
 	line.position = Vector2(play_line_x - 2, y)
-	add_child(line)
+	self.running_parent.add_child(line)
 
 	line = ColorRect.new()
 	line.color = Color.PURPLE
 	line.size = Vector2(2, h)
 	line.position = Vector2(trigger_line_x - 2, y)
-	add_child(line)
-
-	line = ColorRect.new()
-	line.color = Color.ORANGE
-	line.size = Vector2(2, h)
-	line.position = Vector2(bad_trigger_line_x - 2, y)
-	add_child(line)
+	self.running_parent.add_child(line)
 	
 	line = ColorRect.new()
-	line.color = Color.GREEN
+	line.color = Color.RED
 	line.size = Vector2(2, h)
-	line.position = Vector2(perfect_line_x - 2, y)
-	add_child(line)
+	line.position = Vector2(bad_trigger_line_x - 2, y)
+	self.running_parent.add_child(line)
 
 	line = ColorRect.new()
 	line.color = Color.YELLOW
 	line.size = Vector2(2, h)
 	line.position = Vector2(switch_line_x - 2, y)
-	add_child(line)
+	self.running_parent.add_child(line)
 
 func _on_game_over() -> void:
 	var asp = $AudioStreamPlayer
