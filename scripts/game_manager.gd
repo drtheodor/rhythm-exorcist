@@ -250,10 +250,8 @@ func _go_interstage(inter_num: int) -> void:
 	if clara:
 		if inter_num == 3:
 			clara.hide()
-		elif inter_num == 2:
-			clara._start_reaction("d2", 50, 1)
 		else:
-			clara._start_reaction("d1", 50, 1)
+			clara.show()
 	
 	var demonface : Demonface = get_tree().get_first_node_in_group("Demonface")
 	if demonface and inter_num == 3:
