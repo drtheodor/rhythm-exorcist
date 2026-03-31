@@ -114,7 +114,7 @@ func _generate_notes(events: Array, all_notes: Array[PlayNote], seconds_per_tick
 	
 	for event: Variant in events:
 		time += event.delta * seconds_per_tick
-		if event['type'] == 'note':
+		if event.type == 'note':
 			if event.subtype == MIDI_MESSAGE_NOTE_ON:
 				if event.note == TRIGGER_NOTE:
 					_flash_trigger_time = time
@@ -398,11 +398,11 @@ func _play_hit_glow(note_box: Sprite2D, duration: float = 0.06) -> void:
 	tween.tween_property(note_box, "self_modulate", NOTE_HIT_COLOR, duration)
 	tween.finished.connect(note_box.queue_free)
 
-func _create_note_box(play_note: PlayNote, scene: PackedScene, offset: float = 0.) -> Sprite2D:	
+func _create_note_box(play_note: PlayNote, scene: PackedScene, part: int = 0) -> Sprite2D:	
 	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
-	box.set_meta("start_time", play_note.time + offset)
+	box.set_meta("start_time", play_note.time + part * self.note_seconds_per_part)
 	box.set_meta("bad", play_note.bad)
 	box.set_meta("lane", play_note.lane)
 	box.set_meta("target_lane", play_note.target_lane)
@@ -417,21 +417,22 @@ func _create_note_box(play_note: PlayNote, scene: PackedScene, offset: float = 0
 	return box
 
 func _create_note(play_note: PlayNote) -> void:
+	var scene: PackedScene
 	var box: Sprite2D
 
 	if play_note.length > 1:
 		for i in range(play_note.length):
-			var scene: PackedScene = KEY_LONG_MIDDLE
+			scene = KEY_LONG_MIDDLE
 			
 			if i == 0:
 				scene = KEY_LONG_START
 			elif i == play_note.length - 1:
 				scene = KEY_LONG_END
 			
-			box = self._create_note_box(play_note, scene, i * self.note_seconds_per_part)
+			box = self._create_note_box(play_note, scene, i)
 			box.set_meta("part", play_note.length - i - 1)
 	else:
-		var scene: PackedScene = KEY
+		scene = KEY
 		
 		if play_note.bad:
 			scene = KEY_BAD
