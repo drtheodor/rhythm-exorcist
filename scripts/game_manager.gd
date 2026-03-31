@@ -209,12 +209,10 @@ func open_cutscene_end() -> void:
 	TransitionManager.fade_in()
 
 func get_grade(faith_: int) -> String:
-	if faith_ == 100: return "S+"
-	if faith_ >= 85:  return "S"
-	if faith_ >= 70:  return "A"
-	if faith_ >= 55:  return "B"
-	if faith_ >= 35:  return "C"
-	if faith_ >= 15:  return "D"
+	if faith_ >= 80: return "S+"
+	if faith_ >= 65: return "S"
+	if faith_ >= 50: return "A"
+	if faith_ >= 30: return "B"
 	return "F"
 
 func level_completed() -> void:

@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cmgp80s7uh00l" path="res://scripts/cutscene.gd" id="1_cscne"]
 [ext_resource type="PackedScene" uid="uid://cn64kaic6agov" path="res://scenes/dialogue_ui.tscn" id="2_dui"]
+[ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="3_font"]
+[ext_resource type="AudioStream" uid="uid://bw1uj38tnoefu" path="res://assets/audio/type1.mp3" id="4_type1"]
+[ext_resource type="AudioStream" uid="uid://dqvo1ir6shb2" path="res://assets/audio/type2.mp3" id="5_type2"]
 
 [node name="CutsceneEnd" type="Node" unique_id=-2072745075]
 script = ExtResource("1_cscne")
@@ -12,7 +15,8 @@ starting_key = "ending_branch"
 
 [node name="GradeCanvas" type="CanvasLayer" parent="." unique_id=1863877354]
 
-[node name="GradeLabel" type="Label" parent="GradeCanvas" unique_id=322841211]
+[node name="EndingTitle" type="Label" parent="GradeCanvas" unique_id=111111111]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.3
@@ -20,8 +24,13 @@ anchor_right = 0.5
 anchor_bottom = 0.3
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "Perfect Ending"
+horizontal_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="GradeCanvas" unique_id=645491439]
+[node name="EndingDescription" type="Label" parent="GradeCanvas" unique_id=222222222]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -29,4 +38,45 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "Flawless. The demon didn't stand a chance."
 horizontal_alignment = 1
+
+[node name="ScoresDisplay" type="Label" parent="GradeCanvas" unique_id=333333333]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "Notes Hit: 100
+Notes Missed: 5
+Combos Hit: 20"
+horizontal_alignment = 1
+
+[node name="FinalGrade" type="Label" parent="GradeCanvas" unique_id=444444444]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.3
+anchor_right = 0.5
+anchor_bottom = 0.3
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "S+"
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer1" type="AudioStreamPlayer" parent="GradeCanvas" unique_id=123456789]
+stream = ExtResource("4_type1")
+bus = &"SFX"
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="GradeCanvas" unique_id=987654321]
+stream = ExtResource("5_type2")
+bus = &"SFX"

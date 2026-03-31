@@ -5,6 +5,8 @@ enum Type { INTRO, END }
 @export var type: Type = Type.INTRO
 
 @onready var dialogue_ui: DialoguePlayer = $DialogueUi
+@onready var sfx_type1: AudioStreamPlayer = $GradeCanvas/AudioStreamPlayer1
+@onready var sfx_type2: AudioStreamPlayer = $GradeCanvas/AudioStreamPlayer2
 
 const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 	"scene1": preload("res://assets/textures/scenes/scene1.png"),
@@ -23,9 +25,9 @@ const SFX_SOUNDS: Dictionary[String, AudioStream] = {
 }
 
 const ENDINGS : Dictionary[String, String] = {
-	"bad_end_3": "Low Faith Ending (1 of 3)",
-	"good_end_3": "Good Faith Ending (2 of 3)",
-	"secret_end_3": "Secret Ending (3 of 3)"
+	"bad_end_3": "Bad Ending",
+	"good_end_3": "Good Ending",
+	"secret_end_3": "Perfect Ending"
 }
 
 const ENDING_DESC : Dictionary[String, String] = {
@@ -35,6 +37,9 @@ const ENDING_DESC : Dictionary[String, String] = {
 }
 
 var ending_key : String
+var _prev_hit: int = 0
+var _prev_missed: int = 0
+var _prev_combos: int = 0
 
 func _ready() -> void:
 	dialogue_ui.backgrounds = SCENE_BACKGROUNDS
@@ -51,63 +56,88 @@ func _on_dialogue_finished() -> void:
 			GameManager.begin_level_1()
 		Type.END:
 			if dialogue_ui.current == "end_mirror":
-				var faith = GameManager.faith
-				if faith == 100:
+				var grade = GameManager.get_grade(GameManager.faith)
+				if grade == "S+":
 					ending_key = "secret_end_3"
-				elif faith >= 60:
+				elif grade in ["S", "A"]:
 					ending_key = "good_end_3"
 				else:
 					ending_key = "bad_end_3"
 				dialogue_ui.on_display_dialog(ending_key)
 			else:
-				await _show_ending()
-				await _show_grade()
+				await _show_ending_phase()
+				await _show_score_phase()
+				await _show_grade_phase()
 				GameManager.open_title_screen()
 
-func _show_ending() -> void:
-	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
-	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
-	if grade_label and ending_key:
-		grade_label.text = ENDINGS[ending_key]
-	if stats_label and ending_key:
-		stats_label.text = ENDING_DESC[ending_key]
-	
-	await _wait_for_advance()
+func _show_ending_phase() -> void:
+	dialogue_ui.show()
+	var ending_title: Label = get_node_or_null("GradeCanvas/EndingTitle")
+	var ending_desc: Label = get_node_or_null("GradeCanvas/EndingDescription")
+	if ending_title and ending_key:
+		ending_title.text = ENDINGS[ending_key]
+	if ending_desc and ending_key:
+		ending_desc.text = ENDING_DESC[ending_key]
 
-func _show_grade() -> void:
-	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
-	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
-	if grade_label:
-		grade_label.text = GameManager.get_grade(0)
-	if stats_label:
-		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
+	var tween = create_tween()
+	tween.tween_property(ending_title, "modulate:a", 1.0, 1.5)
+	tween.tween_property(ending_desc, "modulate:a", 1.0, 1.5)
+	await tween.finished
+
+func _show_score_phase() -> void:
+	dialogue_ui.show()
+	var scores_label: Label = get_node_or_null("GradeCanvas/ScoresDisplay")
+	if scores_label:
+		scores_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
 			0, 0, 0
 		]
-	if grade_label:
-		grade_label.get_parent().show()
-	
-	await _animate_score()
+
+	_prev_hit = 0
+	_prev_missed = 0
+	_prev_combos = 0
+	await _animate_stats()
+
+func _show_grade_phase() -> void:
+	dialogue_ui.show()
+	var final_grade: Label = get_node_or_null("GradeCanvas/FinalGrade")
+	if final_grade:
+		final_grade.text = GameManager.get_grade(0)
+
+	sfx_type2.play()
+	var tween = create_tween()
+	tween.tween_method(_update_grade, 0., 1., 1.0)
+	await tween.finished
+
 	await _wait_for_advance()
 
-func _animate_score() -> void:
+func _animate_stats() -> void:
 	var tween = create_tween()
 	tween.tween_method(_update_label, 0., 1., 2.0)
-	tween.tween_method(_update_grade, 0., 1., 2.0)
 	await tween.finished
 
 func _update_label(weight: float) -> void:
-	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
-	if stats_label:
-		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
-				int(GameManager.notes_hit * weight),
-				int(GameManager.notes_missed * weight),
-				int(GameManager.combos_hit * weight)
+	var scores_label: Label = get_node_or_null("GradeCanvas/ScoresDisplay")
+	if scores_label:
+		var hit = int(GameManager.notes_hit * weight)
+		var missed = int(GameManager.notes_missed * weight)
+		var combos = int(GameManager.combos_hit * weight)
+
+		if hit > _prev_hit or missed > _prev_missed or combos > _prev_combos:
+			sfx_type1.play()
+			_prev_hit = hit
+			_prev_missed = missed
+			_prev_combos = combos
+
+		scores_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
+				hit,
+				missed,
+				combos
 			]
 
 func _update_grade(weight: float) -> void:
-	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
-	if grade_label:
-		grade_label.text = GameManager.get_grade(int(GameManager.faith * weight))
+	var final_grade: Label = get_node_or_null("GradeCanvas/FinalGrade")
+	if final_grade:
+		final_grade.text = GameManager.get_grade(int(GameManager.faith * weight))
 
 func _wait_for_advance() -> void:
 	while true:

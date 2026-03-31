@@ -33,7 +33,7 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
-@export var combo_heal: int = 8
+@export var combo_heal: int = 10
 @export var faith_penalty: int = 1
 @export var miss_lockout_duration: float = 0.16
 @export var switch_telegraph_distance: float = 30.0
