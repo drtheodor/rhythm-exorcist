@@ -122,6 +122,7 @@ func _on_fear(_incr: int) -> void:
 		# self.is_game_over = true 
 		# self.game_over()
 		return
+		# GODMODE
 
 func options_visible():
 	self.toggle_options_visible.emit()
