@@ -22,22 +22,26 @@ var crt_enabled: bool = true:
 @export var level1_audio: AudioStream = preload("res://stage1.wav")
 @export var level1_midi: MidiResource = preload("res://stage1.mid")
 @export var level1_tempo: int = 769230
+@export var level1_hit_window: float = 1.0
 
 @export_category("Level 2")
 # Current song: stage2
 @export var level2_audio: AudioStream = preload("res://stage2.wav")
 @export var level2_midi: MidiResource = preload("res://stage2.mid")
 @export var level2_tempo: int = 631578
+@export var level2_hit_window: float = 2.0
 
 @export_category("Level 3")
 # Current song: stage3
 @export var level3_audio: AudioStream = preload("res://stage3.wav")
 @export var level3_midi: MidiResource = preload("res://stage3.mid")
 @export var level3_tempo: int = 480000
+@export var level3_hit_window: float = 4.0
 
 @export_category("Level 4")
 @export var level4_audio: AudioStream = preload("uid://c2hprt6p8adds")
 @export var level4_midi: MidiResource = preload("uid://ben25xbc4akfs")
+@export var level4_hit_window: float = 4.0
 
 var current_level_audio: AudioStream = null
 var current_level_midi: MidiResource = null

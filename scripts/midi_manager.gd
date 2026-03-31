@@ -44,18 +44,6 @@ var key_state: Array[int] = []
 var key_lockout: Array[float] = []
 var key_listeners: Array[KeyListener] = []
 
-@export_category("Level 1 Hit Windows")
-@export var level1_hit_window: float = 1.0
-
-@export_category("Level 2 Hit Windows")
-@export var level2_hit_window: float = 2.0
-
-@export_category("Level 3 Hit Windows")
-@export var level3_hit_window: float = 4.0
-
-@export_category("Level 4 Hit Windows")
-@export var level4_hit_window: float = 4.0
-
 signal flash_trigger
 
 var _flash_trigger_time: float = -1.0
@@ -65,6 +53,8 @@ var song_duration: float = 0.0
 var is_finished : bool = false
 
 var notes: Array[Sprite2D] = []
+var last_note_hits: Array[float] = []
+
 var _next_combo_id: int = 0
 
 func _init() -> void:
@@ -73,26 +63,17 @@ func _init() -> void:
 	for _key in self.keys:
 		self.key_state.append(NONE)
 		self.key_lockout.append(0)
+		self.last_note_hits.append(0)
 
 func _ready() -> void:
 	self.finished.connect(self._on_finished)
 	GameManager.on_game_over.connect(self._on_game_over)
 
-func _get_hit_window() -> float:
-	match GameManager.current_level_num:
-		1: return level1_hit_window
-		2: return level2_hit_window
-		3: return level3_hit_window
-		4: return level4_hit_window
-		_: return 6.0
-
-func _get_bad_note_threshold() -> float:
-	return bad_trigger_line_x
-
-@onready var note_spawn_x = get_viewport().get_visible_rect().size.x
-@onready var note_target_x = self.play_line_x + self.note_width / 2.0
-@onready var note_seconds_per_pixel = self.approach_duration / (self.note_spawn_x - self.note_target_x)
-@onready var note_seconds_per_part = self.note_width * self.note_seconds_per_pixel
+@onready var note_spawn_x: float = get_viewport().get_visible_rect().size.x
+@onready var note_target_x: float = self.play_line_x + self.note_width / 2.0
+@onready var note_seconds_per_pixel: float = self.approach_duration / (self.note_spawn_x - self.note_target_x)
+@onready var note_seconds_per_part: float = self.note_width * self.note_seconds_per_pixel
+@onready var note_hit_helper_threshold: float = self.note_seconds_per_part
 
 class PlayNote:
 	var time: float
@@ -119,6 +100,7 @@ func _generate_notes(events: Array, all_notes: Array[PlayNote], seconds_per_tick
 				if event.note == TRIGGER_NOTE:
 					_flash_trigger_time = time
 					continue
+				
 				if event.note < NOTE_OFFSET or event.note > NOTE_OFFSET + 8:
 					push_warning("Note ", event.note, " is out of range!")
 					continue
@@ -351,7 +333,9 @@ func _process(_delta: float) -> void:
 					
 					note_box.queue_free()
 				else:
+					self.last_note_hits[key] = self.current_time
 					GameManager.notes_hit += 1
+					
 					self.key_listeners[key].hit()
 					self._play_hit_glow(note_box)
 				
@@ -373,7 +357,9 @@ func _process(_delta: float) -> void:
 	for key: int in range(self.keys.size()):
 		if not hit_keys[key] and self.key_state[key] == PRESSED:
 			self.key_listeners[key].shake()
-			self._lock_key(key)
+			
+			if self.current_time - self.last_note_hits[key] >= self.note_hit_helper_threshold:
+				self._lock_key(key)
 
 func hit_combo() -> void:
 	GameManager.notes_hit += self.keys.size()
@@ -456,7 +442,7 @@ func draw_play_line() -> void:
 
 	line = ColorRect.new()
 	line.color = Color.PURPLE
-	line.size = Vector2(_get_hit_window(), h)
+	line.size = Vector2(2, h)
 	line.position = Vector2(trigger_line_x - 2, y)
 	add_child(line)
 
