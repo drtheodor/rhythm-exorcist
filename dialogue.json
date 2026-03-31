@@ -617,7 +617,7 @@
 			"\"I have been here longer than your church. Longer than your God has had a name.\"",
 			"\"I have watched every priest that ever lived return to the dirt.\"",
 			"\"And you.\"",
-			"\"You are a NOVICE.\"",
+			{"text": "\"You are a NOVICE.\"", "shake": {"duration": 0.4, "intensity": 6.0}},
 			"\"You are afraid. I can feel it. Every prayer you've said since you walked through that door has been half a prayer.\"",
 			"\"...\""
 		],
@@ -630,7 +630,16 @@
 		"speed": 0.05,
 		"text": [
 			"\"So go ahead, finish this.\"",
-			"\"SHOW ME WHAT YOU HAVE.\""
+		],
+		"next": ["interstage3_3"]
+	},
+	"interstage3_3": {
+		"speaker": "clara",
+		"color": "red",
+		"alignment": "center",
+		"speed": 0.05,
+		"text": [
+			{"text": "\"SHOW ME WHAT YOU HAVE.\"", "shake": {"duration": 0.5, "intensity": 8.0}}
 		]
 	},
 
