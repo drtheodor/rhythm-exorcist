@@ -5,6 +5,18 @@ const KEY = preload("res://scenes/objects/key_running.tscn")
 const KEY_BAD = preload("res://scenes/objects/key_running_bad.tscn")
 const KEY_SWITCH = preload("res://scenes/objects/key_running_switch.tscn")
 const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
+const KEY_LONG_START = preload("res://scenes/objects/key_running_long_start.tscn")
+const KEY_LONG_MIDDLE = preload("res://scenes/objects/key_running_long_middle.tscn")
+const KEY_LONG_END = preload("res://scenes/objects/key_running_long_end.tscn")
+
+enum { NONE, PRESSED, HOLDING, RELEASED }
+
+const TRIGGER_NOTE = 57
+const NOTE_OFFSET = 48
+
+const NOTE_HIT_SIZE = Vector2(1.3, 1.3)
+const NOTE_HIT_COLOR = Color(1.3, 1.3, 1.3, 1.)
+const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 
 @onready var running_parent = $Running
 
@@ -23,33 +35,33 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @export var fear: int = 5
 @export var combo_heal: int = 3
 @export var faith_penalty: int = 1
+@export var miss_lockout_duration: float = 0.16
+@export var switch_telegraph_distance: float = 30.0
 
-@export var keys: Array[StringName] = ["up", "down"]
+@export var keys: Array[StringName] = [&"up", &"down"]
 var key_state: Array[int] = []
 var key_lockout: Array[float] = []
-
-enum { NONE, PRESSED, HOLDING, RELEASED }
-
-const TRIGGER_NOTE = 57
-const NOTE_OFFSET = 48
+var key_listeners: Array[KeyListener] = []
 
 signal flash_trigger
 
-var notes: Array[Sprite2D] = []
-var _next_combo_id: int = 0
 var _flash_trigger_time: float = -1.0
 var _flash_triggered: bool = false
 
-const MISS_LOCKOUT_DURATION: float = 0.16
-const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
+var song_duration: float = 0.0
+var is_finished : bool = false
 
-@onready var key_listeners: Array = [$UpKey, $DownKey]
+var notes: Array[Sprite2D] = []
+var _next_combo_id: int = 0
+
+func _init() -> void:
+	self.key_listeners.resize(self.keys.size())
 
 func _ready() -> void:
-	self.finished.connect(_on_finished)
-	GameManager.on_game_over.connect(_on_game_over)
+	self.finished.connect(self._on_finished)
+	GameManager.on_game_over.connect(self._on_game_over)
 
-	for key in keys:
+	for _key in self.keys:
 		self.key_state.append(NONE)
 		self.key_lockout.append(0)
 
@@ -97,7 +109,7 @@ func _generate_notes(events: Array, all_notes: Array[PlayNote], seconds_per_tick
 				var new_note: PlayNote
 				
 				if is_combo:
-					var combo_id = _next_combo_id
+					var combo_id: int = _next_combo_id
 					_next_combo_id += 1
 					last_combo_notes = []
 					
@@ -184,9 +196,9 @@ func _process(_delta: float) -> void:
 	if self.get_state() != 0: # only when playing
 		return
 
-	if _flash_trigger_time >= 0.0 and current_time >= _flash_trigger_time and not _flash_triggered and not GameManager.is_game_over:
-		_flash_triggered = true
-		flash_trigger.emit()
+	if self._flash_trigger_time >= 0.0 and self.current_time >= self._flash_trigger_time and not self._flash_triggered and not GameManager.is_game_over:
+		self._flash_triggered = true
+		self.flash_trigger.emit()
 		$AudioStreamPlayer.stop()
 		self.stop()
 		return
@@ -206,9 +218,9 @@ func _process(_delta: float) -> void:
 				note_box.set_meta("lane", target)
 				var target_y = (target - 1) * note_height + play_line_y
 				self.create_tween().tween_property(note_box, "position:y", target_y, 0.3)
-			elif dist_to_switch < SWITCH_TELEGRAPH_DISTANCE:
+			elif dist_to_switch < self.switch_telegraph_distance:
 				var flash = sin(current_time * 30.0) > 0.0
-				note_box.modulate = Color(2.0, 2.0, 2.0, 1.0) if flash else Color.WHITE
+				note_box.modulate = NOTE_FLASH_COLOR if flash else Color.WHITE
 
 	for key: int in range(self.keys.size()):
 		if self.key_lockout[key] > 0.0:
@@ -233,12 +245,12 @@ func _process(_delta: float) -> void:
 	var triggered_combos = []
 
 	self.notes = notes.filter(func(note_box: Sprite2D) -> bool:
-		if note_box.position.x >= trigger_line_x: return true
+		if note_box.position.x >= self.trigger_line_x: return true
 		
 		var lane: int = note_box.get_meta("lane")
 		var is_bad: bool = note_box.get_meta("bad")
 		
-		var missed: bool = note_box.position.x + note_width < play_line_x
+		var missed: bool = note_box.position.x + self.note_width < self.play_line_x
 		var key: int = lane - 1
 
 		if note_box.has_meta("combo_id"): # is combo
@@ -275,6 +287,7 @@ func _process(_delta: float) -> void:
 					
 					self.key_listeners[key].shake()
 					self._lock_key(key)
+					
 					note_box.queue_free()
 				else:
 					GameManager.notes_hit += 1
@@ -297,6 +310,7 @@ func _process(_delta: float) -> void:
 					
 					key_listeners[key].shake()
 					self._lock_key(key)
+					
 					note_box.queue_free()
 				else:
 					GameManager.notes_hit += 1
@@ -318,10 +332,10 @@ func _process(_delta: float) -> void:
 	)
 
 	# Whiff detection: key pressed but no note was hit
-	for i in range(self.keys.size()):
-		if not hit_keys[i] and self.key_state[i] == PRESSED:
-			self.key_listeners[i].shake()
-			self._lock_key(i)
+	for key: int in range(self.keys.size()):
+		if not hit_keys[key] and self.key_state[key] == PRESSED:
+			self.key_listeners[key].shake()
+			self._lock_key(key)
 
 func hit_combo() -> void:
 	GameManager.notes_hit += self.keys.size()
@@ -335,26 +349,18 @@ func miss_note(real: bool = true) -> void:
 	GameManager.faith -= faith_penalty
 
 func _lock_key(key: int) -> void:
-	self.key_lockout[key] = MISS_LOCKOUT_DURATION
+	self.key_lockout[key] = self.miss_lockout_duration
 
 func _play_hit_glow(note_box: Sprite2D, duration: float = 0.06) -> void:
 	note_box.z_index = 10
-	note_box.modulate = Color(1, 1, 1, 1)
+	note_box.modulate = Color.WHITE
 	var tween = create_tween().set_parallel(true)
-	tween.tween_property(note_box, "scale", Vector2(1.3, 1.3), duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(note_box, "scale", NOTE_HIT_SIZE, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(note_box, "modulate:a", 0.0, duration)
-	tween.tween_property(note_box, "self_modulate", Color(1.3, 1.3, 1.3, 1.0), duration)
+	tween.tween_property(note_box, "self_modulate", NOTE_HIT_COLOR, duration)
 	tween.finished.connect(note_box.queue_free)
 
-func _create_note_box(play_note: PlayNote, offset: float = 0.) -> Sprite2D:
-	var scene = KEY
-	if play_note.bad:
-		scene = KEY_BAD
-	elif play_note.lane != play_note.target_lane:
-		scene = KEY_SWITCH
-	elif play_note.combo_id != -1:
-		scene = KEY_COMBO
-	
+func _create_note_box(play_note: PlayNote, scene: PackedScene, offset: float = 0.) -> Sprite2D:	
 	var box: Sprite2D = scene.instantiate()
 	self.running_parent.add_child(box)
 
@@ -368,39 +374,42 @@ func _create_note_box(play_note: PlayNote, offset: float = 0.) -> Sprite2D:
 	
 	box.position.x = self.note_spawn_x
 	box.position.y = (play_note.lane - 1) * self.note_height + self.play_line_y
-
+	
+	self.notes.append(box)
 	return box
-
-const LONG_START = 48
-const LONG_MIDDLE = 57
-const LONG_END = 64
 
 func _create_note(play_note: PlayNote) -> void:
 	var box: Sprite2D
 
 	if play_note.length > 1:
 		for i in range(play_note.length):
-			box = self._create_note_box(play_note, i * self.note_seconds_per_part)
-			box.set_meta("part", play_note.length - i - 1)
+			var scene: PackedScene = KEY_LONG_MIDDLE
 			
 			if i == 0:
-				box.region_rect.position.x = LONG_START
+				scene = KEY_LONG_START
 			elif i == play_note.length - 1:
-				box.region_rect.position.x = LONG_END
-			else:
-				box.region_rect.position.x = LONG_MIDDLE
+				scene = KEY_LONG_END
 			
-			notes.append(box)
+			box = self._create_note_box(play_note, scene, i * self.note_seconds_per_part)
+			box.set_meta("part", play_note.length - i - 1)
 	else:
-		box = self._create_note_box(play_note)
-		notes.append(box)
+		var scene: PackedScene = KEY
+		
+		if play_note.bad:
+			scene = KEY_BAD
+		elif play_note.lane != play_note.target_lane:
+			scene = KEY_SWITCH
+		elif play_note.combo_id != -1:
+			scene = KEY_COMBO
+		
+		box = self._create_note_box(play_note, scene)
 
-func draw_play_line():
-	var y = play_line_y - note_height / 2.
-	var h = keys.size() * note_height
+func draw_play_line() -> void:
+	var y: float = play_line_y - note_height / 2.
+	var h: float = keys.size() * note_height
 	
 	# Create a visual line at the play position
-	var line = ColorRect.new()
+	var line: ColorRect = ColorRect.new()
 	line.color = Color.WHITE
 	line.size = Vector2(2, h)
 	line.position = Vector2(play_line_x - 2, y)
@@ -424,9 +433,6 @@ func draw_play_line():
 	line.position = Vector2(switch_line_x - 2, y)
 	add_child(line)
 
-var song_duration: float = 0.0
-var is_finished : bool = false
-
 func _on_game_over() -> void:
 	var asp = $AudioStreamPlayer
 	var tween: Tween = self.create_tween()
@@ -444,9 +450,6 @@ func _on_finished():
 		GameManager.level_completed()
 
 func _reset() -> void:
-	#for play_note in self.notes:
-	#	play_note.queue_free()
-	
 	self.notes.clear()
 	self.stop()
 	
