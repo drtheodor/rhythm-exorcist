@@ -19,7 +19,7 @@ const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 }
 
 const SFX_SOUNDS: Dictionary[String, AudioStream] = {
-	# "writing": preload("res://assets/sfx/writing.wav"),
+	"speaking": preload("uid://4wvhkiyrh3a8")
 }
 
 func _ready() -> void:

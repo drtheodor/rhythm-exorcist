@@ -66,6 +66,7 @@ func type_text() -> void:
 	if text_label.visible_characters < count + end_padding:
 		text_label.visible_characters += 1
 		dialogue_typing.emit()
+		_speak_sfx()
 	else:
 		is_typing = false
 
@@ -213,6 +214,9 @@ func set_speaker(speak: String):
 		speaker_1.visible = true
 	elif current_speaker == speaker_2_name:
 		speaker_2.visible = true
+
+func _speak_sfx():
+	sfx_player.play()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not get("visible") or not in_progress:
