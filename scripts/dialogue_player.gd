@@ -35,13 +35,13 @@ var typing_counter = 0
 @onready var background_texture: TextureRect = $BackgroundTexture
 @onready var scene_sprite: Sprite2D = $Scene
 @onready var sfx_player: AudioStreamPlayer = $SfxPlayer
+@onready var sfx_player_2: AudioStreamPlayer = $SfxPlayer2
+
 @onready var speaker_1: TextureRect = $HBoxContainer/MarginContainer2/TextureRect
 @onready var speaker_2: TextureRect = $HBoxContainer/MarginContainer3/TextureRect
 
 @export var scene_images: Dictionary = {}
 @export var sfx_sounds: Dictionary = {}
-
-var has_sfx : bool = false
 
 func set_visible(toggle: bool) -> void:
 	self.visible = toggle
@@ -165,11 +165,7 @@ func process_text_data(data:Dictionary) -> Array:
 		var stream = _load_audio(data["sfx"])
 		if stream:
 			sfx_player.stream = stream
-			has_sfx = true
 			sfx_player.play()
-	else:
-		sfx_player.stream = sfx_sounds["speaking"]
-		has_sfx = false
 		
 
 	if data.has("background"):
@@ -223,8 +219,7 @@ func set_speaker(speak: String):
 		speaker_2.visible = true
 
 func _speak_sfx():
-	if not has_sfx:
-		sfx_player.play()
+		sfx_player_2.play()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not get("visible") or not in_progress:

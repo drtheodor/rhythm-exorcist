@@ -47,6 +47,10 @@ texture = ExtResource("5_imsod")
 stream = ExtResource("2_x1ric")
 bus = &"SFX"
 
+[node name="SfxPlayer2" type="AudioStreamPlayer" parent="." unique_id=1953033850]
+stream = ExtResource("2_x1ric")
+bus = &"SFX"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=502198296]
 layout_mode = 0
 offset_left = 1.0
