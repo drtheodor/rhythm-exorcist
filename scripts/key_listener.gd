@@ -1,3 +1,4 @@
+class_name KeyListener
 extends Sprite2D
 
 @export var manager: MidiManager
@@ -15,6 +16,8 @@ func _ready() -> void:
 	if self.key == -1:
 		push_warning("Key '", self.key_name, "' is not recognized by the MIDI Manager")
 		self.set_process(false)
+	else:
+		self.manager.key_listeners[self.key] = self
 
 func hit() -> void:
 	var tween: Tween = self.create_tween()
