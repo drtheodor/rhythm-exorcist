@@ -6,6 +6,7 @@ var current_scene: Node = null
 var _crt_material: ShaderMaterial = null
 var glitch_effect: Node = null
 var glitch_intensity: float = 0.0
+var glitch_coverage: float = 0.0
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
@@ -38,39 +39,23 @@ func set_crt_enabled(enabled: bool) -> void:
 		crt_rect.material = null
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		if Input.is_action_just_pressed("up"):
-			glitch_intensity = min(glitch_intensity + 0.1, 1.0)
-			update_glitch_parameters()
-			get_tree().root.set_input_as_handled()
-			return
-		elif Input.is_action_just_pressed("down"):
-			glitch_intensity = max(glitch_intensity - 0.1, 0.0)
-			update_glitch_parameters()
-			get_tree().root.set_input_as_handled()
-			return
-
 	if event is InputEventMouse:
 		event.position -= position
 		event.position *= Vector2(Vector2(sub_viewport.size) / size)
 	sub_viewport.push_input(event)
 
 func update_glitch_parameters() -> void:
-	if glitch_effect == null or glitch_effect.get_child_count() == 0:
+	if glitch_effect == null:
 		return
 
-	var color_rect = glitch_effect.get_child(0) as ColorRect
-	if color_rect == null:
-		return
-
-	var glitch_material = color_rect.material as ShaderMaterial
+	var glitch_material = glitch_effect.material as ShaderMaterial
 	if glitch_material == null:
 		return
 
-	glitch_material.set_shader_parameter("glitch_intensity", glitch_intensity)
+	glitch_effect.visible = glitch_intensity > 0.0
 
-	var tile_coverage = min(glitch_intensity * 1.5, 1.0)
-	glitch_material.set_shader_parameter("tile_coverage", tile_coverage)
+	glitch_material.set_shader_parameter("glitch_intensity", glitch_intensity)
+	glitch_material.set_shader_parameter("tile_coverage", glitch_coverage)
 
 	var max_tiles = 2025
 	var max_tile_index = int(1.0 + glitch_intensity * float(max_tiles - 1))

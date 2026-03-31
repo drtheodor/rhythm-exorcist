@@ -56,6 +56,7 @@ var is_game_over: bool = false
 var options_open: bool = false
 var paused: bool = false
 var _interstage3_in_progress: bool = false
+var _stage3_glitch_active: bool = false
 
 var notes_hit: int = 0:
 	set(val):
@@ -121,11 +122,27 @@ func _process(_delta: float) -> void:
 			get_tree().paused = not self.paused
 			send_pause_game()
 
+	if _stage3_glitch_active:
+		var midi_player = get_tree().get_first_node_in_group("MidiPlayer") as MidiManager
+		if midi_player and midi_player.song_duration > 0.0:
+			var progress = midi_player.current_time / midi_player.song_duration
+			var glitch_intensity = 0.0
+			var glitch_coverage = 0.0
+			if progress >= 0.7:
+				glitch_intensity = 1.0 + (progress - 0.7) * 31.667
+				glitch_coverage = (progress - 0.7) * 1.667
+			var crt_display = _get_crt_display()
+			if crt_display:
+				crt_display.glitch_intensity = glitch_intensity
+				crt_display.glitch_coverage = glitch_coverage
+				crt_display.update_glitch_parameters()
+
 func _on_fear(_incr: int) -> void:
 	if self.fear >= 100 and not self.is_game_over:
 		# self.is_game_over = true 
 		# self.game_over()
 		return
+		# GODMODE
 
 func options_visible():
 	self.toggle_options_visible.emit()
@@ -289,8 +306,10 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		midi.tempo = tempo
 		midi_player.midi = midi
 		midi_player.start()
-		if current_level_num == 3 and not midi_player.flash_trigger.is_connected(_on_flash_trigger):
-			midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
+		if current_level_num == 3:
+			_stage3_glitch_active = true
+			if not midi_player.flash_trigger.is_connected(_on_flash_trigger):
+				midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
 
 		# Slide everything up
 		var slide_tween = get_tree().create_tween()
@@ -319,8 +338,10 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		midi.tempo = tempo
 		midi_player.midi = midi
 		midi_player.start()
-		if current_level_num == 3 and not midi_player.flash_trigger.is_connected(_on_flash_trigger):
-			midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
+		if current_level_num == 3:
+			_stage3_glitch_active = true
+			if not midi_player.flash_trigger.is_connected(_on_flash_trigger):
+				midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
 
 	self.in_level_transition = false
 
@@ -341,6 +362,12 @@ func open_title_screen() -> void:
 func _reset(all: bool = false):
 	self.fear = 0
 	self.is_game_over = false
+	_stage3_glitch_active = false
+	var crt_display = _get_crt_display()
+	if crt_display:
+		crt_display.glitch_intensity = 0.0
+		crt_display.glitch_coverage = 0.0
+		crt_display.update_glitch_parameters()
 	if all:
 		#self.faith = 100
 		self.notes_hit = 0
@@ -361,6 +388,13 @@ func _setup_stage4_visuals() -> void:
 
 func _on_flash_trigger() -> void:
 	_interstage3_in_progress = true
+	_stage3_glitch_active = false
+
+	var crt_display = _get_crt_display()
+	if crt_display:
+		crt_display.glitch_intensity = 0.0
+		crt_display.glitch_coverage = 0.0
+		crt_display.update_glitch_parameters()
 
 	# Create white flash overlay above everything
 	var brighten = preload("res://scenes/effects/brighten_rect.tscn").instantiate()
