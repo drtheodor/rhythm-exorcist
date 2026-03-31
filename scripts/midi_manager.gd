@@ -37,10 +37,16 @@ const PRESSED = 1
 const HOLDING = 2
 const RELEASED = 3
 
+const TRIGGER_NOTE = 57
+
+signal flash_trigger
+
 var key_state = {}
 var notes: Array = []
 var _next_combo_id: int = 0
 var key_lockout: Dictionary = {}
+var _flash_trigger_time: float = -1.0
+var _flash_triggered: bool = false
 
 const MISS_LOCKOUT_DURATION: float = 0.16
 const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
@@ -65,6 +71,8 @@ const NOTE_OFFSET = 48
 
 func start() -> void:
 	is_finished = false
+	_flash_trigger_time = -1.0
+	_flash_triggered = false
 	var asp = $AudioStreamPlayer
 	asp.stream = self.audio
 	
@@ -84,6 +92,9 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
+					if event.note == TRIGGER_NOTE:
+						_flash_trigger_time = time
+						continue
 					if event.note < NOTE_OFFSET or event.note > NOTE_OFFSET + 8:
 						push_warning("Note ", event.note, " is out of range!")
 						continue
@@ -160,6 +171,13 @@ func start() -> void:
 
 func _process(_delta: float) -> void:
 	if self.get_state() != 0: # only when playing
+		return
+
+	if _flash_trigger_time >= 0.0 and current_time >= _flash_trigger_time and not _flash_triggered and not _game_over_slowing:
+		_flash_triggered = true
+		flash_trigger.emit()
+		$AudioStreamPlayer.stop()
+		self.stop()
 		return
 
 	# Tick down key lockouts
@@ -425,5 +443,5 @@ func _on_finished():
 		note.queue_free()
 	notes.clear()
 	self.stop()
-	if not _game_over_slowing:
+	if not _game_over_slowing and not _flash_triggered:
 		GameManager.level_completed()
