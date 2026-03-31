@@ -13,6 +13,7 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @export var note_height: int = 16
 @export var note_width: int = 16
 @export var trigger_line_x: float = 70
+@export var bad_trigger_line_x: float = 70
 @export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
 @export var play_line_y: float = 144.0
@@ -21,10 +22,22 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
-@export var combo_heal: int = 3
+@export var combo_heal: int = 8
 @export var faith_penalty: int = 1
 
 @export var keys: Array[String] = ["up", "down"]
+
+@export_category("Level 1 Hit Windows")
+@export var level1_hit_window: float = 1.0
+
+@export_category("Level 2 Hit Windows")
+@export var level2_hit_window: float = 2.0
+
+@export_category("Level 3 Hit Windows")
+@export var level3_hit_window: float = 4.0
+
+@export_category("Level 4 Hit Windows")
+@export var level4_hit_window: float = 4.0
 
 const NONE = 0
 const PRESSED = 1
@@ -55,6 +68,17 @@ func _ready() -> void:
 
 	for key in keys:
 		self.key_state[key] = NONE
+
+func _get_hit_window() -> float:
+	match GameManager.current_level_num:
+		1: return level1_hit_window
+		2: return level2_hit_window
+		3: return level3_hit_window
+		4: return level4_hit_window
+		_: return 6.0
+
+func _get_bad_note_threshold() -> float:
+	return bad_trigger_line_x
 
 const NOTE_OFFSET = 48
 
@@ -234,12 +258,15 @@ func _process(_delta: float) -> void:
 	var _keys_that_hit: Array = []
 
 	self.notes = notes.filter(func(note):
-		if note.position.x < trigger_line_x:
+		if note.position.x < trigger_line_x + _get_hit_window():
 			var lane = note.get_meta("lane")
 			var is_bad = note.get_meta("bad")
 			var combo_id = note.get_meta("combo_id")
 			var is_combo = combo_id >= 0
 			var is_long = note.has_meta("part")
+
+			if is_bad and note.position.x < _get_bad_note_threshold():
+				return true
 
 			if is_combo:
 				# Skip if this combo pair was already resolved this frame
@@ -407,8 +434,14 @@ func draw_play_line():
 
 	line = ColorRect.new()
 	line.color = Color.PURPLE
-	line.size = Vector2(2, h)
+	line.size = Vector2(_get_hit_window(), h)
 	line.position = Vector2(trigger_line_x - 2, y)
+	add_child(line)
+
+	line = ColorRect.new()
+	line.color = Color.ORANGE
+	line.size = Vector2(2, h)
+	line.position = Vector2(bad_trigger_line_x - 2, y)
 	add_child(line)
 	
 	line = ColorRect.new()
