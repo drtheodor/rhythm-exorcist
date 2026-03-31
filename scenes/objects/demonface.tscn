@@ -1,0 +1,193 @@
+[gd_scene format=3 uid="uid://dldvebtvjjnr1"]
+
+[ext_resource type="Texture2D" uid="uid://b32vg7lib5tfl" path="res://assets/textures/demonface1.png" id="1_1hp5q"]
+[ext_resource type="Script" uid="uid://bx6lhrjw4tdtb" path="res://scripts/demonface.gd" id="1_g3dhu"]
+[ext_resource type="AudioStream" uid="uid://bw7lwblv48bej" path="res://assets/audio/thump.mp3" id="2_cjd2h"]
+[ext_resource type="AudioStream" uid="uid://doyynk30g75qe" path="res://assets/audio/beastscream2.mp3" id="4_nynt4"]
+[ext_resource type="Texture2D" uid="uid://cmtujscnln2j1" path="res://assets/textures/demonface2.png" id="5_g3dhu"]
+
+[sub_resource type="Animation" id="Animation_1hp5q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DemonAudioStream:stream")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_cjd2h")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DemonAudioStream:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Demonsprite:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_1hp5q")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ColorRect:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_nynt4"]
+resource_name = "d1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_1hp5q")]
+}
+
+[sub_resource type="Animation" id="Animation_g3dhu"]
+resource_name = "d2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_g3dhu")]
+}
+
+[sub_resource type="Animation" id="Animation_e1s1c"]
+resource_name = "start"
+length = 28.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(3.3868709, 6.0877934, 6.4307675, 6.859485, 8.07721, 8.443877, 8.963877, 10.043877, 10.910543, 11.310543, 12.4538765, 13.903877, 17.110542, 19.143877),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1.5, 1, 2.5, 1.5, 1, 2.5, 2, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 249.08), Vector2(0, 190.038), Vector2(0, 190.447), Vector2(0, 190.447), Vector2(0, 147.14), Vector2(0, 159.7), Vector2(0, 159.7), Vector2(0, 102.655), Vector2(0, 111.89), Vector2(0, 111.89), Vector2(0, 56.05), Vector2(0, 64.225), Vector2(0, 64.225), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DemonAudioStream:stream")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3333335, 22.000002),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_cjd2h"), ExtResource("4_nynt4")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DemonAudioStream:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3.1, 6.0333333, 8.266666, 10.9, 13.529428, 22.866667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, true, true, true, true, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Demonsprite:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(7.143877, 22.835266, 26.366667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_1hp5q"), ExtResource("5_g3dhu"), ExtResource("1_1hp5q")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ColorRect:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 20.805536),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cjd2h"]
+_data = {
+&"RESET": SubResource("Animation_1hp5q"),
+&"d1": SubResource("Animation_nynt4"),
+&"d2": SubResource("Animation_g3dhu"),
+&"start": SubResource("Animation_e1s1c")
+}
+
+[node name="Demonface" type="Node2D" unique_id=1756298291]
+script = ExtResource("1_g3dhu")
+
+[node name="Demonsprite" type="Sprite2D" parent="." unique_id=1980220264]
+texture = ExtResource("1_1hp5q")
+
+[node name="DemonFaces" type="AnimationPlayer" parent="." unique_id=1306101422]
+libraries/ = SubResource("AnimationLibrary_cjd2h")
+
+[node name="DemonAudioStream" type="AudioStreamPlayer" parent="." unique_id=364924267]
+stream = ExtResource("2_cjd2h")
+bus = &"SFX"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1933314222]
+offset_left = -112.00001
+offset_top = 100.00001
+offset_right = -72.00001
+offset_bottom = 140.0
+scale = Vector2(5.8, 6.2)
+color = Color(0, 0, 0, 1)

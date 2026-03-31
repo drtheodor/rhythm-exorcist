@@ -1,4 +1,5 @@
 extends Node2D
+class_name Clara
 
 # Index = level - 1. Animation names: "1"–"11", "13", "d1", "d2"
 @export var idle_anims: Array[String]             = ["1", "1", "1", "1"]

@@ -22,7 +22,7 @@ const KEY_COMBO = preload("res://scenes/objects/key_running_combo.tscn")
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
 @export var combo_heal: int = 3
-@export var faith_penalty: int = 2
+@export var faith_penalty: int = 1
 
 @export var keys: Array[String] = ["up", "down"]
 
@@ -31,18 +31,27 @@ const PRESSED = 1
 const HOLDING = 2
 const RELEASED = 3
 
+const TRIGGER_NOTE = 57
+
+signal flash_trigger
+
 var key_state = {}
 var notes: Array = []
 var _next_combo_id: int = 0
 var key_lockout: Dictionary = {}
+var _flash_trigger_time: float = -1.0
+var _flash_triggered: bool = false
 
 const MISS_LOCKOUT_DURATION: float = 0.16
 const SWITCH_TELEGRAPH_DISTANCE: float = 30.0
 
 @onready var key_listeners: Array = [$UpKey, $DownKey]
 
+var _game_over_slowing: bool = false
+
 func _ready() -> void:
 	self.finished.connect(_on_finished)
+	GameManager.on_game_over.connect(_on_game_over)
 
 	for key in keys:
 		self.key_state[key] = NONE
@@ -56,6 +65,8 @@ const NOTE_OFFSET = 48
 
 func start() -> void:
 	is_finished = false
+	_flash_trigger_time = -1.0
+	_flash_triggered = false
 	var asp = $AudioStreamPlayer
 	asp.stream = self.audio
 	
@@ -75,6 +86,9 @@ func start() -> void:
 			time += event.delta * seconds_per_tick
 			if event['type'] == 'note':
 				if event.subtype == MIDI_MESSAGE_NOTE_ON:
+					if event.note == TRIGGER_NOTE:
+						_flash_trigger_time = time
+						continue
 					if event.note < NOTE_OFFSET or event.note > NOTE_OFFSET + 8:
 						push_warning("Note ", event.note, " is out of range!")
 						continue
@@ -157,6 +171,13 @@ func start() -> void:
 
 func _process(_delta: float) -> void:
 	if self.get_state() != 0: # only when playing
+		return
+
+	if _flash_trigger_time >= 0.0 and current_time >= _flash_trigger_time and not _flash_triggered and not _game_over_slowing:
+		_flash_triggered = true
+		flash_trigger.emit()
+		$AudioStreamPlayer.stop()
+		self.stop()
 		return
 
 	# Tick down key lockouts
@@ -397,13 +418,29 @@ func draw_play_line():
 var song_duration: float = 0.0
 var is_finished : bool = false
 
+func _on_game_over() -> void:
+	_game_over_slowing = true
+	var asp = $AudioStreamPlayer
+	var tween = create_tween()
+	tween.tween_property(asp, "pitch_scale", 0.0, 5.0) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	tween.tween_callback(_stop_after_game_over)
+
+func _stop_after_game_over() -> void:
+	for note in self.notes:
+		note.queue_free()
+	notes.clear()
+	self.stop()
+	$AudioStreamPlayer.stop()
+
 func _on_finished():
 	if is_finished:
 		return
-	
+
 	is_finished = true
 	for note in self.notes:
 		note.queue_free()
 	notes.clear()
 	self.stop()
-	GameManager.level_completed()
+	if not _game_over_slowing and not _flash_triggered:
+		GameManager.level_completed()

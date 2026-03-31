@@ -31,8 +31,9 @@ var crt_enabled: bool = true:
 
 @export_category("Level 3")
 # Current song: thick_of_it
-@export var level3_audio: AudioStream = preload("uid://c2hprt6p8adds")
-@export var level3_midi: MidiResource = preload("uid://ben25xbc4akfs")
+@export var level3_audio: AudioStream = preload("res://stage3.wav")
+@export var level3_midi: MidiResource = preload("res://stage3.mid")
+@export var level3_tempo: int = 480000
 
 @export_category("Level 4")
 @export var level4_audio: AudioStream = preload("uid://c2hprt6p8adds")
@@ -50,6 +51,7 @@ var music_volume : float = 5.0
 var is_game_over: bool = false
 var options_open: bool = false
 var paused: bool = false
+var _interstage3_in_progress: bool = false
 
 var notes_hit: int = 0:
 	set(val):
@@ -66,6 +68,8 @@ var fear: int:
 
 var faith: int = 100:
 	set(val):
+		if is_game_over and val < faith:
+			return
 		faith = clamp(val, 0, 100)
 		on_faith.emit(faith)
 
@@ -128,7 +132,7 @@ func set_sfx_volume(val: float) -> void:
 func set_music_volume(val: float) -> void:
 	music_volume = linear_to_db(val)
 	
-	var sfx_index= AudioServer.get_bus_index("Music")
+	var sfx_index = AudioServer.get_bus_index("Music")
 	AudioServer.set_bus_volume_db(sfx_index, sfx_volume)
 
 func game_over() -> void:
@@ -136,6 +140,7 @@ func game_over() -> void:
 
 func game_restart() -> void:
 	self._reset(true)
+	_interstage3_in_progress = false
 	select_level(current_level_audio, current_level_midi, current_level_tempo)
 
 func start_level() -> void:
@@ -171,6 +176,8 @@ func get_grade(faith_: int) -> String:
 	return "F"
 
 func level_completed() -> void:
+	if _interstage3_in_progress:
+		return
 	if current_level_num <= 3:
 		_go_interstage(current_level_num)
 	else:
@@ -211,18 +218,33 @@ func _go_interstage(inter_num: int) -> void:
 	for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
 		if node.has_method("hide"):
 			node.hide()
+	
+	var clara : Clara = get_tree().get_first_node_in_group("Clara")
+	if clara:
+		if inter_num == 3:
+			clara.hide()
+		elif inter_num == 2:
+			clara._start_reaction("d2", 50, 1)
+		else:
+			clara._start_reaction("d1", 50, 1)
+	
+	var demonface : Demonface = get_tree().get_first_node_in_group("Demonface")
+	if demonface and inter_num == 3:
+		demonface.start()
+		demonface.show()
 
 func advance_to_level(num: int) -> void:
 	if self.in_level_transition:
 		return
 	
+	self._reset()
 	self.current_level_num = num
 	self.animated_level_entry = true
 	
 	match num:
 		1: select_level(level1_audio, level1_midi, level1_tempo)
 		2: select_level(level2_audio, level2_midi, level2_tempo)
-		3: select_level(level3_audio, level3_midi, level3_midi.tempo)
+		3: select_level(level3_audio, level3_midi, level3_tempo)
 		4: select_level(level4_audio, level4_midi, level4_midi.tempo)
 
 var in_level_transition : bool = false
@@ -233,7 +255,6 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		self.current_level_midi = midi
 		self.current_level_tempo = tempo
 
-	self._reset()
 	self.in_level_transition = true
 
 	if self.animated_level_entry:
@@ -241,6 +262,9 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		_change_scene(GAME_LEVEL)
 		await get_tree().process_frame
 		await get_tree().process_frame
+
+		if current_level_num == 4:
+			_setup_stage4_visuals()
 
 		# Offset all gameplay elements below screen
 		for node in get_tree().get_nodes_in_group("GameplayLayer"):
@@ -255,6 +279,8 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		midi.tempo = tempo
 		midi_player.midi = midi
 		midi_player.start()
+		if current_level_num == 3 and not midi_player.flash_trigger.is_connected(_on_flash_trigger):
+			midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
 
 		# Slide everything up
 		var slide_tween = get_tree().create_tween()
@@ -273,12 +299,18 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 		TransitionManager.fade_in()
 		await get_tree().process_frame
 		await get_tree().process_frame
+
+		if current_level_num == 4:
+			_setup_stage4_visuals()
+
 		var midi_player: MidiManager = get_tree().get_first_node_in_group("MidiPlayer")
 		midi_player.audio = audio
 		print(midi.tempo, " -> ", tempo, "; ", midi.division)
 		midi.tempo = tempo
 		midi_player.midi = midi
 		midi_player.start()
+		if current_level_num == 3 and not midi_player.flash_trigger.is_connected(_on_flash_trigger):
+			midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
 
 	self.in_level_transition = false
 
@@ -300,8 +332,81 @@ func _reset(all: bool = false):
 	self.fear = 0
 	self.is_game_over = false
 	if all:
-		self.faith = 100
+		#self.faith = 100
 		self.notes_hit = 0
 		self.notes_missed = 0
 		self.combos_hit = 0
 		self.animated_level_entry = false
+
+func _setup_stage4_visuals() -> void:
+	for node in get_tree().get_nodes_in_group("Interstage3Hide"):
+		node.hide()
+	var clara = get_tree().get_first_node_in_group("Clara")
+	if clara:
+		clara.hide()
+	var demonface: Demonface = get_tree().get_first_node_in_group("Demonface")
+	if demonface:
+		demonface.show()
+		demonface.activate()
+
+func _on_flash_trigger() -> void:
+	_interstage3_in_progress = true
+
+	# Create white flash overlay above everything
+	var brighten = preload("res://scenes/effects/brighten_rect.tscn").instantiate()
+	var brighten_canvas = CanvasLayer.new()
+	brighten_canvas.layer = 101
+	brighten_canvas.add_child(brighten)
+	_get_sub_viewport().add_child(brighten_canvas)
+	var bright_mat = brighten.material as ShaderMaterial
+
+	# Play lightbreak sound
+	var sfx = AudioStreamPlayer.new()
+	sfx.stream = preload("res://assets/audio/lightbreak.mp3")
+	sfx.bus = "SFX"
+	_get_sub_viewport().add_child(sfx)
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
+
+	# Flash to white (instant)
+	bright_mat.set_shader_parameter("bright_amount", 1.0)
+
+	# While screen is white, hide gameplay elements
+	for node in get_tree().get_nodes_in_group("GameplayLayer"):
+		node.hide()
+	for node in get_tree().get_nodes_in_group("Interstage3Hide"):
+		node.hide()
+	var game_ui = get_tree().get_first_node_in_group("GameUI")
+	if game_ui:
+		game_ui.hide()
+		var ui_canvas = game_ui.get_node_or_null("CanvasLayer")
+		if ui_canvas:
+			ui_canvas.hide()
+	var clara = get_tree().get_first_node_in_group("Clara")
+	if clara:
+		clara.hide()
+	var midi_player = get_tree().get_first_node_in_group("MidiPlayer")
+	if midi_player:
+		for child in midi_player.get_children():
+			if child.has_method("hide"):
+				child.hide()
+
+	# Show demon (off-screen at animation start)
+	var demonface: Demonface = get_tree().get_first_node_in_group("Demonface")
+	if demonface:
+		demonface.show()
+		demonface.start()
+
+	# Fade white away to reveal black interstage screen
+	var tween2 = create_tween()
+	tween2.tween_property(bright_mat, "shader_parameter/bright_amount", 0.0, 0.3)
+	await tween2.finished
+	brighten_canvas.queue_free()
+
+	# Wait for demon animation to finish before starting dialogue
+	if demonface:
+		await demonface.faces.animation_finished
+
+	# Now trigger interstage dialogue
+	go_interstage.emit(3)
+	_interstage3_in_progress = false
