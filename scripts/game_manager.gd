@@ -58,7 +58,12 @@ var notes_hit: int = 0:
 		notes_hit = val
 		note_hit.emit()
 var notes_missed: int = 0
-var combos_hit: int = 0
+var combos_hit: int = 0:
+	set(val):
+		var diff = val - combos_hit
+		
+		for i in range(diff):
+			on_combo.emit()
 
 var fear: int:
 	set(val):

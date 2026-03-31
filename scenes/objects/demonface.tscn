@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dldvebtvjjnr1"]
 
 [ext_resource type="Texture2D" uid="uid://b32vg7lib5tfl" path="res://assets/textures/demonface1.png" id="1_1hp5q"]
-[ext_resource type="Script" uid="uid://bx6lhrjw4tdtb" path="res://scripts/demonface.gd" id="1_g3dhu"]
+[ext_resource type="Script" path="res://scripts/demonface.gd" id="1_g3dhu"]
 [ext_resource type="AudioStream" uid="uid://bw7lwblv48bej" path="res://assets/audio/thump.mp3" id="2_cjd2h"]
 [ext_resource type="AudioStream" uid="uid://doyynk30g75qe" path="res://assets/audio/beastscream2.mp3" id="4_nynt4"]
 [ext_resource type="Texture2D" uid="uid://cmtujscnln2j1" path="res://assets/textures/demonface2.png" id="5_g3dhu"]

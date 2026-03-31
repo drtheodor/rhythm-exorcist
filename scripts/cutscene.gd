@@ -67,23 +67,23 @@ func _show_grade() -> void:
 
 func _animate_score() -> void:
 	var tween = create_tween()
-	tween.tween_method(_update_label, 0, 100, 2.0)
-	tween.tween_method(_update_grade, 0, 100, 2.0)
+	tween.tween_method(_update_label, 0., 1., 2.0)
+	tween.tween_method(_update_grade, 0., 1., 2.0)
 	await tween.finished
 
-func _update_label(percent: int) -> void:
+func _update_label(weight: float) -> void:
 	var stats_label: Label = get_node_or_null("GradeCanvas/StatsLabel")
 	if stats_label:
 		stats_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
-				GameManager.notes_hit * percent * 0.01,
-				GameManager.notes_missed * percent * 0.01,
-				GameManager.combos_hit * percent * 0.01
+				int(GameManager.notes_hit * weight),
+				int(GameManager.notes_missed * weight),
+				int(GameManager.combos_hit * weight)
 			]
 
-func _update_grade(percent: int) -> void:
+func _update_grade(weight: float) -> void:
 	var grade_label: Label = get_node_or_null("GradeCanvas/GradeLabel")
 	if grade_label:
-		grade_label.text = GameManager.get_grade(GameManager.faith * percent * 0.01)
+		grade_label.text = GameManager.get_grade(int(GameManager.faith * weight))
 
 func _wait_for_advance() -> void:
 	while true:
