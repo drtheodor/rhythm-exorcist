@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://coh5lq7ky41y6" path="res://scenes/cutscene_interstage_3.tscn" id="6_o6yrp"]
 [ext_resource type="Script" uid="uid://bitpgscy8bwyx" path="res://scripts/midi_manager.gd" id="6_t82je"]
 [ext_resource type="AudioStream" uid="uid://c04g2ofsft06t" path="res://stage1.wav" id="10_8qdvn"]
-[ext_resource type="Shader" uid="uid://2d3sec453yug" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
+[ext_resource type="Shader" path="res://assets/shaders/gscreplace.gdshader" id="11_o6yrp"]
 [ext_resource type="Texture2D" uid="uid://wdm5a2dqx51i" path="res://assets/textures/clarabody.png" id="12_ooobp"]
 [ext_resource type="PackedScene" uid="uid://dldvebtvjjnr1" path="res://scenes/objects/demonface.tscn" id="14_8qdvn"]
 
@@ -122,7 +122,7 @@ autoplay = &"idle"
 [node name="CutsceneInterstage3" parent="." unique_id=1123250583 instance=ExtResource("6_o6yrp")]
 
 [node name="MidiPlayer" type="MidiPlayer" parent="." unique_id=1952007188 groups=["MidiPlayer"]]
-process_mode = 3
+process_mode = 1
 script = ExtResource("6_t82je")
 audio = ExtResource("10_8qdvn")
 play_line_x = 60.0
@@ -166,6 +166,6 @@ material = SubResource("ShaderMaterial_8qdvn")
 position = Vector2(128, 64)
 texture = ExtResource("12_ooobp")
 
-[node name="Demonface" parent="." unique_id=1756298291 instance=ExtResource("14_8qdvn")]
+[node name="Demonface" parent="." unique_id=1756298291 groups=["Demonface"] instance=ExtResource("14_8qdvn")]
 visible = false
 position = Vector2(128, 32)

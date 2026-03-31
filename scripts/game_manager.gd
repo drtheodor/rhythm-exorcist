@@ -218,6 +218,20 @@ func _go_interstage(inter_num: int) -> void:
 	for node in get_tree().get_first_node_in_group("MidiPlayer").get_children():
 		if node.has_method("hide"):
 			node.hide()
+	
+	var clara : Clara = get_tree().get_first_node_in_group("Clara")
+	if clara:
+		if inter_num == 3:
+			clara.hide()
+		elif inter_num == 2:
+			clara._start_reaction("d2", 50, 1)
+		else:
+			clara._start_reaction("d1", 50, 1)
+	
+	var demonface : Demonface = get_tree().get_first_node_in_group("Demonface")
+	if demonface and inter_num == 3:
+		demonface.start()
+		demonface.show()
 
 func advance_to_level(num: int) -> void:
 	if in_level_transition:
