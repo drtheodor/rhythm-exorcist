@@ -63,15 +63,15 @@ func update_glitch_parameters() -> void:
 	if color_rect == null:
 		return
 
-	var material = color_rect.material as ShaderMaterial
-	if material == null:
+	var glitch_material = color_rect.material as ShaderMaterial
+	if glitch_material == null:
 		return
 
-	material.set_shader_parameter("glitch_intensity", glitch_intensity)
+	glitch_material.set_shader_parameter("glitch_intensity", glitch_intensity)
 
 	var tile_coverage = min(glitch_intensity * 1.5, 1.0)
-	material.set_shader_parameter("tile_coverage", tile_coverage)
+	glitch_material.set_shader_parameter("tile_coverage", tile_coverage)
 
 	var max_tiles = 2025
 	var max_tile_index = int(1.0 + glitch_intensity * float(max_tiles - 1))
-	material.set_shader_parameter("max_tile_index", max_tile_index)
+	glitch_material.set_shader_parameter("max_tile_index", max_tile_index)

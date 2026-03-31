@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c1j5b2nkiuoq8"]
 
-[ext_resource type="Shader" uid="uid://cean2v6nk0hcj" path="res://assets/shaders/glitch.gdshader" id="1_xxx"]
+[ext_resource type="Shader" path="res://assets/shaders/glitch.gdshader" id="1_xxx"]
 [ext_resource type="Texture2D" uid="uid://dkdvlpw6e43o6" path="res://assets/textures/glitch_tiles.png" id="2_glitch"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_glitch"]
