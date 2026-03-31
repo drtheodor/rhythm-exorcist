@@ -41,6 +41,8 @@ var typing_counter = 0
 @export var scene_images: Dictionary = {}
 @export var sfx_sounds: Dictionary = {}
 
+var has_sfx : bool = false
+
 func set_visible(toggle: bool) -> void:
 	self.visible = toggle
 	background_texture.visible = not in_main_scene
@@ -163,7 +165,12 @@ func process_text_data(data:Dictionary) -> Array:
 		var stream = _load_audio(data["sfx"])
 		if stream:
 			sfx_player.stream = stream
+			has_sfx = true
 			sfx_player.play()
+	else:
+		sfx_player.stream = sfx_sounds["speaking"]
+		has_sfx = false
+		
 
 	if data.has("background"):
 		background_texture.texture = backgrounds.get(data["background"])
@@ -216,7 +223,8 @@ func set_speaker(speak: String):
 		speaker_2.visible = true
 
 func _speak_sfx():
-	sfx_player.play()
+	if not has_sfx:
+		sfx_player.play()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not get("visible") or not in_progress:
