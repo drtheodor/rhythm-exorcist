@@ -18,19 +18,19 @@ var crt_enabled: bool = true:
 			_crt_display.set_crt_enabled(val)
 
 @export_category("Level 1")
-# Current song: test_low_tempo2
+# Current song: stage1
 @export var level1_audio: AudioStream = preload("res://stage1.wav")
 @export var level1_midi: MidiResource = preload("res://stage1.mid")
 @export var level1_tempo: int = 769230
 
 @export_category("Level 2")
-# Current song: test_low_tempo
+# Current song: stage2
 @export var level2_audio: AudioStream = preload("res://stage2.wav")
 @export var level2_midi: MidiResource = preload("res://stage2.mid")
 @export var level2_tempo: int = 631578
 
 @export_category("Level 3")
-# Current song: thick_of_it
+# Current song: stage3
 @export var level3_audio: AudioStream = preload("res://stage3.wav")
 @export var level3_midi: MidiResource = preload("res://stage3.mid")
 @export var level3_tempo: int = 480000
@@ -119,8 +119,9 @@ func _process(_delta: float) -> void:
 
 func _on_fear(_incr: int) -> void:
 	if self.fear >= 100 and not self.is_game_over:
-		self.is_game_over = true 
-		self.game_over()
+		# self.is_game_over = true 
+		# self.game_over()
+		return
 
 func options_visible():
 	self.toggle_options_visible.emit()
@@ -415,3 +416,31 @@ func _on_flash_trigger() -> void:
 	# Now trigger interstage dialogue
 	go_interstage.emit(3)
 	_interstage3_in_progress = false
+
+func screen_shake(duration: float = 1.2, intensity: float = 15.0) -> void:
+	var crt = _get_crt_display()
+	if not crt:
+		return
+
+	var sfx = AudioStreamPlayer.new()
+	sfx.stream = preload("res://assets/audio/thump.mp3")
+	sfx.bus = "SFX"
+	sfx.volume_db = 6.0
+	_get_sub_viewport().add_child(sfx)
+	sfx.play()
+	sfx.finished.connect(sfx.queue_free)
+
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUAD)
+
+	var shake_count = int(duration * 20)
+	var frame_duration = duration / shake_count
+
+	for i in range(shake_count):
+		var progress = float(i) / shake_count
+		var current_intensity = intensity * (1.0 - progress)
+		var offset = Vector2(randf_range(-current_intensity, current_intensity), randf_range(-current_intensity, current_intensity))
+		tween.tween_property(crt, "position", offset, frame_duration)
+
+	tween.tween_property(crt, "position", Vector2.ZERO, 0.1)

@@ -74,9 +74,26 @@ func finish_typing() -> void:
 	is_typing = false
 
 func show_text():
-	text_label.text = selected_text.pop_front()
+	var text_entry = selected_text.pop_front()
+	var text_to_display = text_entry
+	var should_shake = false
+	var shake_duration = 0.5
+	var shake_intensity = 5.0
+
+	if text_entry is Dictionary:
+		text_to_display = text_entry.get("text", "")
+		if text_entry.has("shake"):
+			should_shake = true
+			var shake_data = text_entry["shake"]
+			shake_duration = shake_data.get("duration", 0.5) if shake_data is Dictionary else 0.5
+			shake_intensity = shake_data.get("intensity", 5.0) if shake_data is Dictionary else 5.0
+
+	text_label.text = text_to_display
 	is_typing = true
 	text_label.visible_characters = 0
+
+	if should_shake:
+		GameManager.screen_shake(shake_duration, shake_intensity)
 
 func next_line():
 	if selected_text.size() > 0:
@@ -167,12 +184,20 @@ func process_text_data(data:Dictionary) -> Array:
 	var texts = data["text"].duplicate()
 	
 	for i in range(len(texts)):
+		var is_dict = texts[i] is Dictionary
+		var text_str = texts[i]["text"] if is_dict else texts[i]
+
 		if color != null:
-			texts[i] = ("[color=%s]" % [color]) + texts[i] + "[/color]"
+			text_str = ("[color=%s]" % [color]) + text_str + "[/color]"
 		if font_size != null:
-			texts[i] = ("[font_size=%d]" % [font_size]) + texts[i] + "[/font_size]"
+			text_str = ("[font_size=%d]" % [font_size]) + text_str + "[/font_size]"
 		if alignment != null:
-			texts[i] = ("[%s]" % [alignment]) + texts[i] + ("[/%s]" % [alignment])
+			text_str = ("[%s]" % [alignment]) + text_str + ("[/%s]" % [alignment])
+
+		if is_dict:
+			texts[i]["text"] = text_str
+		else:
+			texts[i] = text_str
 	
 	#print(texts)
 	

@@ -25,6 +25,7 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 @export var note_height: int = 16
 @export var note_width: int = 16
 @export var trigger_line_x: float = 70
+@export var bad_trigger_line_x: float = 70
 @export var perfect_line_x: float = 66.0
 @export var play_line_x: float = 64.0
 @export var play_line_y: float = 144.0
@@ -33,7 +34,7 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 
 @export var perfect_threshold: float = 1
 @export var fear: int = 5
-@export var combo_heal: int = 3
+@export var combo_heal: int = 8
 @export var faith_penalty: int = 1
 @export var miss_lockout_duration: float = 0.16
 @export var switch_telegraph_distance: float = 30.0
@@ -42,6 +43,18 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 var key_state: Array[int] = []
 var key_lockout: Array[float] = []
 var key_listeners: Array[KeyListener] = []
+
+@export_category("Level 1 Hit Windows")
+@export var level1_hit_window: float = 1.0
+
+@export_category("Level 2 Hit Windows")
+@export var level2_hit_window: float = 2.0
+
+@export_category("Level 3 Hit Windows")
+@export var level3_hit_window: float = 4.0
+
+@export_category("Level 4 Hit Windows")
+@export var level4_hit_window: float = 4.0
 
 signal flash_trigger
 
@@ -56,14 +69,25 @@ var _next_combo_id: int = 0
 
 func _init() -> void:
 	self.key_listeners.resize(self.keys.size())
+	
+	for _key in self.keys:
+		self.key_state.append(NONE)
+		self.key_lockout.append(0)
 
 func _ready() -> void:
 	self.finished.connect(self._on_finished)
 	GameManager.on_game_over.connect(self._on_game_over)
 
-	for _key in self.keys:
-		self.key_state.append(NONE)
-		self.key_lockout.append(0)
+func _get_hit_window() -> float:
+	match GameManager.current_level_num:
+		1: return level1_hit_window
+		2: return level2_hit_window
+		3: return level3_hit_window
+		4: return level4_hit_window
+		_: return 6.0
+
+func _get_bad_note_threshold() -> float:
+	return bad_trigger_line_x
 
 @onready var note_spawn_x = get_viewport().get_visible_rect().size.x
 @onready var note_target_x = self.play_line_x + self.note_width / 2.0
@@ -198,9 +222,19 @@ func _process(_delta: float) -> void:
 
 	if self._flash_trigger_time >= 0.0 and self.current_time >= self._flash_trigger_time and not self._flash_triggered and not GameManager.is_game_over:
 		self._flash_triggered = true
-		self.flash_trigger.emit()
-		$AudioStreamPlayer.stop()
-		self.stop()
+		
+		# Clear all key states
+		for key in range(self.key_state.size()):
+			self.key_state[key] = NONE
+		
+		self.key_lockout.clear()
+		
+		# Clear all remaining notes from screen
+		for note_box in notes:
+			note_box.queue_free()
+		
+		self._reset()
+		flash_trigger.emit()
 		return
 
 	for note_box: Sprite2D in self.notes:
@@ -247,8 +281,12 @@ func _process(_delta: float) -> void:
 	self.notes = notes.filter(func(note_box: Sprite2D) -> bool:
 		if note_box.position.x >= self.trigger_line_x: return true
 		
-		var lane: int = note_box.get_meta("lane")
 		var is_bad: bool = note_box.get_meta("bad")
+		
+		if is_bad and note_box.position.x < self.bad_trigger_line_x:
+			return true
+		
+		var lane: int = note_box.get_meta("lane")
 		
 		var missed: bool = note_box.position.x + self.note_width < self.play_line_x
 		var key: int = lane - 1
@@ -417,8 +455,14 @@ func draw_play_line() -> void:
 
 	line = ColorRect.new()
 	line.color = Color.PURPLE
-	line.size = Vector2(2, h)
+	line.size = Vector2(_get_hit_window(), h)
 	line.position = Vector2(trigger_line_x - 2, y)
+	add_child(line)
+
+	line = ColorRect.new()
+	line.color = Color.ORANGE
+	line.size = Vector2(2, h)
+	line.position = Vector2(bad_trigger_line_x - 2, y)
 	add_child(line)
 	
 	line = ColorRect.new()
