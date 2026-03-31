@@ -10,9 +10,12 @@ var _active: bool = false
 
 @export var misses_before_reaction: int = 4
 
+signal scream_triggered
+
 func _ready() -> void:
 	GameManager.on_fear.connect(_on_fear)
 	GameManager.on_combo.connect(_on_combo)
+	faces.animation_started.connect(_on_animation_changed)
 
 func _process(delta: float) -> void:
 	if not _active:
@@ -25,6 +28,25 @@ func _process(delta: float) -> void:
 
 func start() -> void:
 	faces.play("start")
+
+func end() -> void:
+	_active = false
+	faces.play("end")
+
+func _on_scream() -> void:
+	var audio = $DemonAudioStream
+	audio.stop()
+	audio.play()
+	scream_triggered.emit()
+
+func _on_thump() -> void:
+	GameManager.screen_shake(1.2, 15.0)
+
+func _on_scream_start() -> void:
+	var audio = $DemonAudioStream
+	audio.stream = preload("res://assets/audio/beastscream2.mp3")
+	audio.play()
+	GameManager.screen_shake(1.2, 15.0)
 
 func activate() -> void:
 	_active = true
@@ -50,6 +72,14 @@ func _on_fear(incr: int) -> void:
 		_start_reaction(clara.near_death_miss_anims[idx], clara.near_death_miss_durations[idx], 2)
 	else:
 		_start_reaction(clara.miss_anims[idx], clara.miss_durations[idx], 1)
+
+func _on_animation_changed(anim: String) -> void:
+	if anim == "d2" and GameManager.current_level_num == 4:
+		GameManager.screen_shake(0.3, 15.0)
+		var audio = $DemonAudioStream
+		audio.stream = preload("res://assets/audio/beastscream2.mp3")
+		audio.stop()
+		audio.play()
 
 func _on_combo() -> void:
 	if not _active:

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://c1j5b2nkiuoq8"]
 
-[ext_resource type="Shader" path="res://assets/shaders/glitch.gdshader" id="1_xxx"]
+[ext_resource type="Shader" uid="uid://cean2v6nk0hcj" path="res://assets/shaders/glitch.gdshader" id="1_xxx"]
 [ext_resource type="Texture2D" uid="uid://dkdvlpw6e43o6" path="res://assets/textures/glitch_tiles.png" id="2_glitch"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_glitch"]
 resource_local_to_scene = true
 shader = ExtResource("1_xxx")
 shader_parameter/glitch_tiles = ExtResource("2_glitch")
-shader_parameter/glitch_intensity = 0.0
+shader_parameter/glitch_intensity = 1.0
 shader_parameter/tile_coverage = 0.0
 shader_parameter/min_tile_index = 0
 shader_parameter/max_tile_index = 64

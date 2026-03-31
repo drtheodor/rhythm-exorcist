@@ -203,17 +203,17 @@ func _process(_delta: float) -> void:
 
 	if self._flash_trigger_time >= 0.0 and self.current_time >= self._flash_trigger_time and not self._flash_triggered and not GameManager.is_game_over:
 		self._flash_triggered = true
-		
+
 		# Clear all key states
 		for key in range(self.key_state.size()):
 			self.key_state[key] = NONE
-		
+
 		self.key_lockout.clear()
-		
+
 		# Clear all remaining notes from screen
 		for note_box in notes:
 			note_box.queue_free()
-		
+
 		self._reset()
 		flash_trigger.emit()
 		return

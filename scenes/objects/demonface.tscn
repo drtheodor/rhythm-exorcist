@@ -114,29 +114,27 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 249.08), Vector2(0, 190.038), Vector2(0, 190.447), Vector2(0, 190.447), Vector2(0, 147.14), Vector2(0, 159.7), Vector2(0, 159.7), Vector2(0, 102.655), Vector2(0, 111.89), Vector2(0, 111.89), Vector2(0, 56.05), Vector2(0, 64.225), Vector2(0, 64.225), Vector2(0, 0)]
 }
-tracks/1/type = "value"
+tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("DemonAudioStream:stream")
+tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.3333335, 22.000002),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("2_cjd2h"), ExtResource("4_nynt4")]
+"times": PackedFloat32Array(3.1, 6.0333333, 8.266666, 10.9, 13.529428),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"values": [{"args": [], "method": &"_on_thump"}, {"args": [], "method": &"_on_thump"}, {"args": [], "method": &"_on_thump"}, {"args": [], "method": &"_on_thump"}, {"args": [], "method": &"_on_thump"}]
 }
-tracks/2/type = "value"
+tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DemonAudioStream:playing")
+tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(3.1, 6.0333333, 8.266666, 10.9, 13.529428, 22.866667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [true, true, true, true, true, true]
+"times": PackedFloat32Array(22.866667),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [], "method": &"_on_scream_start"}]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -163,11 +161,51 @@ tracks/4/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_end"]
+resource_name = "end"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Demonsprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 3.0, 3.8, 5.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_g3dhu"), ExtResource("1_1hp5q"), ExtResource("5_g3dhu"), ExtResource("1_1hp5q"), ExtResource("5_g3dhu")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DemonAudioStream:stream")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_nynt4")]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.0, 5.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{"args": [], "method": &"_on_scream"}, {"args": [], "method": &"_on_scream"}, {"args": [], "method": &"_on_scream"}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cjd2h"]
 _data = {
 &"RESET": SubResource("Animation_1hp5q"),
 &"d1": SubResource("Animation_nynt4"),
 &"d2": SubResource("Animation_g3dhu"),
+&"end": SubResource("Animation_end"),
 &"start": SubResource("Animation_e1s1c")
 }
 

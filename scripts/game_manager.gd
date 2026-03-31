@@ -40,8 +40,23 @@ var crt_enabled: bool = true:
 
 @export_category("Level 4")
 @export var level4_audio: AudioStream = preload("uid://c2hprt6p8adds")
-@export var level4_midi: MidiResource = preload("uid://ben25xbc4akfs")
+@export var level4_midi: MidiResource = preload("res://stage4_temp.mid")
 @export var level4_hit_window: float = 4.0
+
+@export_category("Stage 4 Finale")
+@export var finale_glitch_start_intensity: float = 1.0
+@export var finale_glitch_end_intensity: float = 0.0
+@export var finale_glitch_start_coverage: float = 0
+@export var finale_glitch_end_coverage: float = 0.5
+@export var finale_glitch_duration: float = 5.0
+@export var finale_brighten_delay: float = 3.0
+@export var finale_brighten_duration: float = 5.0
+@export var finale_music_fade_duration: float = 7.0
+@export var finale_total_duration: float = 8.0
+@export var finale_screen_shake_intensity: float = 20.0
+@export var finale_screen_shake_duration: float = 0.8
+@export var finale_white_hold_duration: float = 3.0
+@export var finale_last_scream_time: float = 10.5
 
 var current_level_audio: AudioStream = null
 var current_level_midi: MidiResource = null
@@ -310,6 +325,9 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 			_stage3_glitch_active = true
 			if not midi_player.flash_trigger.is_connected(_on_flash_trigger):
 				midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
+		if current_level_num == 4:
+			if not midi_player.flash_trigger.is_connected(_on_stage4_finale):
+				midi_player.flash_trigger.connect(_on_stage4_finale, CONNECT_ONE_SHOT)
 
 		# Slide everything up
 		var slide_tween = get_tree().create_tween()
@@ -342,6 +360,9 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 			_stage3_glitch_active = true
 			if not midi_player.flash_trigger.is_connected(_on_flash_trigger):
 				midi_player.flash_trigger.connect(_on_flash_trigger, CONNECT_ONE_SHOT)
+		if current_level_num == 4:
+			if not midi_player.flash_trigger.is_connected(_on_stage4_finale):
+				midi_player.flash_trigger.connect(_on_stage4_finale, CONNECT_ONE_SHOT)
 
 	self.in_level_transition = false
 
@@ -364,7 +385,7 @@ func _reset(all: bool = false):
 	self.is_game_over = false
 	_stage3_glitch_active = false
 	var crt_display = _get_crt_display()
-	if crt_display:
+	if crt_display and current_level_num != 4:
 		crt_display.glitch_intensity = 0.0
 		crt_display.glitch_coverage = 0.0
 		crt_display.update_glitch_parameters()
@@ -454,6 +475,90 @@ func _on_flash_trigger() -> void:
 	# Now trigger interstage dialogue
 	go_interstage.emit(3)
 	_interstage3_in_progress = false
+
+func _on_stage4_finale() -> void:
+	var brighten = preload("res://scenes/effects/brighten_rect.tscn").instantiate()
+	var brighten_canvas = CanvasLayer.new()
+	brighten_canvas.layer = 101
+	brighten_canvas.add_child(brighten)
+	_get_sub_viewport().add_child(brighten_canvas)
+	var bright_mat = brighten.material as ShaderMaterial
+	bright_mat.set_shader_parameter("bright_amount", 0.0)
+
+	var demonface: Demonface = get_tree().get_first_node_in_group("Demonface")
+	if demonface:
+		demonface.scream_triggered.connect(func():
+			screen_shake(finale_screen_shake_duration, finale_screen_shake_intensity)
+		)
+		demonface.end()
+
+	var music_bus_index = AudioServer.get_bus_index("Music")
+	var original_music_db = AudioServer.get_bus_volume_db(music_bus_index)
+
+	var glitch_tween = create_tween()
+	glitch_tween.tween_method(func(val: float):
+		var crt = _get_crt_display()
+		if crt:
+			crt.glitch_intensity = lerpf(finale_glitch_start_intensity, finale_glitch_end_intensity, val)
+			crt.glitch_coverage = lerpf(finale_glitch_start_coverage, finale_glitch_end_coverage, val)
+			crt.update_glitch_parameters()
+	, 0.0, 1.0, finale_total_duration)
+
+	var brighten_tween = create_tween()
+	brighten_tween.tween_interval(finale_brighten_delay)
+	brighten_tween.tween_method(func(val: float):
+		bright_mat.set_shader_parameter("bright_amount", val)
+	, 0.0, 1.0, finale_brighten_duration)
+
+	var music_tween = create_tween()
+	music_tween.tween_method(func(val: float):
+		AudioServer.set_bus_volume_db(music_bus_index, lerpf(original_music_db, -80.0, val))
+	, 0.0, 1.0, finale_music_fade_duration)
+
+	await get_tree().create_timer(finale_total_duration).timeout
+
+	await get_tree().create_timer(finale_white_hold_duration).timeout
+
+	var final_scream = AudioStreamPlayer.new()
+	final_scream.stream = preload("res://assets/audio/beastscream2.mp3")
+	final_scream.bus = "SFX"
+	_get_sub_viewport().add_child(final_scream)
+	final_scream.play()
+
+	var crt = _get_crt_display()
+	var shake_tween = create_tween()
+	shake_tween.set_ease(Tween.EASE_OUT)
+	shake_tween.set_trans(Tween.TRANS_QUAD)
+	var shake_count = int(2.0 * 20)
+	var frame_duration = 2.0 / shake_count
+	for i in range(shake_count):
+		var progress = float(i) / shake_count
+		var current_intensity = 25.0 * (1.0 - progress)
+		var offset = Vector2(randf_range(-current_intensity, current_intensity), randf_range(-current_intensity, current_intensity))
+		shake_tween.tween_property(crt, "position", offset, frame_duration)
+
+	await get_tree().create_timer(1.2).timeout
+
+	glitch_tween.kill()
+	brighten_tween.kill()
+	music_tween.kill()
+	shake_tween.kill()
+
+	final_scream.stop()
+	final_scream.queue_free()
+
+	if crt:
+		crt.position = Vector2.ZERO
+
+	var crt_display = _get_crt_display()
+	if crt_display:
+		crt_display.glitch_intensity = 0.0
+		crt_display.glitch_coverage = 0.0
+		crt_display.update_glitch_parameters()
+	AudioServer.set_bus_volume_db(music_bus_index, original_music_db)
+	brighten_canvas.queue_free()
+
+	_change_scene(CUTSCENE_END)
 
 func screen_shake(duration: float = 1.2, intensity: float = 15.0) -> void:
 	var crt = _get_crt_display()
