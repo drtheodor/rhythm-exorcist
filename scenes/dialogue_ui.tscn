@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b8454s4oi2l5y" path="res://scripts/dialogue_player.gd" id="1_jx1sv"]
 [ext_resource type="FontFile" uid="uid://dcxlptd5fw4lb" path="res://assets/Fami-Serif.otf" id="2_e6usr"]
 [ext_resource type="AudioStream" uid="uid://4wvhkiyrh3a8" path="res://assets/audio/voice_sans.wav" id="2_x1ric"]
+[ext_resource type="AudioStream" uid="uid://b564fbiokrogy" path="res://assets/audio/text.mp3" id="6_b564f"]
 [ext_resource type="FontFile" uid="uid://bc3sgsjifmivc" path="res://assets/Fami-Serif-Bold.otf" id="3_imsod"]
 [ext_resource type="Texture2D" uid="uid://cymo7np46dcq5" path="res://assets/textures/character_portrait_1.png" id="4_wlc0t"]
 [ext_resource type="Texture2D" uid="uid://ohpvm4o8ij6q" path="res://assets/textures/scenes/scene4.png" id="5_imsod"]
@@ -48,7 +49,7 @@ stream = ExtResource("2_x1ric")
 bus = &"SFX"
 
 [node name="SfxPlayer2" type="AudioStreamPlayer" parent="." unique_id=1953033850]
-stream = ExtResource("2_x1ric")
+stream = ExtResource("6_b564f")
 bus = &"SFX"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=502198296]

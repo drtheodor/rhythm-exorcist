@@ -25,9 +25,9 @@ const SFX_SOUNDS: Dictionary[String, AudioStream] = {
 }
 
 const ENDINGS : Dictionary[String, String] = {
-	"bad_end_3": "Bad Ending",
-	"good_end_3": "Good Ending",
-	"secret_end_3": "Perfect Ending"
+	"bad_end_3": "Low Faith Ending (1 of 3)",
+	"good_end_3": "High Faith Ending (2 of 3)",
+	"secret_end_3": "Secret Ending (3 of 3)"
 }
 
 const ENDING_DESC : Dictionary[String, String] = {
@@ -73,7 +73,7 @@ func _on_dialogue_finished() -> void:
 func _show_ending_phase() -> void:
 	dialogue_ui.show()
 	var ending_title: Label = get_node_or_null("GradeCanvas/EndingTitle")
-	var ending_desc: Label = get_node_or_null("GradeCanvas/EndingDescription")
+	var ending_desc: RichTextLabel = get_node_or_null("GradeCanvas/EndingDescription")
 	if ending_title and ending_key:
 		ending_title.text = ENDINGS[ending_key]
 	if ending_desc and ending_key:
