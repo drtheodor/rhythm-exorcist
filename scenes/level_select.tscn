@@ -78,7 +78,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_7plkq")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
-text = "LEVEL 1: Placeholder"
+text = "LEVEL 1: Cross"
 flat = true
 script = ExtResource("5_ckc44")
 
@@ -94,7 +94,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_7plkq")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
-text = "LEVEL 2: Placeholder"
+text = "LEVEL 2: Holy Water"
 flat = true
 script = ExtResource("5_ckc44")
 
@@ -110,7 +110,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_7plkq")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
-text = "LEVEL 3: Placeholder"
+text = "LEVEL 3: Bell"
 flat = true
 script = ExtResource("5_ckc44")
 
@@ -126,7 +126,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_7plkq")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/focus = SubResource("StyleBoxEmpty_t7v6v")
-text = "LEVEL 4: Placeholder"
+text = "LEVEL 4: Pentagram"
 flat = true
 script = ExtResource("5_ckc44")
 

@@ -8,6 +8,7 @@ enum Type { INTRO, END }
 @onready var sfx_type1: AudioStreamPlayer = $GradeCanvas/AudioStreamPlayer1
 @onready var sfx_type2: AudioStreamPlayer = $GradeCanvas/AudioStreamPlayer2
 
+
 const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 	"scene1": preload("res://assets/textures/scenes/scene1.png"),
 	"scene2": preload("res://assets/textures/scenes/scene2.png"),
@@ -71,7 +72,7 @@ func _on_dialogue_finished() -> void:
 				GameManager.open_title_screen()
 
 func _show_ending_phase() -> void:
-	dialogue_ui.show()
+	#dialogue_ui.show()
 	var ending_title: Label = get_node_or_null("GradeCanvas/EndingTitle")
 	var ending_desc: RichTextLabel = get_node_or_null("GradeCanvas/EndingDescription")
 	if ending_title and ending_key:
@@ -85,7 +86,7 @@ func _show_ending_phase() -> void:
 	await tween.finished
 
 func _show_score_phase() -> void:
-	dialogue_ui.show()
+	#dialogue_ui.show()
 	var scores_label: Label = get_node_or_null("GradeCanvas/ScoresDisplay")
 	if scores_label:
 		scores_label.text = "Notes Hit: %d\nNotes Missed: %d\nCombos Hit: %d" % [
@@ -98,20 +99,31 @@ func _show_score_phase() -> void:
 	await _animate_stats()
 
 func _show_grade_phase() -> void:
-	dialogue_ui.show()
+	#dialogue_ui.show()
 	var final_grade: Label = get_node_or_null("GradeCanvas/FinalGrade")
 	if final_grade:
 		final_grade.text = GameManager.get_grade(0)
 
 	sfx_type2.play()
-	var tween = create_tween()
+	var tween : Tween
+	if final_grade:
+		tween = create_tween()
+		tween.tween_property(final_grade, "modulate:a", 1.0, 1.5)
+		await tween.finished
+	tween = create_tween()
 	tween.tween_method(_update_grade, 0., 1., 1.0)
 	await tween.finished
 
 	await _wait_for_advance()
 
 func _animate_stats() -> void:
-	var tween = create_tween()
+	var tween : Tween
+	var scores_label: Label = get_node_or_null("GradeCanvas/ScoresDisplay")
+	if scores_label:
+		tween = create_tween()
+		tween.tween_property(scores_label, "modulate:a", 1.0, 1.5)
+		await tween.finished
+	tween = create_tween()
 	tween.tween_method(_update_label, 0., 1., 2.0)
 	await tween.finished
 
