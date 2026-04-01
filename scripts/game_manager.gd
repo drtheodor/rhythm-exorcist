@@ -154,9 +154,9 @@ func _process(_delta: float) -> void:
 
 func _on_fear(_incr: int) -> void:
 	if self.fear >= 100 and not self.is_game_over:
-		# self.is_game_over = true 
-		# self.game_over()
-		return
+		self.is_game_over = true 
+		self.game_over()
+		# return
 		# GODMODE
 
 func options_visible():
