@@ -21,7 +21,7 @@ const SCENE_BACKGROUNDS: Dictionary[String, Texture2D] = {
 }
 
 const SFX_SOUNDS: Dictionary[String, AudioStream] = {
-	"speaking": preload("uid://4wvhkiyrh3a8")
+	"speaking": preload("uid://b564fbiokrogy")
 }
 
 const ENDINGS : Dictionary[String, String] = {
