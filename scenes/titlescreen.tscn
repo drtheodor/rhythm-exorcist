@@ -105,6 +105,7 @@ flat = true
 script = ExtResource("4_t7v6v")
 
 [node name="Credits" type="CanvasLayer" parent="." unique_id=1741137941]
+layer = 2
 visible = false
 
 [node name="BackgroundLayer" type="TileMapLayer" parent="Credits" unique_id=2003605838]
@@ -126,6 +127,7 @@ script = ExtResource("4_t7v6v")
 [node name="MarginContainer" type="MarginContainer" parent="Credits" unique_id=1077555954]
 offset_right = 256.0
 offset_bottom = 224.0
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 10

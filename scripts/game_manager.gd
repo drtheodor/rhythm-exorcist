@@ -130,7 +130,7 @@ func _add_menus_to_viewport() -> void:
 	sv.add_child(options_menu)
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("pause"):
+	if Input.is_action_just_pressed("pause") and (current_level_audio != null or self.options_open):
 		if self.options_open:
 			options_visible()
 		else:
