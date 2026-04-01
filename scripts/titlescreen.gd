@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var credits: CanvasLayer = $Credits
+
 func _ready() -> void:
 	TransitionManager.set_ambient_pulse(true)
 
@@ -13,4 +15,8 @@ func _on_options_button_pressed() -> void:
 	GameManager.options_visible()
 
 func _on_credits_button_pressed() -> void:
-	pass # Replace with function body.
+	credits.show()
+
+
+func _on_credits_back_button_pressed() -> void:
+	credits.hide()
