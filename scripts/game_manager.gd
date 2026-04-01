@@ -78,7 +78,11 @@ var notes_hit: int = 0:
 	set(val):
 		notes_hit = val
 		note_hit.emit()
-var notes_missed: int = 0
+var notes_missed: int = 0:
+	set(val):
+		notes_missed = val
+		note_missed.emit()
+		
 var combos_hit: int = 0:
 	set(val):
 		var diff = val - combos_hit
@@ -102,6 +106,7 @@ var faith: int = 100:
 signal on_fear(incr: int)
 signal on_faith(new_val: int)
 signal note_hit
+signal note_missed
 signal on_combo
 signal on_game_over
 signal toggle_options_visible
@@ -124,6 +129,8 @@ func _change_scene(packed: PackedScene) -> void:
 
 func _ready() -> void:
 	call_deferred("_add_menus_to_viewport")
+	self.note_hit.connect(play_beat_shake)
+	self.note_missed.connect(play_beat_shake)
 
 func _add_menus_to_viewport() -> void:
 	var sv = _get_sub_viewport()
@@ -137,21 +144,27 @@ func _process(_delta: float) -> void:
 		else:
 			get_tree().paused = not self.paused
 			send_pause_game()
-
-	if _stage3_glitch_active:
-		var midi_player = get_tree().get_first_node_in_group("MidiPlayer") as MidiManager
-		if midi_player and midi_player.song_duration > 0.0:
-			var progress = midi_player.current_time / midi_player.song_duration
-			var glitch_intensity = 0.0
-			var glitch_coverage = 0.0
-			if progress >= 0.7:
-				glitch_intensity = 1.0 + (progress - 0.7) * 31.667
-				glitch_coverage = (progress - 0.7) * 1.667
-			var crt_display = _get_crt_display()
-			if crt_display:
-				crt_display.glitch_intensity = glitch_intensity
-				crt_display.glitch_coverage = glitch_coverage
-				crt_display.update_glitch_parameters()
+	
+	var midi_player = get_tree().get_first_node_in_group("MidiPlayer") as MidiManager
+	if midi_player:
+		var progress = midi_player.current_time / midi_player.song_duration
+		if _stage3_glitch_active:
+			if midi_player.song_duration > 0.0:
+				var glitch_intensity = 0.0
+				var glitch_coverage = 0.0
+				if progress >= 0.7:
+					glitch_intensity = 1.0 + (progress - 0.7) * 31.667
+					glitch_coverage = (progress - 0.7) * 1.667
+				var crt_display = _get_crt_display()
+				if crt_display:
+					crt_display.glitch_intensity = glitch_intensity
+					crt_display.glitch_coverage = glitch_coverage
+					crt_display.update_glitch_parameters()
+		
+		if beat_intensity > 0:
+			_beat_time_count += _delta
+			if midi_player and _beat_time_count > beat_duration:
+				play_beat_shake(false)
 
 func _on_fear(_incr: int) -> void:
 	if self.fear >= 100 and not self.is_game_over:
@@ -236,6 +249,8 @@ func _go_interstage(inter_num: int) -> void:
 				node.hide()
 		TransitionManager.fade_in()
 		return
+	
+	beat_intensity = 0
 
 	# Interstages 1-3: slide gameplay down to reveal interstage
 	go_interstage.emit(inter_num)
@@ -362,6 +377,9 @@ func select_level(audio: AudioStream, midi: MidiResource, tempo: int) -> void:
 				midi_player.flash_trigger.connect(_on_stage4_finale, CONNECT_ONE_SHOT)
 
 	self.in_level_transition = false
+	
+	if current_level_num > 1:
+		start_beat_shake(current_level_audio.get_length() * 1000.0, current_level_midi.tempo)
 
 func open_level_select() -> void:
 	self._reset(true)
@@ -494,11 +512,11 @@ func _on_stage4_finale() -> void:
 
 	var glitch_tween = create_tween()
 	glitch_tween.tween_method(func(val: float):
-		var crt = _get_crt_display()
-		if crt:
-			crt.glitch_intensity = lerpf(finale_glitch_start_intensity, finale_glitch_end_intensity, val)
-			crt.glitch_coverage = lerpf(finale_glitch_start_coverage, finale_glitch_end_coverage, val)
-			crt.update_glitch_parameters()
+		var _crt = _get_crt_display()
+		if _crt:
+			_crt.glitch_intensity = lerpf(finale_glitch_start_intensity, finale_glitch_end_intensity, val)
+			_crt.glitch_coverage = lerpf(finale_glitch_start_coverage, finale_glitch_end_coverage, val)
+			_crt.update_glitch_parameters()
 	, 0.0, 1.0, finale_total_duration)
 
 	var brighten_tween = create_tween()
@@ -584,3 +602,59 @@ func screen_shake(duration: float = 1.2, intensity: float = 15.0) -> void:
 		tween.tween_property(crt, "position", offset, frame_duration)
 
 	tween.tween_property(crt, "position", Vector2.ZERO, 0.1)
+
+var beat_intensity : float = 0
+var beat_tween : Tween = null
+var beat_duration : float = 0
+var beat_count : int = 0
+
+var _beat_time_count : float = 0
+var current_beat_num : int = 0
+
+var _prev_beat_timestamp : int = 0
+var _real_beat_msec : float = 0
+
+var song_duration : float
+var start_msec : int
+
+func start_beat_shake(duration: float, beats: int, intensity: float = 1.0) -> void:
+	var crt = _get_crt_display()
+	if not crt:
+		return
+	beat_intensity = intensity
+	beat_count = beats
+	current_beat_num = 0
+	song_duration = duration
+	start_msec = Time.get_ticks_msec()
+	
+	beat_tween = create_tween()
+	beat_tween.set_ease(Tween.EASE_OUT)
+	beat_tween.set_trans(Tween.TRANS_QUAD)
+	
+	beat_duration = duration / beats
+
+func end_beat_shake() -> void:
+	beat_intensity = 0
+
+func play_beat_shake(beat: bool = true) -> void:
+	if beat_intensity <= 0:
+		return
+	var current = Time.get_ticks_msec()
+	if beat:
+		_real_beat_msec = current - _prev_beat_timestamp
+		#print("Time since prev beat: ", _real_beat_msec / 1000.0, "; Assumed time per beat: ", beat_duration)
+		_prev_beat_timestamp = current
+	_beat_time_count = 0
+	var crt = _get_crt_display()
+	if not crt:
+		return
+	var progress =  (current - start_msec) / song_duration
+	current_beat_num += 1
+	
+	beat_tween = create_tween()
+	beat_tween.set_ease(Tween.EASE_OUT)
+	beat_tween.set_trans(Tween.TRANS_QUAD)
+	
+	var current_intensity = beat_intensity * (1.0 - progress)
+	var offset = Vector2(randf_range(-current_intensity, current_intensity), randf_range(-current_intensity, current_intensity))
+	beat_tween.tween_property(crt, "position", offset, beat_duration)
