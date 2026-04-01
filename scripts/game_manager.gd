@@ -41,7 +41,8 @@ var crt_enabled: bool = true:
 @export_category("Level 4")
 @export var level4_audio: AudioStream = preload("res://stage4.wav")
 @export var level4_midi: MidiResource = preload("res://stage4.mid")
-@export var level4_hit_window: float = 4.0
+@export var level4_tempo: int = 387097
+@export var level4_hit_window: float = 16.0 
 
 @export_category("Stage 4 Finale")
 @export var finale_glitch_start_intensity: float = 1.0
@@ -283,7 +284,7 @@ func advance_to_level(num: int) -> void:
 		1: select_level(level1_audio, level1_midi, level1_tempo)
 		2: select_level(level2_audio, level2_midi, level2_tempo)
 		3: select_level(level3_audio, level3_midi, level3_tempo)
-		4: select_level(level4_audio, level4_midi, level4_midi.tempo)
+		4: select_level(level4_audio, level4_midi, level4_tempo)
 
 var in_level_transition : bool = false
 

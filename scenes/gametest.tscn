@@ -108,6 +108,7 @@ position = Vector2(128, 112)
 [node name="Clara" parent="." unique_id=514047567 groups=["Clara"] instance=ExtResource("5_1dvly")]
 z_index = 1
 position = Vector2(128, 64)
+miss_anims = Array[String](["2", "5", "10", "d2"])
 
 [node name="ClaraAnimations" type="AnimationPlayer" parent="." unique_id=304925286]
 libraries/ = SubResource("AnimationLibrary_t82je")
@@ -131,16 +132,15 @@ play_line_x = 60.0
 [node name="Running" type="Node" parent="MidiPlayer" unique_id=489803820]
 
 [node name="NoteHider2" type="ColorRect" parent="MidiPlayer" unique_id=1048274858 groups=["GameplayLayer"]]
-offset_left = 201.0
-offset_top = 137.0
+offset_left = 200.0
+offset_top = 136.0
 offset_right = 256.0
-offset_bottom = 167.0
+offset_bottom = 168.0
 color = Color(0, 0, 0, 1)
 
 [node name="NoteHider" type="ColorRect" parent="MidiPlayer" unique_id=1062773405 groups=["GameplayLayer"]]
-offset_left = 8.0
 offset_top = 136.0
-offset_right = 72.0
+offset_right = 56.0
 offset_bottom = 168.0
 color = Color(0, 0, 0, 1)
 

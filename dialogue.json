@@ -689,6 +689,7 @@
 		"color": "white",
 		"alignment": "center",
 		"speed": 0.05,
+		"scene": "scene7",
 		"text": [
 			"I felt a hand on my shoulder."
 		],
