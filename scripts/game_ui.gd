@@ -53,7 +53,7 @@ func _shake_ui() -> void:
 	tween.tween_property(canvas_layer, "offset:x", 0.0, 0.03)
 
 func _update_poss_bar() -> void:
-	var midi_player = get_tree().get_first_node_in_group("MidiPlayer") as MidiManager
+	var midi_player = get_tree().get_first_node_in_group("MidiPlayer")
 	if midi_player and midi_player.song_duration > 0.0:
 		poss_bar.value = (1.0 - midi_player.current_time / midi_player.song_duration) * 100.0
 

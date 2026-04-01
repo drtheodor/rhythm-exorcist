@@ -2,6 +2,7 @@ extends Node2D
 class_name Demonface
 
 @onready var faces: AnimationPlayer = $DemonFaces
+@onready var color_rect: ColorRect = $ColorRect
 
 var _reaction_timer: float = 0.0
 var _reaction_priority: int = 0
@@ -54,6 +55,7 @@ func activate() -> void:
 	_reaction_priority = 0
 	_reaction_timer = 0.0
 	_play_idle()
+	color_rect.hide()
 
 func _on_fear(incr: int) -> void:
 	if not _active or incr <= 0:
