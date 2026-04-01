@@ -39,8 +39,8 @@ var crt_enabled: bool = true:
 @export var level3_hit_window: float = 4.0
 
 @export_category("Level 4")
-@export var level4_audio: AudioStream = preload("uid://c2hprt6p8adds")
-@export var level4_midi: MidiResource = preload("res://stage4_temp.mid")
+@export var level4_audio: AudioStream = preload("res://stage4.wav")
+@export var level4_midi: MidiResource = preload("res://stage4.mid")
 @export var level4_hit_window: float = 4.0
 
 @export_category("Stage 4 Finale")
