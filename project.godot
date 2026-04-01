@@ -16,7 +16,6 @@ run/main_scene="res://scenes/crt_display.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/use_filter=false
 boot_splash/image="uid://b4wefa8jgpoyg"
-config/icon="res://icon.svg"
 
 [autoload]
 
