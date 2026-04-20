@@ -128,8 +128,8 @@ autoplay = &"idle"
 process_mode = 1
 script = ExtResource("6_t82je")
 audio = ExtResource("10_8qdvn")
-trigger_line_x = 68.0
-play_line_x = 60.0
+trigger_line_x = 80.0
+play_line_x = 56.0
 
 [node name="Running" type="Node" parent="MidiPlayer" unique_id=489803820]
 

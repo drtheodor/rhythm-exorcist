@@ -35,7 +35,7 @@ const NOTE_FLASH_COLOR = Color(2., 2., 2., 1.)
 @export var fear: int = 5
 @export var combo_heal: int = 25
 @export var faith_penalty: int = 1
-@export var miss_lockout_duration: float = 0.16
+@export var miss_lockout_duration: float = 0.10
 @export var switch_telegraph_distance: float = 30.0
 
 @export var keys: Array[StringName] = [&"up", &"down"]
@@ -356,9 +356,21 @@ func _process(_delta: float) -> void:
 	for key: int in range(self.keys.size()):
 		if not hit_keys[key] and self.key_state[key] == PRESSED:
 			self.key_listeners[key].shake()
-			
+
+			if self._has_incoming_note(key + 1):
+				continue
+
 			if self.current_time - self.last_note_hits[key] >= self.note_hit_helper_threshold:
 				self._lock_key(key)
+
+func _has_incoming_note(lane: int) -> bool:
+	for note_box in self.notes:
+		if note_box.get_meta("lane") != lane: continue
+		if note_box.get_meta("bad"): continue
+		var x: float = note_box.position.x
+		if x >= self.trigger_line_x and x < self.trigger_line_x + self.note_width * 2:
+			return true
+	return false
 
 func hit_combo() -> void:
 	GameManager.notes_hit += self.keys.size()
